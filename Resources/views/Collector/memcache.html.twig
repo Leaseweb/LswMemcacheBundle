@@ -1,14 +1,15 @@
 {% extends 'WebProfilerBundle:Profiler:layout.html.twig' %}
 
 {% block toolbar %}
+    {% set percentage = 100*collector.missCount/collector.readCount %}
     {% set icon %}
         MC
-        {% if 100*collector.missCount/collector.readCount == 0 %}
-            <span class="sf-toolbar-status sf-toolbar-status-green">{{ collector.missCount }}</span>
-        {% elseif 100*collector.missCount/collector.readCount > 5 %}
-            <span class="sf-toolbar-status sf-toolbar-status-red">{{ collector.missCount }}</span>
+        {% if percentage == 0 %}
+            <span class="sf-toolbar-status sf-toolbar-status-green">{{ collector.callCount }}</span>
+        {% elseif percentage > 5 %}
+            <span class="sf-toolbar-status sf-toolbar-status-red">{{ collector.callCount }}</span>
         {% else %}
-            <span class="sf-toolbar-status sf-toolbar-status-yellow">{{ collector.missCount }}</span>
+            <span class="sf-toolbar-status sf-toolbar-status-yellow">{{ collector.callCount }}</span>
         {% endif %}
         {% if collector.callcount > 0 %}
             <span class="sf-toolbar-info-piece-additional-detail">in {{ '%0.2f'|format(collector.time * 1000) }} ms</span>
@@ -25,9 +26,9 @@
         </div>
         <div class="sf-toolbar-info-piece">
             <b>Misses</b>
-            {% if collector.missCount == 0 %}
+            {% if percentage == 0 %}
                 <span class="sf-toolbar-status sf-toolbar-status-green">{{ '%0.0f%%'|format(100*collector.missCount/collector.readCount) }}</span>
-            {% elseif collector.missCount > 5 %}
+            {% elseif percentage > 5 %}
                 <span class="sf-toolbar-status sf-toolbar-status-red">{{ '%0.0f%%'|format(100*collector.missCount/collector.readCount) }}</span>
             {% else %}
                 <span class="sf-toolbar-status sf-toolbar-status-yellow">{{ '%0.0f%%'|format(100*collector.missCount/collector.readCount) }}</span>
@@ -44,13 +45,7 @@
     </span>
     <strong>Memcache</strong>
     <span class="count">
-        {% if collector.missCount == 0 %}
-            <span class="sf-toolbar-status sf-toolbar-status-green">{{ '%0.0f%%'|format(100*collector.missCount/collector.readCount) }}</span>
-        {% elseif collector.missCount > 5 %}
-            <span class="sf-toolbar-status sf-toolbar-status-red">{{ '%0.0f%%'|format(100*collector.missCount/collector.readCount) }}</span>
-        {% else %}
-            <span class="sf-toolbar-status sf-toolbar-status-yellow">{{ '%0.0f%%'|format(100*collector.missCount/collector.readCount) }}</span>
-        {% endif %}
+        <span>{{ collector.callcount }}</span>
         <span>{{ '%0.0f'|format(collector.time * 1000) }} ms</span>
     </span>
 </span>
