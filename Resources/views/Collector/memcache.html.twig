@@ -3,7 +3,7 @@
 {% block toolbar %}
     {% set percentage = 100*collector.missCount/collector.readCount %}
     {% set icon %}
-        <img width="20" height="28" alt="MC" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAcCAYAAABh2p9gAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB90DBRQ2Hno2iAkAAAAZdEVYdENvbW1lbnQAQ3JlYXRlZCB3aXRoIEdJTVBXgQ4XAAAAf0lEQVRIx+2UMQqAMAxFH4oFB8H738mO3kBEZ1etU6GLTVMKDu1fH30kJA201JUBmDLYZ2ZgzWBRoQMWJROFDrCASWSi8AkeprCkCsNqeoGphA64BKYS+hb3CNuA0Uu6xIGdEXYAt6ZlKzD1UIzA/lmbootd9OsVPQ5ZJ6qlxrxXfmICrothtQAAAABJRU5ErkJggg==">
+        <img width="20" height="28" alt="MC" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAcCAYAAABh2p9gAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB90DBRUYHnDz6xIAAAAZdEVYdENvbW1lbnQAQ3JlYXRlZCB3aXRoIEdJTVBXgQ4XAAAA10lEQVRIx+2UsYoCQRBE34gKegj+hgYFrsgZ39ffBbrQyX6BgSZqYCganCd7y/aME7sVDbyemupuGOj0RpI0kDTJZU31aucP4MepizHXEGAmaePUxphrCFBI2koaZjLX8AYsgO9MBkCoDX4KHBu8BFbAxGNmdk0lrGsBnHNYyvD22HDlMUk7SaNXDf90iLA98Gy7nzAKj1l9tcwwAKWZFTktl8A6h/Wd2fx7XdLYY68sJUSShUTq1oRbM1s69THWmrCKXKhSZs2EF+CzrcjMTsC8++Q7/eoODXhHAld0cGAAAAAASUVORK5CYII=">
         {% if percentage == 0 %}
             <span class="sf-toolbar-status sf-toolbar-status-green">{{ collector.callCount }}</span>
         {% elseif percentage > 5 %}
@@ -41,7 +41,7 @@
 {% block menu %}
 <span class="label">
     <span class="icon">
-      MC
+        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB90DBRUYIyibpwMAAAAZdEVYdENvbW1lbnQAQ3JlYXRlZCB3aXRoIEdJTVBXgQ4XAAAAqUlEQVRYw+3WTQ5AMBAF4PEuVG7EybiBozAnYiuidP5q01m2L31fBClRmza3SSltwvxs6cPDWi9EjBYEMuvVEHjZq4LAx344AgWZUAQKc2EICA4NQUD4zrgjoPhyNIjNE6BBZPPdw6/1EBy8E1EvyTPz4PEErgBT3gJYmHmy5vFnuRbgVq4BuJZLAe7lEkBIeSkgrLwEEFr+BQgvfwNUKc9ds9ea1/I2bU5u6XDs6A4LrgAAAABJRU5ErkJggg==">
     </span>
     <strong>Memcache</strong>
     <span class="count">
