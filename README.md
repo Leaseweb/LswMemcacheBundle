@@ -8,6 +8,8 @@ central object storage for your website. In this role it is used for caching exp
 This Symfony2 bundle will provide Memcache integration into Symfony2 for session and object storage. It has full
 Web Debug Toolbar integration to allow youto analyze and debug the cache behavior and performance.
 
+Screenshot: http://www.leaseweblabs.com/2013/03/memcache-support-in-symfony2-wdt/
+
 ### Installation
 
 To install LswMemcacheBundle with Composer just add the following to your 'composer.json' file:
