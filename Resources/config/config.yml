@@ -1,0 +1,5 @@
+parameters:
+    memcache_host: 127.0.0.1
+    memcache_port: 11211
+    memcache_session_prefix: "session_"
+    memcache_session_expire: 3600

@@ -1,0 +1,20 @@
+parameters:
+    memcache.class: Lsw\MemcacheBundle\Cache\LoggingMemcache
+    memcache.session_handler.class: Lsw\MemcacheBundle\Session\Storage\Handler\MemcacheSessionHandler
+    memcache.data_collector.class: Lsw\MemcacheBundle\DataCollector\MemcacheDataCollector
+    memcache.data_collector.template: "LswMemcacheBundle:Collector:memcache"
+
+services:
+    memcache:
+        class: %memcache.class%
+        arguments: [ %kernel.debug% ]
+        calls:
+          - [ addServer, [ %memcache_host%, %memcache_port% ]]
+    memcache.session_handler:
+        class: %memcache.session_handler.class%
+        arguments: [ @memcache, { prefix: %memcache_session_prefix%, expiretime: %memcache_session_expire% } ]
+    memcache.data_collector:
+        class: %memcache.data_collector.class%
+        arguments: [@memcache]
+        tags:
+            - { name: data_collector, template: %memcache.data_collector.template%, id:"memcache"}
