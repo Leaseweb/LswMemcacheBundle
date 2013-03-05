@@ -22,7 +22,7 @@ use Lsw\MemcacheBundle\Cache\LoggingMemcache;
 class MemcacheSessionHandler implements \SessionHandlerInterface
 {
     /**
-     * @var \Memcache Memcache driver.
+     * @var \Memcached Memcache driver.
      */
     private $memcache;
 
@@ -75,7 +75,8 @@ class MemcacheSessionHandler implements \SessionHandlerInterface
      */
     public function close()
     {
-        return $this->memcache->close();
+        // not required here because memcached has no close function.
+        return true;
     }
 
     /**
@@ -91,7 +92,7 @@ class MemcacheSessionHandler implements \SessionHandlerInterface
      */
     public function write($sessionId, $data)
     {
-        return $this->memcache->set($this->prefix.$sessionId, $data, 0, time() + $this->ttl);
+        return $this->memcache->set($this->prefix.$sessionId, $data, time() + $this->ttl);
     }
 
     /**

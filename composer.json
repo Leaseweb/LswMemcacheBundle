@@ -2,7 +2,7 @@
     "name": "leaseweb/memcache-bundle",
     "type": "symfony-bundle",
     "description": "LeaseWeb LswMemcacheBundle",
-    "keywords": ["memcache","cache","session"],
+    "keywords": ["memcache","memcached","cache","session"],
     "homepage": "http://www.leaseweblabs.com",
     "license": "MIT",
     "authors": [
@@ -15,7 +15,7 @@
     "require": {
         "php": ">=5.3.2",
         "symfony/framework-bundle": "2.*",
-        "ext-memcache": "3.*"
+        "ext-memcached": "3.*"
     }
     "autoload": {
         "psr-0": { "Lsw\\VersionInformationBundle": "" }

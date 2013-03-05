@@ -25,11 +25,11 @@ class LoggingMemcache
         if ($this->debug) {
             $this->calls = array();
         }
-        if (!class_exists('Memcache')) {
+        if (!class_exists('Memcached')) {
             $class = get_class($this);
-            throw new \Exception("Class '$class' depends on the 'Memcache' plugin that is currently not installed");
+            throw new \Exception("Class '$class' depends on the 'Memcached' plugin that is currently not installed");
         }
-        $this->memcache = new \Memcache();
+        $this->memcache = new \Memcached();
     }
 
     public function getLoggedCalls()
