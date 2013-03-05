@@ -52,3 +52,16 @@ When you want to use the cache from the controller you can simply call:
 The above example shows how to store value 'someValue' under key 'someKey' for a maximum of $timeToLive
 seconds. In the second line the value is retrieved from Memcache. If the key can not be found or the
 specified number of seconds have passed the 'get' function returns the value 'false'.
+
+### Configuration
+
+If you want to configure the bundle you can override the following parameters in your config:
+
+    parameters:
+        memcache_host: 127.0.0.1
+        memcache_port: 11211
+        memcache_session_prefix: "session_"
+        memcache_session_expire: 3600
+        
+These settings specify on which host and port the Memcache daemon runs, what prefix should be used for
+session data and how long it should store the session data.
