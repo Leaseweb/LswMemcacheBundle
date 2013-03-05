@@ -39,4 +39,16 @@ Install the following dependencies (in Debian based systems using 'apt'):
 
     apt-get install memcached php5-memcache
 
-Now the Memcache information should show up with a little double arrow (fast-forward) icon in your debug toolbar.
+Do not forget to restart you web server after adding the Memcache module. Now the Memcache
+information should show up with a little double arrow (fast-forward) icon in your debug toolbar.
+
+### Usage
+
+When you want to use the cache from the controller you can simply call:
+  
+    $this->get('memcache')->set('someKey', 'someValue', $timeToLive);
+    $this->get('memcache')->get('someKey');
+    
+The above example shows how to store value 'someValue' under key 'someKey' for a maximum of $timeToLive
+seconds. In the second line the value is retrieved from Memcache. If the specified number of seconds
+have passed the function returns the value 'false'.
