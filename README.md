@@ -37,7 +37,7 @@ Add the following 'handler_id' to your 'app/config/config.yml' file under sessio
 
 Install the following dependencies (in Debian based systems using 'apt'):
 
-    apt-get install memcached php5-memcache
+    apt-get install memcached php5-memcached
 
 Do not forget to restart you web server after adding the Memcache module. Now the Memcache
 information should show up with a little double arrow (fast-forward) icon in your debug toolbar.
