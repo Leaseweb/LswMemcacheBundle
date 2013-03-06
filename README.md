@@ -62,7 +62,7 @@ specified number of seconds have passed the 'get' function returns the value 'fa
 
 ### Configuration
 
-If the default settings of the bundle do not work, you can override override these parameters in your config:
+The bundle has the following default configuration, but you can override these parameters in your config:
 
     parameters:
         memcache_host: 127.0.0.1
