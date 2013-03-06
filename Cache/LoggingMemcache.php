@@ -30,6 +30,10 @@ class LoggingMemcache
             throw new \Exception("Class '$class' depends on the 'Memcached' plugin that is currently not installed");
         }
         $this->memcache = new \Memcached();
+        // use the binary protocol for speed optimization
+        $this->memcache->setOption(\Memcached::OPT_SERIALIZER, \Memcached::SERIALIZER_JSON);
+        $this->memcache->setOption(\Memcached::OPT_BINARY_PROTOCOL,true);
+        $this->memcache->setOption(\Memcached::OPT_TCP_NODELAY,true);
     }
 
     public function getLoggedCalls()
