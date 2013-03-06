@@ -73,6 +73,11 @@ If you want to configure the bundle you can override the following parameters in
 These settings specify on which host and port the Memcache daemon runs, what prefix should be used for
 session data and how long it should store the session data.
 
+### Considerations
+
+LswMemcacheBundle uses the 'memcached' php object (client) not the older 'memcache' php object.
+For a comparison of the available clients see: http://code.google.com/p/memcached/wiki/PHPClientComparison
+
 ### Known issues
 
 The session write that invokes a memcache set operation is executed after the page has been rendered.
