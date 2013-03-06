@@ -6,7 +6,7 @@ It will manage your session data without doing disk I/O on web or database serve
 central object storage for your website. In this role it is used for caching expensive API calls or database queries.
 
 This Symfony2 bundle will provide Memcache integration into Symfony2 for session and object storage. It has full
-Web Debug Toolbar integration to allow youto analyze and debug the cache behavior and performance.
+Web Debug Toolbar integration that allows you to analyze and debug the cache behavior and performance.
 
 Screenshot: http://www.leaseweblabs.com/2013/03/memcache-support-in-symfony2-wdt/
 
