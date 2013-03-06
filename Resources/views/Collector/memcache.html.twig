@@ -64,8 +64,8 @@
                 <li class="{{ i is odd ? 'odd' : 'even' }}">
                     <div>
                         <strong>Name</strong>: {{ call.name }}<br />
-                        <strong>Arguments</strong>: {{ call.arguments|yaml_encode() }}<br/>
-                        <strong>Results</strong>: {{ call.result|yaml_encode() }}<br/>
+                        <strong>Arguments</strong>: {{ call.arguments|json_encode() }}<br/>
+                        <strong>Results</strong>: {{ call.result|json_encode() }}<br/>
                     </div>
                     <small>
                         <strong>Time</strong>: {{ '%0.2f'|format(call.time * 1000) }} ms
