@@ -37,7 +37,6 @@ class FlushCommand extends ContainerAwareCommand
    {
      $memcache = $this->getContainer()->get('memcache');
      $output->writeln($memcache->flush()?'<info>OK</info>':'<error>ERROR</error>');
-     $output->writeln($this->formatStats($memcache->getStats()));
    }
 
 }
