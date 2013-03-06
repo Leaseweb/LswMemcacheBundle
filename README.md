@@ -72,3 +72,10 @@ If you want to configure the bundle you can override the following parameters in
         
 These settings specify on which host and port the Memcache daemon runs, what prefix should be used for
 session data and how long it should store the session data.
+
+### Known issues
+
+The session write that invokes a memcache set operation is executed after the page has been rendered.
+This causes the session writes not to show up in the Web Debug Toolbar. The collect call of the
+memcache data collector is executed before the rendering of the page is complete and therefor also
+before the session write is executed.
