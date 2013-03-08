@@ -18,7 +18,7 @@
         "ext-memcached": ">=1.0"
     },
     "autoload": {
-        "psr-0": { "Lsw\\VersionInformationBundle": "" }
+        "psr-0": { "Lsw\\MemcacheBundle": "" }
     },
-    "target-dir": "Lsw/VersionInformationBundle"
+    "target-dir": "Lsw/MemcacheBundle"
 }
