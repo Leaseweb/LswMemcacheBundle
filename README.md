@@ -90,8 +90,8 @@ lsw_memcache:
                 binary_protocol: true
                 no_block: true
                 tcp_nodelay: false
-                socket_send_size: ~
-                socket_recv_size: ~
+                socket_send_size: 4096
+                socket_recv_size: 4096
                 connect_timeout: 1000
                 retry_timeout: 0
                 send_timeout: 0
