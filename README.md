@@ -65,7 +65,7 @@ specified number of seconds have passed the 'get' function returns the value 'fa
 Below you can see a full configuration for this bundle.
 
 ```yml
-lsw_memcached:
+lsw_memcache:
     session_support:
         enabled: true
         instance_id: instance1
@@ -80,7 +80,7 @@ lsw_memcached:
                 - { dsn: host1, port: 11211, weight: 15 }
                 - { dsn: host2, port: 11211, weight: 30 }
 
-            memcached_options:
+            options:
                 compression: true
                 serializer: igbinary
                 prefix_key: instance1
