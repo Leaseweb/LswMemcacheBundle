@@ -35,7 +35,7 @@ Finally, add the bundle to the registerBundles function of the AppKernel class i
             ...
         );
 
-Configure the bundle:
+Configure the bundle by adding the following to app/config/config.yml':
 
 ```yml
 lsw_memcache:
