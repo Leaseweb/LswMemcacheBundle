@@ -11,7 +11,8 @@ use Symfony\Component\DependencyInjection\Parameter;
 use Symfony\Component\DependencyInjection\Definition;
 
 /**
- * {@inheritDoc}
+ * Applies the configuration for the Memcached object
+ * Based on Emagister\MemcachedBundle by Christian Soronellas
  */
 class LswMemcacheExtension extends Extension
 {

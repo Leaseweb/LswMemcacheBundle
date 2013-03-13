@@ -5,14 +5,14 @@ namespace Lsw\MemcacheBundle\DependencyInjection\Compiler;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
+/**
+ * EnableSessionSupport is a compiler pass to set the session handler.
+ * Based on Emagister\MemcachedBundle by Christian Soronellas
+ */
 class EnableSessionSupport implements CompilerPassInterface
 {
     /**
-     * You can modify the container here before it is dumped to PHP code.
-     *
-     * @param ContainerBuilder $container
-     *
-     * @api
+     * {@inheritDoc}
      */
     public function process(ContainerBuilder $container)
     {

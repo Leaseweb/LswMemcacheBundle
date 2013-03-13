@@ -42,8 +42,8 @@ class StatisticsCommand extends ContainerAwareCommand
 
    /**
     * Format the raw array for the command line report
-    * 
-    * @param array $stats An array of memcache::extendedstats 
+    *
+    * @param array $stats An array of memcache::extendedstats
     * @return string ConsoleComponent-formatted output, suitable for ->writeln() usage
     */
    protected function formatStats($stats)
@@ -80,7 +80,7 @@ class StatisticsCommand extends ContainerAwareCommand
 
    /**
     * Format the usage stats
-    * 
+    *
     * @param integer $bytes Cache usage (in bytes)
     * @param integer $maxbytes Cache maximum size (in bytes)
     * @return string A short string with friendly formatting
@@ -101,7 +101,7 @@ class StatisticsCommand extends ContainerAwareCommand
 
    /**
     * Formats the uptime to be friendlier
-    * 
+    *
     * @param integer $uptime Cache server uptime (in seconds)
     * @return string A short string with friendly formatting
     */

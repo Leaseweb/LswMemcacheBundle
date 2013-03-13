@@ -6,6 +6,10 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 
+/**
+ * Defines the configuration options for the Memcached object
+ * Based on Emagister\MemcachedBundle by Christian Soronellas
+ */
 class Configuration implements ConfigurationInterface
 {
     /**
