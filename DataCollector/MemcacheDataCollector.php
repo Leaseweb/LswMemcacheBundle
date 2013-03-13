@@ -14,16 +14,24 @@ use Lsw\MemcacheBundle\Cache\LoggingMemcache;
  */
 class MemcacheDataCollector extends DataCollector
 {
-    private $memcache;
+    private $instances;
 
     /**
      * Class constructor
+     */
+    public function __construct()
+    {
+        $this->instances = array();
+    }
+
+    /**
+     * Add a Memcache object to the collector
      *
      * @param Lsw\MemcacheBundle\Cache\LoggingMemcache $memcache Logging Memcache object
      */
-    public function __construct(LoggingMemcache $memcache = null)
+    public function addInstance($name, LoggingMemcache $memcache)
     {
-        $this->memcache = $memcache;
+        $this->instances[$name] = $memcache;
     }
 
     /**
@@ -31,9 +39,11 @@ class MemcacheDataCollector extends DataCollector
      */
     public function collect(Request $request, Response $response, \Exception $exception = null)
     {
-        $this->data = array(
-            'calls' => null !== $this->memcache ? $this->memcache->getLoggedCalls() : array(),
-        );
+        $this->data = array();
+        foreach ($this->instances as $name=>$memcache) {
+            $this->data[$name] = array();
+            $this->data[$name]['calls'] = $memcache->getLoggedCalls();
+        }
     }
 
     /**
@@ -44,12 +54,13 @@ class MemcacheDataCollector extends DataCollector
     public function getMissCount()
     {
         $misses = 0;
-        foreach ($this->data['calls'] as $call) {
-            if ($call->name == 'get') {
-                $misses += $call->result === false?1:0;
+        foreach ($this->data as $name=>$data) {
+            foreach ($data['calls'] as $call) {
+                if ($call->name == 'get') {
+                    $misses += $call->result === false?1:0;
+                }
             }
         }
-
         return $misses;
     }
 
@@ -61,9 +72,11 @@ class MemcacheDataCollector extends DataCollector
     public function getReadCount()
     {
         $reads = 0;
-        foreach ($this->data['calls'] as $call) {
-            if ($call->name == 'get') {
-                $reads += 1;
+        foreach ($this->data as $name=>$data) {
+            foreach ($data['calls'] as $call) {
+                if ($call->name == 'get') {
+                    $reads += 1;
+                }
             }
         }
 
@@ -77,7 +90,12 @@ class MemcacheDataCollector extends DataCollector
      */
     public function getCallCount()
     {
-        return count($this->data['calls']);
+        $calls = 0;
+        foreach ($this->data as $name=>$data) {
+            $calls += count($data['calls']);
+        }
+
+        return $calls;
     }
 
     /**
@@ -87,7 +105,12 @@ class MemcacheDataCollector extends DataCollector
      */
     public function getCalls()
     {
-        return $this->data['calls'];
+        $calls = array();
+        foreach ($this->data as $name=>$data) {
+            $calls[$name] = $data['calls'];
+        }
+
+        return $calls;
     }
 
     /**
@@ -98,8 +121,10 @@ class MemcacheDataCollector extends DataCollector
     public function getTime()
     {
         $time = 0;
-        foreach ($this->data['calls'] as $call) {
-            $time += $call->time;
+        foreach ($this->data as $name=>$data) {
+            foreach ($data['calls'] as $call) {
+                $time += $call->time;
+            }
         }
 
         return $time;

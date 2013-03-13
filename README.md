@@ -60,18 +60,92 @@ The above example shows how to store value 'someValue' under key 'someKey' for a
 seconds. In the second line the value is retrieved from Memcache. If the key can not be found or the
 specified number of seconds have passed the 'get' function returns the value 'false'.
 
-### Configuration
+## Usage ##
 
-The bundle has the following default configuration (parameters) that you can override in your config:
+Below you can see a full configuration for this bundle.
 
-    parameters:
-        memcache_host: 127.0.0.1
-        memcache_port: 11211
-        memcache_session_prefix: "session_"
-        memcache_session_expire: 3600
-        
-These settings specify on which host and port the Memcache daemon runs, what prefix should be used for
-session data and how long it should store the session data.
+```yml
+lsw_memcached:
+    session_support:
+        enabled: true
+        instance_id: instance1
+        options:
+            prefix: "my_session_prefix_"
+            expiretime: 172800
+
+    instances:
+        instance1:
+            persistent_id: instance1
+            hosts:
+                - { dsn: host1, port: 11211, weight: 15 }
+                - { dsn: host2, port: 11211, weight: 30 }
+
+            memcached_options:
+                compression: true
+                serializer: igbinary
+                prefix_key: instance1
+                hash: default
+                distribution: consistent
+                libketama_compatible: true
+                buffer_writes: true
+                binary_protocol: true
+                no_block: true
+                socket_send_size: 1
+                socket_recv_size: 1
+                connect_timeout: 1
+                retry_timeout: 1
+                send_timeout: 1
+                recv_timeout: 1
+                poll_timeout: 1
+                cache_lookups: true
+                server_failure_limit: 1
+
+        instance2:
+            hosts:
+                - { dsn: host1, port: 11211, weight: 15 }
+                - { dsn: host2, port: 11211, weight: 30 }
+
+```
+
+To reference those instances in your code or in other configuration files you will have to
+use the instance name:
+
+```php
+$memcache = $this->get('memcache.instance1');
+```
+
+### Memcached / Memcache configuration ###
+
+If you want to see all the Memcached / Memcache configuration options you can check it out on the
+extension documentation in the PHP site
+
+#### Memcached ####
+
+* http://php.net/manual/en/memcached.constants.php (Memcached configuration reference per instance)
+
+#### Memcache ####
+
+* http://php.net/manual/en/memcache.ini.php (Memcache configuration reference)
+* http://php.net/manual/en/memcache.addserver.php (Memcache connection options)
+
+### Session Support ###
+
+This bundle also provides support for storing session data on Memcache servers. To enable session support
+you will have to enable it through the ```session_support``` key. Note that the only required subkeys of
+the session support are: ```enabled``` (defaults to ```false```) and ```instance_id``` (a valid instance).
+You can also specify a key prefix and an expiretime.
+
+```yml
+emagister_memcached:
+    session_support:
+        enabled: true
+        instance_id: instance1
+        options:
+            prefix: "my_session_prefix_"
+            expiretime: 172800
+
+    # Instances configuration
+```
 
 ### Considerations
 
