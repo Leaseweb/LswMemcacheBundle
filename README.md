@@ -126,3 +126,19 @@ The session write that invokes a memcache set operation is executed after the pa
 The collect call of the memcache data collector is executed before the rendering of the page is complete
 and therefor also before the session write is executed. This causes the session writes not to show up in
 the Web Debug Toolbar.
+
+### Credits
+
+- DependencyInjection/LswMemcacheExtension.php
+- DependencyInjection/Configuration.php
+- DependencyInjection/Compiler/EnableSessionSupport.php
+
+Are based on implementation in:
+
+https://github.com/Emagister/MemcachedBundle by Christian Soronellas
+
+- Command/StatisticsCommand.php
+
+Is based on an implementation in:
+
+https://github.com/beryllium/CacheBundle by Kevin Boyd
