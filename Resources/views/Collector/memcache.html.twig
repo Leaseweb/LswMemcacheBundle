@@ -1,41 +1,29 @@
 {% extends 'WebProfilerBundle:Profiler:layout.html.twig' %}
 
 {% block toolbar %}
-    {% set percentage = 100 %}
-    {% if collector.readCount > 0 %}
-        {% set percentage = 100*collector.missCount/collector.readCount %}
-    {% endif %}
     {% set icon %}
         <img width="20" height="28" alt="MC" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAcCAYAAABh2p9gAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB90DBRUYHnDz6xIAAAAZdEVYdENvbW1lbnQAQ3JlYXRlZCB3aXRoIEdJTVBXgQ4XAAAA10lEQVRIx+2UsYoCQRBE34gKegj+hgYFrsgZ39ffBbrQyX6BgSZqYCganCd7y/aME7sVDbyemupuGOj0RpI0kDTJZU31aucP4MepizHXEGAmaePUxphrCFBI2koaZjLX8AYsgO9MBkCoDX4KHBu8BFbAxGNmdk0lrGsBnHNYyvD22HDlMUk7SaNXDf90iLA98Gy7nzAKj1l9tcwwAKWZFTktl8A6h/Wd2fx7XdLYY68sJUSShUTq1oRbM1s69THWmrCKXKhSZs2EF+CzrcjMTsC8++Q7/eoODXhHAld0cGAAAAAASUVORK5CYII=">
-        {% if percentage == 0 %}
-            <span class="sf-toolbar-status sf-toolbar-status-green">{{ collector.callCount }}</span>
-        {% elseif percentage > 5 %}
-            <span class="sf-toolbar-status sf-toolbar-status-red">{{ collector.callCount }}</span>
-        {% else %}
-            <span class="sf-toolbar-status sf-toolbar-status-yellow">{{ collector.callCount }}</span>
-        {% endif %}
-        {% if collector.callcount > 0 %}
-            <span class="sf-toolbar-info-piece-additional-detail">in {{ '%0.2f'|format(collector.time * 1000) }} ms</span>
+        <span class="sf-toolbar-status">{{ collector.totals.calls }}</span>
+        {% if collector.totals.calls > 0 %}
+            <span class="sf-toolbar-info-piece-additional-detail">in {{ '%0.1f'|format(collector.totals.time * 1000) }} ms</span>
         {% endif %}
     {% endset %}
     {% set text %}
         <div class="sf-toolbar-info-piece">
-            <b>Calls</b>
-            <span>{{ collector.callcount }}</span>
+            <b>Memcache Calls</b>
+            <span>{{ collector.totals.calls }}</span>
         </div>
         <div class="sf-toolbar-info-piece">
             <b>Total time</b>
-            <span>{{ '%0.2f'|format(collector.time * 1000) }} ms</span>
+            <span>{{ '%0.1f'|format(collector.totals.time * 1000) }} ms</span>
         </div>
         <div class="sf-toolbar-info-piece">
-            <b>Misses</b>
-            {% if percentage == 0 %}
-                <span class="sf-toolbar-status sf-toolbar-status-green">{{ '%0.0f%%'|format(percentage) }}</span>
-            {% elseif percentage > 5 %}
-                <span class="sf-toolbar-status sf-toolbar-status-red">{{ '%0.0f%%'|format(percentage) }}</span>
-            {% else %}
-                <span class="sf-toolbar-status sf-toolbar-status-yellow">{{ '%0.0f%%'|format(percentage) }}</span>
-            {% endif %}
+            <b>Cache hits</b>
+            <span>{{ collector.totals.reads }}/{{ collector.totals.reads }} ({{ collector.totals.ratio }})</span>
+        </div>
+        <div class="sf-toolbar-info-piece">
+            <b>Cache writes</b>
+            <span>{{ collector.totals.writes }}</span>
         </div>
     {% endset %}
     {% include 'WebProfilerBundle:Profiler:toolbar_item.html.twig' with { 'link': profiler_url } %}
@@ -48,26 +36,39 @@
     </span>
     <strong>Memcache</strong>
     <span class="count">
-        <span>{{ collector.callcount }}</span>
-        <span>{{ '%0.0f'|format(collector.time * 1000) }} ms</span>
+        <span>{{ collector.totals.calls }}</span>
+        <span>{{ '%0.0f'|format(collector.totals.time * 1000) }} ms</span>
     </span>
 </span>
 {% endblock %}
 
 {% block panel %}
-    <h2>Memcache Calls</h2>
+    <h2>Memcache</h2>
+    {% for name, calls in collector.calls %}
+        <h3>Statistics for '{{ name }}'</h3>
+        <table>
+        <thead><tr>
+        {% for key, value in collector.statistics[name] %}
+        <th>{{ key|capitalize }}</th>
+        {% endfor %}
+        </tr><tbody><tr>
+        {% for key, value in collector.statistics[name] %}
+            {% if key == 'time' %}
+                <td>{{ '%0.1f'|format(value * 1000) }} ms</td>
+            {% else %}
+                <td>{{ value }}</td>
+            {% endif %}
+        {% endfor %}
+        </tr></tbody></table>
 
-    {% if not collector.callcount %}
-        <p>
-            <em>No calls.</em>
-        </p>
-    {% else %}
-        <ul class="alt">
-            {% for name, calls in collector.calls %}
-                {% set count = calls|length %}
-                {% if count > 0 %}
-                    <h4>Instance: {{ name }} ({{ count }})</h4><br/>
-                {% endif %}
+        <h3>Calls for '{{ name }}'</h3>
+
+        {% if not collector.totals.calls %}
+            <p>
+                <em>No calls.</em>
+            </p>
+        {% else %}
+            <ul class="alt">
                 {% for i, call in calls %}
                     <li class="{{ i is odd ? 'odd' : 'even' }}">
                         <div>
@@ -80,8 +81,15 @@
                         </small>
                     </li>
                 {% endfor %}
+            </ul>
+        {% endif %}
+
+        <h3>Options for '{{ name }}'</h3>
+        <pre>
+            {%- for key, value in collector.options[name] %}
+                {{- '%-25s'|format(key~':') }} {{ value }}{{ "\n" -}}
             {% endfor %}
-        </ul>
-    {% endif %}
+        </pre>
+    {% endfor %}
 
 {% endblock %}

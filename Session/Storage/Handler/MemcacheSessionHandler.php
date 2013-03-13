@@ -1,15 +1,4 @@
 <?php
-
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
-//namespace Symfony\Component\HttpFoundation\Session\Storage\Handler;
 namespace Lsw\MemcacheBundle\Session\Storage\Handler;
 
 use Lsw\MemcacheBundle\Cache\LoggingMemcache;
@@ -48,7 +37,6 @@ class MemcacheSessionHandler implements \SessionHandlerInterface
      *
      * @throws \InvalidArgumentException When unsupported options are passed
      */
-    //public function __construct(Memcache $memcache, array $options = array())
     public function __construct(LoggingMemcache $memcache, array $options = array())
     {
         if ($diff = array_diff(array_keys($options), array('prefix', 'expiretime'))) {

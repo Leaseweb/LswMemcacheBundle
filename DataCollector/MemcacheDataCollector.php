@@ -1,6 +1,8 @@
 <?php
 namespace Lsw\MemcacheBundle\DataCollector;
 
+use Symfony\Component\Yaml\Yaml;
+
 use Symfony\Component\HttpKernel\DataCollector\DataCollector;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,6 +17,7 @@ use Lsw\MemcacheBundle\Cache\LoggingMemcache;
 class MemcacheDataCollector extends DataCollector
 {
     private $instances;
+    private $options;
 
     /**
      * Class constructor
@@ -22,6 +25,7 @@ class MemcacheDataCollector extends DataCollector
     public function __construct()
     {
         $this->instances = array();
+        $this->options = array();
     }
 
     /**
@@ -29,9 +33,10 @@ class MemcacheDataCollector extends DataCollector
      *
      * @param Lsw\MemcacheBundle\Cache\LoggingMemcache $memcache Logging Memcache object
      */
-    public function addInstance($name, LoggingMemcache $memcache)
+    public function addInstance($name, $options, LoggingMemcache $memcache)
     {
         $this->instances[$name] = $memcache;
+        $this->options[$name] = $options;
     }
 
     /**
@@ -39,29 +44,61 @@ class MemcacheDataCollector extends DataCollector
      */
     public function collect(Request $request, Response $response, \Exception $exception = null)
     {
-        $this->data = array();
+        $empty = array('calls'=>array(),'config'=>array(),'options'=>array(),'statistics'=>array());
+        $this->data = array('instances'=>$empty,'total'=>$empty);
         foreach ($this->instances as $name=>$memcache) {
-            $this->data[$name] = array();
-            $this->data[$name]['calls'] = $memcache->getLoggedCalls();
+            $calls = $memcache->getLoggedCalls();
+            $this->data['instances']['calls'][$name] = $calls;
+            $this->data['instances']['options'][$name] = $this->options[$name];
         }
+        $this->data['instances']['statistics'] = $this->calculateStatistics($this->data['instances']['calls']);
+        $this->data['total']['statistics'] = $this->calculateTotalStatistics($this->data['instances']['statistics']);
     }
 
-    /**
-     * Method counts amount of Memcache misses: "get" calls that return "false"
-     *
-     * @return number
-     */
-    public function getMissCount()
+    private function calculateStatistics($calls)
     {
-        $misses = 0;
-        foreach ($this->data as $name=>$data) {
-            foreach ($data['calls'] as $call) {
+        $statistics = array();
+        foreach ($this->data['instances']['calls'] as $name=>$calls) {
+            $statistics[$name] = array('calls'=>0,'time'=>0,'reads'=>0,'hits'=>0,'misses'=>0,'writes'=>0);
+            foreach ($calls as $call) {
+                $statistics[$name]['calls'] += 1;
+                $statistics[$name]['time'] += $call->time;
                 if ($call->name == 'get') {
-                    $misses += $call->result === false?1:0;
+                    $statistics[$name]['reads'] += 1;
+                    if ($call->result !== false) {
+                        $statistics[$name]['hits'] += 1;
+                    } else {
+                        $statistics[$name]['misses'] += 1;
+                    }
+                } elseif ($call->name == 'get') {
+                    $statistics[$name]['writes'] += 1;
                 }
             }
+            if ($statistics[$name]['reads']) {
+                $statistics[$name]['ratio'] = 100*$statistics[$name]['hits']/$statistics[$name]['reads'].'%';
+            } else {
+                $statistics[$name]['ratio'] = 'N/A';
+            }
         }
-        return $misses;
+
+        return $statistics;
+    }
+
+    private function calculateTotalStatistics($statistics)
+    {
+        $totals = array('calls'=>0,'time'=>0,'reads'=>0,'hits'=>0,'misses'=>0,'writes'=>0);
+        foreach ($statistics as $name=>$values) {
+            foreach ($totals as $key => $value) {
+                $totals[$key] += $statistics[$name][$key];
+            }
+        }
+        if ($totals['reads']) {
+            $totals['ratio'] = 100*$totals['hits']/$totals['reads'].'%';
+        }else {
+            $totals['ratio'] = 'N/A';
+        }
+
+        return $totals;
     }
 
     /**
@@ -69,34 +106,21 @@ class MemcacheDataCollector extends DataCollector
      *
      * @return number
      */
-    public function getReadCount()
+    public function getStatistics()
     {
-        $reads = 0;
-        foreach ($this->data as $name=>$data) {
-            foreach ($data['calls'] as $call) {
-                if ($call->name == 'get') {
-                    $reads += 1;
-                }
-            }
-        }
-
-        return $reads;
+        return $this->data['instances']['statistics'];
     }
 
     /**
-     * Method returns amount of logged Memcache calls
+     * Method returns the statistic totals
      *
      * @return number
      */
-    public function getCallCount()
+    public function getTotals()
     {
-        $calls = 0;
-        foreach ($this->data as $name=>$data) {
-            $calls += count($data['calls']);
-        }
-
-        return $calls;
+        return $this->data['total']['statistics'];
     }
+
 
     /**
      * Method returns all logged Memcache call objects
@@ -105,29 +129,17 @@ class MemcacheDataCollector extends DataCollector
      */
     public function getCalls()
     {
-        $calls = array();
-        foreach ($this->data as $name=>$data) {
-            $calls[$name] = $data['calls'];
-        }
-
-        return $calls;
+        return $this->data['instances']['calls'];
     }
 
     /**
-     * Method calculates Memcache calls execution time
+     * Method returns all Memcache options
      *
-     * @return number
+     * @return mixed
      */
-    public function getTime()
+    public function getOptions()
     {
-        $time = 0;
-        foreach ($this->data as $name=>$data) {
-            foreach ($data['calls'] as $call) {
-                $time += $call->time;
-            }
-        }
-
-        return $time;
+        return $this->data['instances']['options'];
     }
 
     /**

@@ -19,7 +19,7 @@ class LoggingMemcache
      *
      * @throws \Exception when php Memcache plugin is not installed
      */
-    public function __construct($debug = false)
+    public function __construct($debug = false, $persistentId = null)
     {
         $this->debug = $debug;
         if ($this->debug) {
@@ -29,11 +29,11 @@ class LoggingMemcache
             $class = get_class($this);
             throw new \Exception("Class '$class' depends on the 'Memcached' plugin that is currently not installed");
         }
-        $this->memcache = new \Memcached();
-        // use the binary protocol for speed optimization
-        $this->memcache->setOption(\Memcached::OPT_SERIALIZER, \Memcached::SERIALIZER_JSON);
-        $this->memcache->setOption(\Memcached::OPT_BINARY_PROTOCOL,true);
-        $this->memcache->setOption(\Memcached::OPT_TCP_NODELAY,true);
+        if ($persistentId) {
+            $this->memcache = new \Memcached($persistentId);
+        } else {
+            $this->memcache = new \Memcached();
+        }
     }
 
     public function getLoggedCalls()
@@ -56,12 +56,16 @@ class LoggingMemcache
             if ($this->debug) {
                 $start = microtime(true);
             }
-            $result = call_user_func_array(array($this->memcache, $name), $arguments);
+            $return = call_user_func_array(array($this->memcache, $name), $arguments);
             if ($this->debug) {
+                $result = $return;
+                if (strlen($result)>1024*64) {
+                    $result = 'Memcache result too long ('.strlen($result).' bytes) to display.';
+                }
                 $time = microtime(true) - $start;
                 $this->calls[] = (object)compact('start','time','name','arguments','result');
             }
-            return $result;
+            return $return;
         }
         throw new \Exception("Method 'Memcache::$name' do not exist, see PHP manual.");
     }

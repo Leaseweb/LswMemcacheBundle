@@ -93,7 +93,8 @@ class LswMemcacheExtension extends Extension
         }
 
         $memcached = new Definition('Lsw\MemcacheBundle\Cache\LoggingMemcache');
-        $memcached->addArgument(new Parameter('kernel.debug'));
+        $debug = new Parameter('kernel.debug');
+        $memcached->addArgument($debug);
 
         // Check if it has to be persistent
         if (isset($config['persistent_id'])) {
@@ -136,17 +137,24 @@ class LswMemcacheExtension extends Extension
                         $constant = 'Memcached::OPT_'.strtoupper($key);
                         $memcached->addMethodCall('setOption', array(constant($constant), $value));
                     }
+
                 }
             }
 
+        }
+
+        foreach ($options as $key => $value) {
+            $options[$key] = var_export($value,true);
         }
 
         // Add the service to the container
         $serviceName = sprintf('memcache.%s', $name);
         $container->setDefinition($serviceName, $memcached);
         // Add the service to the data collector
-        $definition = $container->getDefinition('memcache.data_collector');
-        $definition->addMethodCall('addInstance', array($name, new Reference($serviceName)));
+        if ($debug) {
+            $definition = $container->getDefinition('memcache.data_collector');
+            $definition->addMethodCall('addInstance', array($name, $options, new Reference($serviceName)));
+        }
     }
 
 }
