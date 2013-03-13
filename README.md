@@ -35,6 +35,18 @@ Finally, add the bundle to the registerBundles function of the AppKernel class i
             ...
         );
 
+Configure the bundle:
+
+```yml
+lsw_memcache:
+    session_support:
+        instance: default
+    instances:
+        default:
+            hosts:
+              - { dsn: localhost, port: 11211 }
+```
+
 Install the following dependencies (in Debian based systems using 'apt'):
 
     apt-get install memcached php5-memcached
