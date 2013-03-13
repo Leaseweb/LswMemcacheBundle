@@ -69,7 +69,7 @@ lsw_memcache:
 
     instances:
         default:
-            persistent_id: instance1
+            persistent_id: default
             hosts:
                 - { dsn: 10.0.0.1, port: 11211, weight: 15 }
                 - { dsn: 10.0.0.2, port: 11211, weight: 30 }
