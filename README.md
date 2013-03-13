@@ -110,7 +110,7 @@ To reference those instances in your code or in other configuration files you wi
 use the instance name:
 
 ```php
-$memcache = $this->get('memcache.instance1');
+$memcache = $this->get('memcache.default');
 ```
 
 ### Memcached / Memcache configuration ###
