@@ -111,21 +111,22 @@ class LswMemcacheExtension extends Extension
         }
         $memcached->addMethodCall('addServers', array($servers));
 
+        // Get default memcached options
         $options = $container->getParameter('memcache.default_options');
-
-
-        // Add memcached options
+        // Add overriden options
         if (isset($config['options'])) {
 
             foreach ($options as $key => $value) {
                 if (isset($config['options'][$key])) {
                     $type = gettype($value);
                     if ($key == 'serializer') {
+                        // serializer option needs to be supported and is a constant
                         if ($value != 'php' && !constant('Memcached::HAVE_' . strtoupper($value))) {
                             throw new \LogicException("Invalid serializer specified for Memcached: $value");
                         }
                         $value = constant('Memcached::SERIALIZER_' . strtoupper($value));
                     } elseif ($key == 'distribution') {
+                        // distribution is defined as a constant
                         $value = constant('Memcached::DISTRIBUTION_' . strtoupper($value));
                     } else {
                         $value = $config['options'][$key];
@@ -139,8 +140,11 @@ class LswMemcacheExtension extends Extension
             }
 
         }
+
+        // Add the service to the container
         $serviceName = sprintf('memcache.%s', $name);
         $container->setDefinition($serviceName, $memcached);
+        // Add the service to the data collector
         $definition = $container->getDefinition('memcache.data_collector');
         $definition->addMethodCall('addInstance', array($name, new Reference($serviceName)));
     }
