@@ -66,7 +66,6 @@ Below you can see a full configuration for this bundle.
 
 ```yml
 lsw_memcache:
-
     instances:
         default:
             persistent_id: default
@@ -94,7 +93,6 @@ lsw_memcache:
                 poll_timeout: 1000
                 cache_lookups: false
                 server_failure_limit: 0
-
         sessions:
             hosts:
                 - { dsn: localhost, port: 11212 }
