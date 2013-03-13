@@ -68,42 +68,42 @@ Below you can see a full configuration for this bundle.
 lsw_memcache:
     session_support:
         enabled: true
-        instance_id: instance1
+        instance_id: sessions
         options:
-            prefix: "my_session_prefix_"
-            expiretime: 172800
+            prefix: "session_"
+            expiretime: 7200
 
     instances:
-        instance1:
+        default:
             persistent_id: instance1
             hosts:
-                - { dsn: host1, port: 11211, weight: 15 }
-                - { dsn: host2, port: 11211, weight: 30 }
+                - { dsn: 10.0.0.1, port: 11211, weight: 15 }
+                - { dsn: 10.0.0.2, port: 11211, weight: 30 }
 
             options:
                 compression: true
-                serializer: igbinary
-                prefix_key: instance1
+                serializer: json
+                prefix_key: ""
                 hash: default
                 distribution: consistent
                 libketama_compatible: true
                 buffer_writes: true
                 binary_protocol: true
                 no_block: true
-                socket_send_size: 1
-                socket_recv_size: 1
-                connect_timeout: 1
-                retry_timeout: 1
-                send_timeout: 1
-                recv_timeout: 1
-                poll_timeout: 1
-                cache_lookups: true
-                server_failure_limit: 1
+                tcp_nodelay: false
+                socket_send_size: ~
+                socket_recv_size: ~
+                connect_timeout: 1000
+                retry_timeout: 0
+                send_timeout: 0
+                recv_timeout: 0
+                poll_timeout: 1000
+                cache_lookups: false
+                server_failure_limit: 0
 
-        instance2:
+        sessions:
             hosts:
-                - { dsn: host1, port: 11211, weight: 15 }
-                - { dsn: host2, port: 11211, weight: 30 }
+                - { dsn: localhost, port: 11212 }
 
 ```
 
