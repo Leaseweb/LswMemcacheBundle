@@ -66,11 +66,6 @@ Below you can see a full configuration for this bundle.
 
 ```yml
 lsw_memcache:
-    session_support:
-        instance: sessions
-        options:
-            prefix: "session_"
-            expiretime: 7200
 
     instances:
         default:
@@ -113,37 +108,21 @@ use the instance name:
 $memcache = $this->get('memcache.default');
 ```
 
-### Memcached / Memcache configuration ###
-
-If you want to see all the Memcached / Memcache configuration options you can check it out on the
-extension documentation in the PHP site
-
-#### Memcached ####
-
-* http://php.net/manual/en/memcached.constants.php (Memcached configuration reference per instance)
-
-#### Memcache ####
-
-* http://php.net/manual/en/memcache.ini.php (Memcache configuration reference)
-* http://php.net/manual/en/memcache.addserver.php (Memcache connection options)
-
 ### Session Support ###
 
 This bundle also provides support for storing session data on Memcache servers. To enable session support
-you will have to enable it through the ```session_support``` key. Note that the only required subkeys of
-the session support are: ```enabled``` (defaults to ```false```) and ```instance_id``` (a valid instance).
-You can also specify a key prefix and an expiretime.
+you will have to enable it through the ```session_support``` key. Note that the only required subkey of
+the session support is ```instance``` (a valid instance). You can also specify a key prefix and an expiretime.
 
 ```yml
-emagister_memcached:
+lsw_memcache:
     session_support:
-        enabled: true
-        instance_id: instance1
+        instance: sessions
         options:
-            prefix: "my_session_prefix_"
-            expiretime: 172800
+            prefix: "session_"
+            expiretime: 7200
 
-    # Instances configuration
+    ...
 ```
 
 ### Considerations
