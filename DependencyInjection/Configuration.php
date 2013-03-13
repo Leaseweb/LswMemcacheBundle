@@ -116,7 +116,7 @@ class Configuration implements ConfigurationInterface
                     ->addDefaultsIfNotSet()
                     ->children()
                         ->scalarNode('prefix')
-                            ->defaultValue('sf2')
+                            ->defaultValue('session_')
                             ->isRequired()
                         ->end()
                         ->scalarNode('expiretime')
@@ -143,7 +143,7 @@ class Configuration implements ConfigurationInterface
     private function addMemcachedOptionsSection()
     {
         $tree = new TreeBuilder();
-        $node = $tree->root('memcached_options');
+        $node = $tree->root('options');
 
         // Memcached only configs
         $node
@@ -151,13 +151,13 @@ class Configuration implements ConfigurationInterface
             ->children()
                 ->booleanNode('compression')->defaultTrue()->end()
                 ->scalarNode('serializer')
-                    ->defaultValue('php')
+                    ->defaultValue('json')
                     ->validate()
                     ->ifNotInArray(array('php', 'json', 'igbinary'))
                         ->thenInvalid('Invalid value for serializer')
                     ->end()
                 ->end()
-                ->scalarNode('prefix_key')->defaultValue('')->end()
+                ->scalarNode('prefix_key')->defaultValue('cache_')->end()
                 ->scalarNode('hash')
                     ->defaultValue('default')
                     ->validate()
@@ -166,7 +166,7 @@ class Configuration implements ConfigurationInterface
                     ->end()
                 ->end()
                 ->scalarNode('distribution')
-                    ->defaultValue('modula')
+                    ->defaultValue('consistent')
                     ->validate()
                     ->ifNotInArray(array('modula', 'consistent'))
                         ->thenInvalid('Must be either modula or consistent')
@@ -174,11 +174,11 @@ class Configuration implements ConfigurationInterface
                 ->end()
                 ->booleanNode('libketama_compatible')
                     ->info('It is highly recommended to enable this option if you want to use consistent hashing, and it may be enabled by default in future releases.')
-                    ->defaultFalse()
+                    ->defaultTrue()
                 ->end()
-                ->booleanNode('buffer_writes')->defaultFalse()->end()
-                ->booleanNode('binary_protocol')->defaultFalse()->end()
-                ->booleanNode('no_block')->defaultFalse()->end()
+                ->booleanNode('buffer_writes')->defaultTrue()->end()
+                ->booleanNode('binary_protocol')->defaultTrue()->end()
+                ->booleanNode('no_block')->defaultTrue()->end()
                 ->booleanNode('tcp_nodelay')->defaultFalse()->end()
                 ->scalarNode('socket_send_size')
                     ->defaultNull()
