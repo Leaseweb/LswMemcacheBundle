@@ -35,13 +35,6 @@ Finally, add the bundle to the registerBundles function of the AppKernel class i
             ...
         );
 
-Add the following 'handler_id' to your 'app/config/config.yml' file under session:
-
-    framework:
-        ...
-        session:
-            handler_id:  memcache.session_handler
-
 Install the following dependencies (in Debian based systems using 'apt'):
 
     apt-get install memcached php5-memcached
