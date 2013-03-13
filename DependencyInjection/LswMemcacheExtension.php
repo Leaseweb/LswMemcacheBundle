@@ -25,6 +25,7 @@ class LswMemcacheExtension extends Extension
         $config = $this->processConfiguration($configuration, $configs);
 
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader->load('config.yml');
         $loader->load('services.yml');
 
         if (isset($config['session_support']) && null !== $config['session_support']['instance']) {
@@ -110,53 +111,33 @@ class LswMemcacheExtension extends Extension
         }
         $memcached->addMethodCall('addServers', array($servers));
 
+        $options = $container->getParameter('memcache.default_options');
+
+
         // Add memcached options
         if (isset($config['options'])) {
-            $memcached->addMethodCall('setOption', array(constant('Memcached::OPT_COMPRESSION'), (bool) $config['options']['compression']));
 
-            if ('php' != $config['options']['serializer']
-                && false === constant('Memcached::HAVE_' . strtoupper($config['options']['serializer']))
-            ) {
-                throw new \LogicException('Invalid serializer specified for Memcached: ' . $config['options']['serializer']);
+            foreach ($options as $key => $value) {
+                if (isset($config['options'][$key])) {
+                    $type = gettype($value);
+                    if ($key == 'serializer') {
+                        if ($value != 'php' && !constant('Memcached::HAVE_' . strtoupper($value))) {
+                            throw new \LogicException("Invalid serializer specified for Memcached: $value");
+                        }
+                        $value = constant('Memcached::SERIALIZER_' . strtoupper($value));
+                    } elseif ($key == 'distribution') {
+                        $value = constant('Memcached::DISTRIBUTION_' . strtoupper($value));
+                    } else {
+                        $value = $config['options'][$key];
+                    }
+                    if ($type!='null') {
+                        settype($value,$type);
+                        $constant = 'Memcached::OPT_'.strtoupper($key);
+                        $memcached->addMethodCall('setOption', array(constant($constant), $value));
+                    }
+                }
             }
 
-            $memcached->addMethodCall('setOption', array(constant('Memcached::OPT_SERIALIZER'), constant('Memcached::SERIALIZER_' . strtoupper($config['options']['serializer']))));
-            $memcached->addMethodCall('setOption', array(constant('Memcached::OPT_PREFIX_KEY'), $config['options']['prefix_key']));
-            $memcached->addMethodCall('setOption', array(constant('Memcached::OPT_HASH'), constant('Memcached::HASH_' . strtoupper($config['options']['hash']))));
-            $memcached->addMethodCall('setOption', array(constant('Memcached::OPT_DISTRIBUTION'), strtoupper('Memcached::DISTRIBUTION_' . $config['options']['distribution'])));
-
-            if ('consistent' == $config['options']['distribution']) {
-                $config['options']['libketama_compatible'] = true;
-            }
-
-            $memcached->addMethodCall('setOption', array(constant('Memcached::OPT_LIBKETAMA_COMPATIBLE'), (bool) $config['options']['libketama_compatible']));
-            $memcached->addMethodCall('setOption', array(constant('Memcached::OPT_BUFFER_WRITES'), (bool) $config['options']['buffer_writes']));
-            $memcached->addMethodCall('setOption', array(constant('Memcached::OPT_BINARY_PROTOCOL'), (bool) $config['options']['binary_protocol']));
-            $memcached->addMethodCall('setOption', array(constant('Memcached::OPT_NO_BLOCK'), (bool) $config['options']['no_block']));
-            $memcached->addMethodCall('setOption', array(constant('Memcached::OPT_TCP_NODELAY'), (bool) $config['options']['tcp_nodelay']));
-            if (null !== $config['options']['socket_send_size']) {
-                $memcached->addMethodCall('setOption', array(constant('Memcached::OPT_SOCKET_SEND_SIZE'), $config['options']['socket_send_size']));
-            }
-            if (null !== $config['options']['socket_recv_size']) {
-                $memcached->addMethodCall('setOption', array(constant('Memcached::OPT_SOCKET_RECV_SIZE'), $config['options']['socket_recv_size']));
-            }
-            $memcached->addMethodCall('setOption', array(constant('Memcached::OPT_CONNECT_TIMEOUT'), $config['options']['connect_timeout']));
-
-            if ($config['options']['retry_timeout'] > 0) {
-                $memcached->addMethodCall('setOption', array(constant('Memcached::OPT_RETRY_TIMEOUT'), $config['options']['retry_timeout']));
-            }
-
-            $memcached->addMethodCall('setOption', array(constant('Memcached::OPT_SEND_TIMEOUT'), $config['options']['send_timeout']));
-            $memcached->addMethodCall('setOption', array(constant('Memcached::OPT_RECV_TIMEOUT'), $config['options']['recv_timeout']));
-            $memcached->addMethodCall('setOption', array(constant('Memcached::OPT_POLL_TIMEOUT'), $config['options']['poll_timeout']));
-
-            if (true === (bool) $config['options']['cache_lookups']) {
-                $memcached->addMethodCall('setOption', array(constant('Memcached::OPT_CACHE_LOOKUPS'), true));
-            }
-
-            if ($config['options']['server_failure_limit'] > 0) {
-                $memcached->addMethodCall('setOption', array(constant('Memcached::OPT_SERVER_FAILURE_LIMIT'), $config['options']['server_failure_limit']));
-            }
         }
         $serviceName = sprintf('memcache.%s', $name);
         $container->setDefinition($serviceName, $memcached);
