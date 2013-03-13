@@ -119,7 +119,7 @@ lsw_memcache:
         options:
             prefix: "session_"
             expiretime: 7200
-    # ...
+    # instances
 ```
 
 ### Considerations
