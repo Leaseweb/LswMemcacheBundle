@@ -58,8 +58,8 @@ information should show up with a little double arrow (fast-forward) icon in you
 
 When you want to use the cache from the controller you can simply call:
 
-    $this->get('memcache')->set('someKey', 'someValue', $timeToLive);
-    $this->get('memcache')->get('someKey');
+    $this->get('memcache.default')->set('someKey', 'someValue', $timeToLive);
+    $this->get('memcache.default')->get('someKey');
 
 The above example shows how to store value 'someValue' under key 'someKey' for a maximum of $timeToLive
 seconds. In the second line the value is retrieved from Memcache. If the key can not be found or the
@@ -102,13 +102,6 @@ lsw_memcache:
             hosts:
                 - { dsn: localhost, port: 11212 }
 
-```
-
-To reference those instances in your code or in other configuration files you will have to
-use the instance name:
-
-```php
-$memcache = $this->get('memcache.default');
 ```
 
 ### Session Support ###
