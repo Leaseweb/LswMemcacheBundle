@@ -52,10 +52,10 @@ information should show up with a little double arrow (fast-forward) icon in you
 ### Usage
 
 When you want to use the cache from the controller you can simply call:
-  
+
     $this->get('memcache')->set('someKey', 'someValue', $timeToLive);
     $this->get('memcache')->get('someKey');
-    
+
 The above example shows how to store value 'someValue' under key 'someKey' for a maximum of $timeToLive
 seconds. In the second line the value is retrieved from Memcache. If the key can not be found or the
 specified number of seconds have passed the 'get' function returns the value 'false'.
@@ -67,8 +67,7 @@ Below you can see a full configuration for this bundle.
 ```yml
 lsw_memcache:
     session_support:
-        enabled: true
-        instance_id: sessions
+        instance: sessions
         options:
             prefix: "session_"
             expiretime: 7200

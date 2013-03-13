@@ -110,8 +110,7 @@ class Configuration implements ConfigurationInterface
         $node
             ->addDefaultsIfNotSet()
             ->children()
-                ->booleanNode('enabled')->defaultFalse()->end()
-                ->scalarNode('instance_id')->end()
+                ->scalarNode('instance')->defaultNull()->end()
                 ->arrayNode('options')
                     ->addDefaultsIfNotSet()
                     ->children()

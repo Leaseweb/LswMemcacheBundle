@@ -26,12 +26,12 @@ class LswMemcacheExtension extends Extension
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
 
-        if (isset($config['session_support']) && true === $config['session_support']['enabled']) {
-            if (!isset($config['instances']) || !isset($config['instances'][$config['session_support']['instance_id']])) {
-                throw new \LogicException(sprintf('The instance "%s" does not exist! Cannot enable the session support!', $config['session_support']['instance_id']));
+        if (isset($config['session_support']) && null !== $config['session_support']['instance']) {
+            if (!isset($config['instances']) || !isset($config['instances'][$config['session_support']['instance']])) {
+                throw new \LogicException(sprintf('The instance "%s" does not exist! Cannot enable the session support!', $config['session_support']['instance']));
             }
             $options = $config['session_support']['options'];
-            $this->enableSessionSupport($config['session_support']['instance_id'], $options, $container);
+            $this->enableSessionSupport($config['session_support']['instance'], $options, $container);
         }
         if (isset($config['instances'])) {
             $this->addInstances($config['instances'], $container);
