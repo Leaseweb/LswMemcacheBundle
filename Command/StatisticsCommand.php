@@ -7,6 +7,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 
 /**
  * Provides a command-line interface for viewing cache client stats
@@ -24,7 +25,10 @@ class StatisticsCommand extends ContainerAwareCommand
    {
       $this
         ->setName('memcache:statistics')
-        ->setDescription('Display Memcache statistics');
+        ->setDescription('Display Memcache statistics')
+        ->setDefinition(array(
+            new InputArgument('instance', InputArgument::REQUIRED, 'The instance'),
+        ));
    }
 
    /**
@@ -36,8 +40,41 @@ class StatisticsCommand extends ContainerAwareCommand
     */
    protected function execute(InputInterface $input, OutputInterface $output)
    {
-     $memcache = $this->getContainer()->get('memcache');
-     $output->writeln($this->formatStats($memcache->getStats()));
+     $instance = $input->getArgument('instance');
+     try {
+         $memcache = $this->getContainer()->get('memcache.'.$instance);
+         $output->writeln($this->formatStats($memcache->getStats()));
+     } catch(ServiceNotFoundException $e) {
+         $output->writeln("<error>Instance '$instance' is not found</error>");
+     }
+   }
+
+   /**
+    * Choose the instance
+    *
+    * @param InputInterface  $input  Input interface
+    * @param OutputInterface $output Output interface
+    *
+    * @see Command
+    * @return mixed
+    */
+   protected function interact(InputInterface $input, OutputInterface $output)
+   {
+       if (!$input->getArgument('instance')) {
+           $instance = $this->getHelper('dialog')->askAndValidate(
+                   $output,
+                   'Please give the instance:',
+                   function($instance)
+                   {
+                       if (empty($instance)) {
+                           throw new \Exception('Instance can not be empty');
+                       }
+
+                       return $instance;
+                   }
+                   );
+                   $input->setArgument('instance', $instance);
+       }
    }
 
    /**

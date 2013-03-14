@@ -59,9 +59,6 @@ class LoggingMemcache
             $return = call_user_func_array(array($this->memcache, $name), $arguments);
             if ($this->debug) {
                 $result = $return;
-                if (strlen($result)>1024*64) {
-                    $result = 'Memcache result too long ('.strlen($result).' bytes) to display.';
-                }
                 $time = microtime(true) - $start;
                 $this->calls[] = (object)compact('start','time','name','arguments','result');
             }
