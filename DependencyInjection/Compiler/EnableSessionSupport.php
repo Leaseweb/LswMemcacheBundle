@@ -16,11 +16,13 @@ class EnableSessionSupport implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        // If no handler type specified or no is active session support, return
+        // If there is no active session support, return
         if (!$container->hasAlias('session.storage')) {
             return;
         }
-
-        $container->setAlias('session.handler', 'memcache.session_handler');
+        // If the memcache.session_handler service is loaded set the alias
+        if ($container->hasDefinition('memcache.session_handler')) {
+            $container->setAlias('session.handler', 'memcache.session_handler');
+        }
     }
 }

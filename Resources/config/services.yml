@@ -4,8 +4,6 @@ parameters:
     memcache.data_collector.template: "LswMemcacheBundle:Collector:memcache"
 
 services:
-    memcache.session_handler:
-        class: %memcache.session_handler.class%
     memcache.data_collector:
         class: %memcache.data_collector.class%
         tags:

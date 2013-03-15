@@ -40,7 +40,7 @@ class LswMemcacheExtension extends Extension
         }
     }
 
-        /**
+    /**
      * Given a handler (memcache/memcached) enables session support
      *
      * @param string $type
@@ -50,15 +50,13 @@ class LswMemcacheExtension extends Extension
      */
     private function enableSessionSupport($clientId, array $options, ContainerBuilder $container)
     {
-        $definition = $container->findDefinition('memcache.session_handler');
+        $definition = new Definition($container->getParameter('memcache.session_handler.class'));
+        $container->setDefinition('memcache.session_handler',$definition);
         $definition
             ->addArgument(new Reference(sprintf('memcache.%s', $clientId)))
             ->addArgument($options)
         ;
-
-        $this->addClassesToCompile(array(
-            $definition->getClass()
-        ));
+        $this->addClassesToCompile(array($definition->getClass()));
     }
 
     /**
