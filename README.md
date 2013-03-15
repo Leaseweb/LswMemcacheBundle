@@ -65,7 +65,7 @@ The above example shows how to store value 'someValue' under key 'someKey' for a
 seconds. In the second line the value is retrieved from Memcache. If the key can not be found or the
 specified number of seconds have passed the 'get' function returns the value 'false'.
 
-## Usage ##
+### Configuration
 
 Below you can see a full configuration for this bundle.
 
