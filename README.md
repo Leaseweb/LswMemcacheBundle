@@ -1,7 +1,7 @@
 LswMemcacheBundle
 =================
 
-[screenshot](http://www.leaseweblabs.com/wp-content/uploads/2013/03/memcache_debug.png)
+![screenshot](http://www.leaseweblabs.com/wp-content/uploads/2013/03/memcache_debug.png)
 
 If you want to optimize your web application for high load and/or low load times Memcache is an indispensable tool.
 It will manage your session data without doing disk I/O on web or database servers. You can also run it as a
