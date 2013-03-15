@@ -28,8 +28,6 @@ class LswMemcacheExtension extends Extension
         $loader->load('config.yml');
         $loader->load('services.yml');
 
-        //die(var_export($config['session'],true));
-
         if (isset($config['session']) && null !== $config['session']['client']) {
             if (!isset($config['clients']) || !isset($config['clients'][$config['session']['client']])) {
                 throw new \LogicException(sprintf('The client "%s" does not exist! Cannot enable the session support!', $config['session']['client']));
