@@ -39,19 +39,18 @@ class LswMemcacheExtension extends Extension
     /**
      * Given a handler (memcache/memcached) enables session support
      *
-     * @param string $type
-     * @param string $clientId
-     * @param array $options
+     * @param string $config
      * @param ContainerBuilder $container
      */
     private function enableSessionSupport($config, ContainerBuilder $container)
     {
         // make sure the client is specified and it exists
-        if (null !== $config['session']['client']) {
+        $client = $config['session']['client'];
+        if (null === $client) {
             return;
         }
-        if (!isset($config['clients']) || !isset($config['clients'][$config['session']['client']])) {
-            throw new \LogicException(sprintf('The client "%s" does not exist! Cannot enable the session support!', $config['session']['client']));
+        if (!isset($config['clients']) || !isset($config['clients'][$client])) {
+            throw new \LogicException(sprintf('The client "%s" does not exist! Cannot enable the session support!', $client));
         }
         // calculate options
         $sessionOptions = $container->getParameter('session.storage.options');
@@ -68,7 +67,7 @@ class LswMemcacheExtension extends Extension
         $definition = new Definition($container->getParameter('memcache.session_handler.class'));
         $container->setDefinition('memcache.session_handler',$definition);
         $definition
-            ->addArgument(new Reference(sprintf('memcache.%s', $clientId)))
+            ->addArgument(new Reference(sprintf('memcache.%s', $client)))
             ->addArgument($options)
         ;
         $this->addClassesToCompile(array($definition->getClass()));
