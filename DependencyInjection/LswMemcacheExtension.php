@@ -32,8 +32,19 @@ class LswMemcacheExtension extends Extension
             if (!isset($config['clients']) || !isset($config['clients'][$config['session']['client']])) {
                 throw new \LogicException(sprintf('The client "%s" does not exist! Cannot enable the session support!', $config['session']['client']));
             }
-            $options = $config['session']['options'];
-            $this->enableSessionSupport($config['session']['client'], $options, $container);
+            $sessionOptions = $container->getParameter('session.storage.options');
+            $options = array();
+            if (isset($config['session']['ttl'])) {
+                $options['ttl'] = $config['session']['ttl'];
+            } elseif (isset($sessionOptions['cookie_lifetime'])) {
+                $options['ttl'] = $sessionOptions['cookie_lifetime'];
+            }
+            if (isset($config['session']['prefix'])) {
+                $options['prefix'] = $config['session']['prefix'];
+            }
+            if (!isset($config['session']['use_as_default']) || $config['session']['use_as_default']) {
+                $this->enableSessionSupport($config['session']['client'], $options, $container);
+            }
         }
         if (isset($config['clients'])) {
             $this->addclients($config['clients'], $container);

@@ -93,24 +93,10 @@ class Configuration implements ConfigurationInterface
         $node
             ->addDefaultsIfNotSet()
             ->children()
-                ->scalarNode('client')->defaultNull()->end()
-                ->arrayNode('options')
-                    ->addDefaultsIfNotSet()
-                    ->children()
-                        ->scalarNode('prefix')
-                            ->defaultValue('session_')
-                            ->isRequired()
-                        ->end()
-                        ->scalarNode('expiretime')
-                            ->defaultValue('86400')
-                            ->isRequired()
-                            ->validate()
-                            ->ifTrue(function ($v) { return !is_int($v); })
-                                ->thenInvalid('expiretime option must be an integer!')
-                            ->end()
-                        ->end()
-                    ->end()
-                ->end()
+                ->scalarNode('client')->isRequired()->end()
+                ->scalarNode('prefix')->defaultValue('session_')->end()
+                ->scalarNode('ttl')->end()
+                ->booleanNode('use_as_default')->defaultTrue()->end()
             ->end()
         ->end();
 
@@ -130,7 +116,7 @@ class Configuration implements ConfigurationInterface
         // Memcached only configs
         $node
             ->children()
-                ->booleanNode('compression')->defaultValue('false')->end()
+                ->booleanNode('compression')->defaultFalse()->end()
                 ->scalarNode('serializer')
                     ->defaultValue('php')
                     ->validate()

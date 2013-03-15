@@ -108,15 +108,14 @@ lsw_memcache:
 
 This bundle also provides support for storing session data on Memcache servers. To enable session support
 you will have to enable it through the ```session``` key. Note that the only required subkey of
-the session support is ```client``` (a valid client). You can also specify a key prefix and an expiretime.
+the session support is ```client``` (a valid client). You can also specify a key prefix and an ttl.
 
 ```yml
 lsw_memcache:
     session:
         client: sessions
-        options:
-            prefix: "session_"
-            expiretime: 7200
+        prefix: "session_"
+        ttl: 7200
     # clients
 ```
 
