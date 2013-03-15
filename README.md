@@ -39,7 +39,7 @@ Configure the bundle by adding the following to app/config/config.yml':
 
 ```yml
 lsw_memcache:
-    session_support:
+    session:
         client: default
     clients:
         default:
@@ -107,12 +107,12 @@ lsw_memcache:
 ### Session Support ###
 
 This bundle also provides support for storing session data on Memcache servers. To enable session support
-you will have to enable it through the ```session_support``` key. Note that the only required subkey of
+you will have to enable it through the ```session``` key. Note that the only required subkey of
 the session support is ```client``` (a valid client). You can also specify a key prefix and an expiretime.
 
 ```yml
 lsw_memcache:
-    session_support:
+    session:
         client: sessions
         options:
             prefix: "session_"

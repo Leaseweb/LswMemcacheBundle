@@ -81,14 +81,14 @@ class Configuration implements ConfigurationInterface
     }
 
     /**
-     * Configure the "session_support" section
+     * Configure the "session" section
      *
      * @return ArrayNodeDefinition
      */
     private function addSessionSupportSection()
     {
         $tree = new TreeBuilder();
-        $node = $tree->root('session_support');
+        $node = $tree->root('session');
 
         $node
             ->addDefaultsIfNotSet()
