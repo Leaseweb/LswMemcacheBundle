@@ -91,10 +91,9 @@ class Configuration implements ConfigurationInterface
         $node = $tree->root('session');
 
         $node
-            ->addDefaultsIfNotSet()
             ->children()
                 ->scalarNode('client')->isRequired()->end()
-                ->scalarNode('prefix')->defaultValue('session_')->end()
+                ->scalarNode('prefix')->end()
                 ->scalarNode('ttl')->end()
             ->end()
         ->end();
