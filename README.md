@@ -40,8 +40,8 @@ Configure the bundle by adding the following to app/config/config.yml':
 ```yml
 lsw_memcache:
     session_support:
-        instance: default
-    instances:
+        client: default
+    clients:
         default:
             hosts:
               - { dsn: localhost, port: 11211 }
@@ -71,7 +71,7 @@ Below you can see a full configuration for this bundle.
 
 ```yml
 lsw_memcache:
-    instances:
+    clients:
         default:
             persistent_id: default
             hosts:
@@ -108,16 +108,16 @@ lsw_memcache:
 
 This bundle also provides support for storing session data on Memcache servers. To enable session support
 you will have to enable it through the ```session_support``` key. Note that the only required subkey of
-the session support is ```instance``` (a valid instance). You can also specify a key prefix and an expiretime.
+the session support is ```client``` (a valid client). You can also specify a key prefix and an expiretime.
 
 ```yml
 lsw_memcache:
     session_support:
-        instance: sessions
+        client: sessions
         options:
             prefix: "session_"
             expiretime: 7200
-    # instances
+    # clients
 ```
 
 ### Considerations

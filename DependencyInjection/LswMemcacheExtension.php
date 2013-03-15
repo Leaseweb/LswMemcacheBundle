@@ -28,15 +28,15 @@ class LswMemcacheExtension extends Extension
         $loader->load('config.yml');
         $loader->load('services.yml');
 
-        if (isset($config['session_support']) && null !== $config['session_support']['instance']) {
-            if (!isset($config['instances']) || !isset($config['instances'][$config['session_support']['instance']])) {
-                throw new \LogicException(sprintf('The instance "%s" does not exist! Cannot enable the session support!', $config['session_support']['instance']));
+        if (isset($config['session_support']) && null !== $config['session_support']['client']) {
+            if (!isset($config['clients']) || !isset($config['clients'][$config['session_support']['client']])) {
+                throw new \LogicException(sprintf('The client "%s" does not exist! Cannot enable the session support!', $config['session_support']['client']));
             }
             $options = $config['session_support']['options'];
-            $this->enableSessionSupport($config['session_support']['instance'], $options, $container);
+            $this->enableSessionSupport($config['session_support']['client'], $options, $container);
         }
-        if (isset($config['instances'])) {
-            $this->addInstances($config['instances'], $container);
+        if (isset($config['clients'])) {
+            $this->addclients($config['clients'], $container);
         }
     }
 
@@ -44,15 +44,15 @@ class LswMemcacheExtension extends Extension
      * Given a handler (memcache/memcached) enables session support
      *
      * @param string $type
-     * @param string $instanceId
+     * @param string $clientId
      * @param array $options
      * @param ContainerBuilder $container
      */
-    private function enableSessionSupport($instanceId, array $options, ContainerBuilder $container)
+    private function enableSessionSupport($clientId, array $options, ContainerBuilder $container)
     {
         $definition = $container->findDefinition('memcache.session_handler');
         $definition
-            ->addArgument(new Reference(sprintf('memcache.%s', $instanceId)))
+            ->addArgument(new Reference(sprintf('memcache.%s', $clientId)))
             ->addArgument($options)
         ;
 
@@ -62,17 +62,17 @@ class LswMemcacheExtension extends Extension
     }
 
     /**
-     * Adds memcache/memcached instances to the service contaienr
+     * Adds memcache/memcached clients to the service contaienr
      *
-     * @param array $instances
+     * @param array $clients
      * @param ContainerBuilder $container
      *
      * @throws \LogicException
      */
-    private function addInstances(array $instances, ContainerBuilder $container)
+    private function addclients(array $clients, ContainerBuilder $container)
     {
-        foreach ($instances as $instance => $memcachedConfig) {
-            $this->newMemcachedInstance($instance, $memcachedConfig, $container);
+        foreach ($clients as $client => $memcachedConfig) {
+            $this->newMemcachedclient($client, $memcachedConfig, $container);
         }
     }
 
@@ -85,11 +85,11 @@ class LswMemcacheExtension extends Extension
      *
      * @throws \LogicException
      */
-    private function newMemcachedInstance($name, array $config, ContainerBuilder $container)
+    private function newMemcachedclient($name, array $config, ContainerBuilder $container)
     {
         // Check if the Memcached extension is loaded
         if (!extension_loaded('memcached')) {
-            throw LogicException('Memcached extension is not loaded! To configure memcached instances it MUST be loaded!');
+            throw LogicException('Memcached extension is not loaded! To configure memcached clients it MUST be loaded!');
         }
 
         $memcached = new Definition('Lsw\MemcacheBundle\Cache\LoggingMemcache');
@@ -101,7 +101,7 @@ class LswMemcacheExtension extends Extension
             $memcached->addArgument($config['persistent_id']);
         }
 
-        // Add servers to the memcached instance
+        // Add servers to the memcached client
         $servers = array();
         foreach ($config['hosts'] as $host) {
             $servers[] = array(
@@ -153,7 +153,7 @@ class LswMemcacheExtension extends Extension
         // Add the service to the data collector
         if ($debug) {
             $definition = $container->getDefinition('memcache.data_collector');
-            $definition->addMethodCall('addInstance', array($name, $options, new Reference($serviceName)));
+            $definition->addMethodCall('addclient', array($name, $options, new Reference($serviceName)));
         }
     }
 

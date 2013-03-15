@@ -26,7 +26,7 @@ class FlushCommand extends ContainerAwareCommand
         ->setName('memcache:clear')
         ->setDescription('Invalidate all Memcache items')
         ->setDefinition(array(
-            new InputArgument('instance', InputArgument::REQUIRED, 'The instance'),
+            new InputArgument('client', InputArgument::REQUIRED, 'The client'),
         ));
    }
 
@@ -39,17 +39,17 @@ class FlushCommand extends ContainerAwareCommand
     */
    protected function execute(InputInterface $input, OutputInterface $output)
    {
-     $instance = $input->getArgument('instance');
+     $client = $input->getArgument('client');
      try {
-         $memcache = $this->getContainer()->get('memcache.'.$instance);
+         $memcache = $this->getContainer()->get('memcache.'.$client);
          $output->writeln($memcache->flush()?'<info>OK</info>':'<error>ERROR</error>');
      } catch(ServiceNotFoundException $e) {
-         $output->writeln("<error>Instance '$instance' is not found</error>");
+         $output->writeln("<error>client '$client' is not found</error>");
      }
    }
 
    /**
-    * Choose the instance
+    * Choose the client
     *
     * @param InputInterface  $input  Input interface
     * @param OutputInterface $output Output interface
@@ -59,20 +59,20 @@ class FlushCommand extends ContainerAwareCommand
     */
    protected function interact(InputInterface $input, OutputInterface $output)
    {
-       if (!$input->getArgument('instance')) {
-           $instance = $this->getHelper('dialog')->askAndValidate(
+       if (!$input->getArgument('client')) {
+           $client = $this->getHelper('dialog')->askAndValidate(
                    $output,
-                   'Please give the instance:',
-                   function($instance)
+                   'Please give the client:',
+                   function($client)
                    {
-                       if (empty($instance)) {
-                           throw new \Exception('Instance can not be empty');
+                       if (empty($client)) {
+                           throw new \Exception('client can not be empty');
                        }
 
-                       return $instance;
+                       return $client;
                    }
                    );
-                   $input->setArgument('instance', $instance);
+                   $input->setArgument('client', $client);
        }
    }
 

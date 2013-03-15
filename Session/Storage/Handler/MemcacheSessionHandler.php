@@ -32,7 +32,7 @@ class MemcacheSessionHandler implements \SessionHandlerInterface
      *  * prefix: The prefix to use for the memcache keys in order to avoid collision
      *  * expiretime: The time to live in seconds
      *
-     * @param \Memcache $memcache A \Memcache instance
+     * @param \Memcache $memcache A \Memcache client
      * @param array     $options  An associative array of Memcache options
      *
      * @throws \InvalidArgumentException When unsupported options are passed

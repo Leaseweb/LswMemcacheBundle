@@ -24,21 +24,21 @@ class Configuration implements ConfigurationInterface
 
         $rootNode
             ->append($this->addSessionSupportSection())
-            ->append($this->addInstancesSection())
+            ->append($this->addclientsSection())
         ;
 
         return $treeBuilder;
     }
 
     /**
-     * Configure the "instances" section
+     * Configure the "clients" section
      *
      * @return ArrayNodeDefinition
      */
-    private function addInstancesSection()
+    private function addclientsSection()
     {
         $tree = new TreeBuilder();
-        $node = $tree->root('instances');
+        $node = $tree->root('clients');
 
         $node
             ->requiresAtLeastOneElement()
@@ -47,7 +47,7 @@ class Configuration implements ConfigurationInterface
                 ->children()
                     ->scalarNode('persistent_id')
                         ->defaultNull()
-                        ->info('Specify to enable persistent connections. All instances with the same ID share connections.')
+                        ->info('Specify to enable persistent connections. All clients with the same ID share connections.')
                     ->end()
                     ->arrayNode('hosts')
                         ->requiresAtLeastOneElement()
@@ -93,7 +93,7 @@ class Configuration implements ConfigurationInterface
         $node
             ->addDefaultsIfNotSet()
             ->children()
-                ->scalarNode('instance')->defaultNull()->end()
+                ->scalarNode('client')->defaultNull()->end()
                 ->arrayNode('options')
                     ->addDefaultsIfNotSet()
                     ->children()
