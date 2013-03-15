@@ -96,7 +96,6 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('client')->isRequired()->end()
                 ->scalarNode('prefix')->defaultValue('session_')->end()
                 ->scalarNode('ttl')->end()
-                ->booleanNode('use_as_default')->defaultTrue()->end()
             ->end()
         ->end();
 

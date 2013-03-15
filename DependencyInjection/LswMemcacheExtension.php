@@ -42,9 +42,7 @@ class LswMemcacheExtension extends Extension
             if (isset($config['session']['prefix'])) {
                 $options['prefix'] = $config['session']['prefix'];
             }
-            if (!isset($config['session']['use_as_default']) || $config['session']['use_as_default']) {
-                $this->enableSessionSupport($config['session']['client'], $options, $container);
-            }
+            $this->enableSessionSupport($config['session']['client'], $options, $container);
         }
         if (isset($config['clients'])) {
             $this->addclients($config['clients'], $container);
