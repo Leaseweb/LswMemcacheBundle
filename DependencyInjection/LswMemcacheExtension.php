@@ -28,21 +28,8 @@ class LswMemcacheExtension extends Extension
         $loader->load('config.yml');
         $loader->load('services.yml');
 
-        if (isset($config['session']) && null !== $config['session']['client']) {
-            if (!isset($config['clients']) || !isset($config['clients'][$config['session']['client']])) {
-                throw new \LogicException(sprintf('The client "%s" does not exist! Cannot enable the session support!', $config['session']['client']));
-            }
-            $sessionOptions = $container->getParameter('session.storage.options');
-            $options = array();
-            if (isset($config['session']['ttl'])) {
-                $options['ttl'] = $config['session']['ttl'];
-            } elseif (isset($sessionOptions['cookie_lifetime'])) {
-                $options['ttl'] = $sessionOptions['cookie_lifetime'];
-            }
-            if (isset($config['session']['prefix'])) {
-                $options['prefix'] = $config['session']['prefix'];
-            }
-            $this->enableSessionSupport($config['session']['client'], $options, $container);
+        if (isset($config['session'])) {
+            $this->enableSessionSupport($config, $container);
         }
         if (isset($config['clients'])) {
             $this->addclients($config['clients'], $container);
@@ -57,8 +44,27 @@ class LswMemcacheExtension extends Extension
      * @param array $options
      * @param ContainerBuilder $container
      */
-    private function enableSessionSupport($clientId, array $options, ContainerBuilder $container)
+    private function enableSessionSupport($config, ContainerBuilder $container)
     {
+        // make sure the client is specified and it exists
+        if (null !== $config['session']['client']) {
+            return;
+        }
+        if (!isset($config['clients']) || !isset($config['clients'][$config['session']['client']])) {
+            throw new \LogicException(sprintf('The client "%s" does not exist! Cannot enable the session support!', $config['session']['client']));
+        }
+        // calculate options
+        $sessionOptions = $container->getParameter('session.storage.options');
+        $options = array();
+        if (isset($config['session']['ttl'])) {
+            $options['ttl'] = $config['session']['ttl'];
+        } elseif (isset($sessionOptions['cookie_lifetime'])) {
+            $options['ttl'] = $sessionOptions['cookie_lifetime'];
+        }
+        if (isset($config['session']['prefix'])) {
+            $options['prefix'] = $config['session']['prefix'];
+        }
+        // load the session handler
         $definition = new Definition($container->getParameter('memcache.session_handler.class'));
         $container->setDefinition('memcache.session_handler',$definition);
         $definition
