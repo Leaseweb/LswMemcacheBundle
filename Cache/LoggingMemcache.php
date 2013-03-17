@@ -15,7 +15,8 @@ class LoggingMemcache
     /**
      * Constructor instantiates and stores Memcache object
      *
-     * @param boolean $debug Debug mode
+     * @param boolean $debug        Debug mode
+     * @param string  $persistentId Identifier for persistent connections
      *
      * @throws \Exception when php Memcache plugin is not installed
      */
@@ -36,13 +37,18 @@ class LoggingMemcache
         }
     }
 
+    /**
+     * Get the logged calls for this Memcached object
+     *
+     * @return array Array of calls made to the Memcached object
+     */
     public function getLoggedCalls()
     {
         return $this->calls;
     }
 
     /**
-     * Magic method to execute memcache calls
+     * Magic method to execute Memcache calls
      *
      * @param string $name      Method name
      * @param array  $arguments Method arguments
@@ -60,8 +66,9 @@ class LoggingMemcache
             if ($this->debug) {
                 $result = $return;
                 $time = microtime(true) - $start;
-                $this->calls[] = (object)compact('start','time','name','arguments','result');
+                $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             }
+
             return $return;
         }
         throw new \Exception("Method 'Memcache::$name' do not exist, see PHP manual.");
