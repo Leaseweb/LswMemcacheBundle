@@ -5,7 +5,7 @@
         <img width="20" height="28" alt="MC" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAcCAYAAABh2p9gAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB90DBRUYHnDz6xIAAAAZdEVYdENvbW1lbnQAQ3JlYXRlZCB3aXRoIEdJTVBXgQ4XAAAA10lEQVRIx+2UsYoCQRBE34gKegj+hgYFrsgZ39ffBbrQyX6BgSZqYCganCd7y/aME7sVDbyemupuGOj0RpI0kDTJZU31aucP4MepizHXEGAmaePUxphrCFBI2koaZjLX8AYsgO9MBkCoDX4KHBu8BFbAxGNmdk0lrGsBnHNYyvD22HDlMUk7SaNXDf90iLA98Gy7nzAKj1l9tcwwAKWZFTktl8A6h/Wd2fx7XdLYY68sJUSShUTq1oRbM1s69THWmrCKXKhSZs2EF+CzrcjMTsC8++Q7/eoODXhHAld0cGAAAAAASUVORK5CYII=">
         <span class="sf-toolbar-status">{{ collector.totals.calls }}</span>
         {% if collector.totals.calls > 0 %}
-            <span class="sf-toolbar-info-piece-additional-detail">in {{ '%0.1f'|format(collector.totals.time * 1000) }} ms</span>
+            <span class="sf-toolbar-info-piece-additional-detail">in {{ '%0.2f'|format(collector.totals.time * 1000) }} ms</span>
         {% endif %}
     {% endset %}
     {% set text %}
@@ -15,7 +15,7 @@
         </div>
         <div class="sf-toolbar-info-piece">
             <b>Total time</b>
-            <span>{{ '%0.1f'|format(collector.totals.time * 1000) }} ms</span>
+            <span>{{ '%0.2f'|format(collector.totals.time * 1000) }} ms</span>
         </div>
         <div class="sf-toolbar-info-piece">
             <b>Cache hits</b>
@@ -54,7 +54,7 @@
         </tr><tbody><tr>
         {% for key, value in collector.statistics[name] %}
             {% if key == 'time' %}
-                <td>{{ '%0.1f'|format(value * 1000) }} ms</td>
+                <td>{{ '%0.2f'|format(value * 1000) }} ms</td>
             {% else %}
                 <td>{{ value }}</td>
             {% endif %}
