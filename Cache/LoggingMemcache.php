@@ -1,10 +1,8 @@
 <?php
 namespace Lsw\MemcacheBundle\Cache;
 
-use Doctrine\Common\Util\Inflector;
-
 /**
- * Class to encapsulate PHP Memcache object for unit tests and to add logging in debug mode
+ * Class to encapsulate PHP Memcached object for unit tests and to add logging in debug mode
  */
 class LoggingMemcache
 {
@@ -14,12 +12,12 @@ class LoggingMemcache
     private $initialize;
 
     /**
-     * Constructor instantiates and stores Memcache object
+     * Constructor instantiates and stores Memcached object
      *
      * @param boolean $debug        Debug mode
      * @param string  $persistentId Identifier for persistent connections
      *
-     * @throws \Exception when php Memcache plugin is not installed
+     * @throws \Exception when php Memcached plugin is not installed
      */
     public function __construct($debug = false, $persistentId = null)
     {
@@ -51,7 +49,7 @@ class LoggingMemcache
     }
 
     /**
-     * Magic method to execute Memcache calls
+     * Magic method to execute Memcached calls
      *
      * @param string $name      Method name
      * @param array  $arguments Method arguments
@@ -80,7 +78,7 @@ class LoggingMemcache
 
             return $return;
         }
-        throw new \Exception("Method 'Memcache::$name' do not exist, see PHP manual.");
+        throw new \Exception("Method 'Memcached::$name' do not exist, see PHP manual.");
     }
 
 }
