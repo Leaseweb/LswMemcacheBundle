@@ -11,6 +11,7 @@ class LoggingMemcache
     private $memcache;
     private $debug;
     private $calls;
+    private $initialize;
 
     /**
      * Constructor instantiates and stores Memcache object
@@ -32,8 +33,10 @@ class LoggingMemcache
         }
         if ($persistentId) {
             $this->memcache = new \Memcached($persistentId);
+            $this->initialize = count($this->memcache->getServerList())==0;
         } else {
             $this->memcache = new \Memcached();
+            $this->initialize = true;
         }
     }
 
@@ -58,6 +61,12 @@ class LoggingMemcache
      */
     public function __call($name, $arguments)
     {
+        if (!$this->initialize) {
+            if (in_array($name, array('setOption', 'setOptions', 'addServer', 'addServers', 'setSaslAuthData'))) {
+                // ignore calls
+                return true;
+            }
+        }
         if (method_exists($this->memcache, $name)) {
             if ($this->debug) {
                 $start = microtime(true);
