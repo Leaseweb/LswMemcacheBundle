@@ -32,15 +32,17 @@ class LswMemcacheExtension extends Extension
             $this->enableSessionSupport($config, $container);
         }
         if (isset($config['clients'])) {
-            $this->addclients($config['clients'], $container);
+            $this->addClients($config['clients'], $container);
         }
     }
 
     /**
      * Given a handler (memcache/memcached) enables session support
      *
-     * @param string $config
-     * @param ContainerBuilder $container
+     * @param string           $config    Configuration for bundle
+     * @param ContainerBuilder $container Service container
+     *
+     * @return void
      */
     private function enableSessionSupport($config, ContainerBuilder $container)
     {
@@ -65,39 +67,38 @@ class LswMemcacheExtension extends Extension
         }
         // load the session handler
         $definition = new Definition($container->getParameter('memcache.session_handler.class'));
-        $container->setDefinition('memcache.session_handler',$definition);
+        $container->setDefinition('memcache.session_handler', $definition);
         $definition
             ->addArgument(new Reference(sprintf('memcache.%s', $client)))
-            ->addArgument($options)
-        ;
+            ->addArgument($options);
         $this->addClassesToCompile(array($definition->getClass()));
     }
 
     /**
      * Adds memcache/memcached clients to the service contaienr
      *
-     * @param array $clients
-     * @param ContainerBuilder $container
+     * @param array            $clients   Array of client configurations
+     * @param ContainerBuilder $container Service container
      *
      * @throws \LogicException
      */
-    private function addclients(array $clients, ContainerBuilder $container)
+    private function addClients(array $clients, ContainerBuilder $container)
     {
         foreach ($clients as $client => $memcachedConfig) {
-            $this->newMemcachedclient($client, $memcachedConfig, $container);
+            $this->newMemcachedClient($client, $memcachedConfig, $container);
         }
     }
 
     /**
      * Creates a new Memcached definition
      *
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
-     * @param string $name
-     * @param array $config
+     * @param string           $name      Client name
+     * @param array            $config    Client configuration
+     * @param ContainerBuilder $container Service container
      *
      * @throws \LogicException
      */
-    private function newMemcachedclient($name, array $config, ContainerBuilder $container)
+    private function newMemcachedClient($name, array $config, ContainerBuilder $container)
     {
         // Check if the Memcached extension is loaded
         if (!extension_loaded('memcached')) {
@@ -126,9 +127,9 @@ class LswMemcacheExtension extends Extension
 
         // Get default memcached options
         $options = $container->getParameter('memcache.default_options');
+
         // Add overriden options
         if (isset($config['options'])) {
-
             foreach ($options as $key => $value) {
                 if (isset($config['options'][$key])) {
                     $type = gettype($value);
@@ -145,18 +146,18 @@ class LswMemcacheExtension extends Extension
                         $value = $config['options'][$key];
                     }
                     if ($type!='null') {
-                        settype($value,$type);
+                        settype($value, $type);
                         $constant = 'Memcached::OPT_'.strtoupper($key);
                         $memcached->addMethodCall('setOption', array(constant($constant), $value));
                     }
 
                 }
             }
-
         }
 
+        // Make sure that config values are human readable
         foreach ($options as $key => $value) {
-            $options[$key] = var_export($value,true);
+            $options[$key] = var_export($value, true);
         }
 
         // Add the service to the container
@@ -165,7 +166,7 @@ class LswMemcacheExtension extends Extension
         // Add the service to the data collector
         if ($debug) {
             $definition = $container->getDefinition('memcache.data_collector');
-            $definition->addMethodCall('addclient', array($name, $options, new Reference($serviceName)));
+            $definition->addMethodCall('addClient', array($name, $options, new Reference($serviceName)));
         }
     }
 

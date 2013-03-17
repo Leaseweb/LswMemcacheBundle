@@ -31,9 +31,13 @@ class MemcacheDataCollector extends DataCollector
     /**
      * Add a Memcache object to the collector
      *
-     * @param Lsw\MemcacheBundle\Cache\LoggingMemcache $memcache Logging Memcache object
+     * @param string          $name     Name of the Memcache client
+     * @param array           $options  Options for Memcache client
+     * @param LoggingMemcache $memcache Logging Memcache object
+     *
+     * @return void
      */
-    public function addclient($name, $options, LoggingMemcache $memcache)
+    public function addClient($name, $options, LoggingMemcache $memcache)
     {
         $this->clients[$name] = $memcache;
         $this->options[$name] = $options;
@@ -46,7 +50,7 @@ class MemcacheDataCollector extends DataCollector
     {
         $empty = array('calls'=>array(),'config'=>array(),'options'=>array(),'statistics'=>array());
         $this->data = array('clients'=>$empty,'total'=>$empty);
-        foreach ($this->clients as $name=>$memcache) {
+        foreach ($this->clients as $name => $memcache) {
             $calls = $memcache->getLoggedCalls();
             $this->data['clients']['calls'][$name] = $calls;
             $this->data['clients']['options'][$name] = $this->options[$name];
@@ -58,7 +62,7 @@ class MemcacheDataCollector extends DataCollector
     private function calculateStatistics($calls)
     {
         $statistics = array();
-        foreach ($this->data['clients']['calls'] as $name=>$calls) {
+        foreach ($this->data['clients']['calls'] as $name => $calls) {
             $statistics[$name] = array('calls'=>0,'time'=>0,'reads'=>0,'hits'=>0,'misses'=>0,'writes'=>0);
             foreach ($calls as $call) {
                 $statistics[$name]['calls'] += 1;
@@ -87,14 +91,14 @@ class MemcacheDataCollector extends DataCollector
     private function calculateTotalStatistics($statistics)
     {
         $totals = array('calls'=>0,'time'=>0,'reads'=>0,'hits'=>0,'misses'=>0,'writes'=>0);
-        foreach ($statistics as $name=>$values) {
+        foreach ($statistics as $name => $values) {
             foreach ($totals as $key => $value) {
                 $totals[$key] += $statistics[$name][$key];
             }
         }
         if ($totals['reads']) {
             $totals['ratio'] = 100*$totals['hits']/$totals['reads'].'%';
-        }else {
+        } else {
             $totals['ratio'] = 'N/A';
         }
 
