@@ -25,26 +25,25 @@ class AntiDogPileMemcache
         $this->memcache = new LoggingMemcache($debug, $persistentId);
     }
 
-    public function getAdp($key, $cacheCallback = null, &$casToken = null)
+    public function getAdp($key)
     {
-        $exp = $this->memcache->get($key.'_expire', null, &$cas);
-        if ($exp === false) {
+        $value = $this->memcache->get($key, null, &$cas);
+        if ($value===false) {
             return false;
         }
-        $ttl = $this->memcache->get($key.'_ttl');
-        if ($ttl === false) {
-            return false;
-        }
+        list($exp, $ttl, $val) = explode('|', $value, 3);
+
         $time = time();
         if ($time>$exp) {
-            $result = $this->memcache->cas($cas, $key.'_expire', $time+$ttl, 0);
+            $value = implode('|', array($time+$ttl, $ttl, $val));
+            $result = $this->memcache->cas($cas, $key, $value, 0);
 
             if ($result) {
                 return false;
             }
         }
 
-        return $this->memcache->get($key.'_value', $cacheCallback, &$casToken);
+        return $val;
     }
 
     public function setAdp($key, $value, $ttl=0)
@@ -53,9 +52,8 @@ class AntiDogPileMemcache
             $ttl = self::MAX_TTL;
         }
         $time = time();
-        $result = $this->memcache->set($key.'_expire', $time+$ttl, 0);
-        $result = $this->memcache->set($key.'_ttl', $ttl, 0);
-        $result = $this->memcache->set($key.'_value', $value, 0);
+        $value = implode('|', array($time+$ttl, $ttl, $value));
+        $result = $this->memcache->set($key, $value, 0);
 
         return $result;
     }
