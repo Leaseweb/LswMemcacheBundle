@@ -1,10 +1,12 @@
 <?php
 namespace Lsw\MemcacheBundle\Cache;
 
+use Lsw\MemcacheBundle\Cache\LoggingMemcacheInterface;
+
 /**
  * Class to encapsulate PHP Memcached object for unit tests and to add logging in debug mode
  */
-class LoggingMemcache
+class LoggingMemcache implements LoggingMemcacheInterface
 {
     private $memcache;
     private $debug;
@@ -68,6 +70,15 @@ class LoggingMemcache
         if (method_exists($this->memcache, $name)) {
             if ($this->debug) {
                 $start = microtime(true);
+            }
+            // Set call_by_reference for cas_token in the following arguments:
+            // Memcached:: get (3)
+            // Memcached:: getByKey (4)
+            // Memcached:: getMulti (2)
+            // Memcached:: getMultiByKey (3)
+            $references = array('get'=>2, 'getByKey'=>3, 'getMulti'=>1, 'getMultiByKey'=>2);
+            if (isset($references[$name]) && array_key_exists($references[$name],$arguments)) {
+                 $arguments[$references[$name]] = &$arguments[$references[$name]];
             }
             $return = call_user_func_array(array($this->memcache, $name), $arguments);
             if ($this->debug) {

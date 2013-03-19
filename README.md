@@ -79,7 +79,7 @@ lsw_memcache:
             hosts:
                 - { dsn: 10.0.0.1, port: 11211, weight: 15 }
                 - { dsn: 10.0.0.2, port: 11211, weight: 30 }
-
+            anti_dog_pile: true
             options:
                 compression: true
                 serializer: json

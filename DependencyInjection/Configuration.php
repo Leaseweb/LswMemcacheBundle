@@ -2,6 +2,8 @@
 
 namespace Lsw\MemcacheBundle\DependencyInjection;
 
+use Symfony\Component\Config\Definition\BooleanNode;
+
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
@@ -71,6 +73,10 @@ class Configuration implements ConfigurationInterface
                                 ->end()
                             ->end()
                         ->end()
+                    ->end()
+                    ->booleanNode('anti_dog_pile')
+                        ->info('Set this to true to enable "getAdp" and "setAdp" methods')
+                        ->defaultFalse()
                     ->end()
                     ->append($this->addMemcachedOptionsSection())
                 ->end()

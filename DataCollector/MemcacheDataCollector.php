@@ -6,7 +6,7 @@ use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\HttpKernel\DataCollector\DataCollector;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Lsw\MemcacheBundle\Cache\LoggingMemcache;
+use Lsw\MemcacheBundle\Cache\LoggingMemcacheInterface;
 
 
 /**
@@ -31,13 +31,13 @@ class MemcacheDataCollector extends DataCollector
     /**
      * Add a Memcache object to the collector
      *
-     * @param string          $name     Name of the Memcache client
-     * @param array           $options  Options for Memcache client
-     * @param LoggingMemcache $memcache Logging Memcache object
+     * @param string                   $name     Name of the Memcache client
+     * @param array                    $options  Options for Memcache client
+     * @param LoggingMemcacheInterface $memcache Logging Memcache object
      *
      * @return void
      */
-    public function addClient($name, $options, LoggingMemcache $memcache)
+    public function addClient($name, $options, LoggingMemcacheInterface $memcache)
     {
         $this->clients[$name] = $memcache;
         $this->options[$name] = $options;
