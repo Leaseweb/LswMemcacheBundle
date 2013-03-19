@@ -2,7 +2,6 @@
 namespace Lsw\MemcacheBundle\Cache;
 
 use Lsw\MemcacheBundle\Cache\LoggingMemcache;
-use Lsw\MemcacheBundle\Cache\LoggingMemcacheInterface;
 
 /**
  * Class to encapsulate PHP Memcached object to avoid the "Dog Pile" effect
