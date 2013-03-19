@@ -79,7 +79,6 @@ lsw_memcache:
             hosts:
                 - { dsn: 10.0.0.1, port: 11211, weight: 15 }
                 - { dsn: 10.0.0.2, port: 11211, weight: 30 }
-            anti_dog_pile: true
             options:
                 compression: true
                 serializer: json
@@ -120,6 +119,24 @@ lsw_memcache:
         ttl: 7200
     # clients
 ```
+
+### ADP: Anti Dog Pile
+
+Let us examine a high traffic website case and see how Memcache behaves:
+
+Your cache is stored for 90 minutes. It takes about 3 second to calculate the cache value and 1 ms second to read from cache the cache value. You have about 5000 requests per second and that the value is cached. You get 5000 requests per second taking about 5000 ms to read the values from cache. You might think that that is not possible since 5000 > 1000, but that depends on the number of worker processes on your web server  Let's say it is about 100 workers (under high load) with 75 threads each. Your web requests take about 200 ms each. Whenever the cache invalidates (after 90 minutes), during 3 seconds, there will be 15000 requests getting a cache miss. All the threads getting a miss will start to calculate the cache value (because they don't know the other threads are doing the same). This means that during (almost) 3 seconds the server wont answer a single request, but the requests keep coming in. Since each worker has 75 threads (holding 100 x 75 connections), the amount of workers has to go up to be able to process them.
+
+The heavy forking will cause extra CPU usage and the each worker will use extra RAM. This unexpected increase in RAM and CPU is called the 'dog pile' effect or 'stampeding herd' and is very unwelcome during peek hours on a web service.
+
+There is a solution: we serve the old cache entries while calculating the new value and by using an atomic read and write operation we can make sure only one thread will receive a cache miss when the content is invalidated. The algorithm is implemented in AntiDogPileMemcache class in LswMemcacheBundle. It provides the getAdp() and setAdp() functions that can be used as replacements for the normal get and set.
+
+Please note:
+
+- ADP might not be needed if you have low amount of hits or when calculating the new value goes relatively fast.
+- ADP might not be needed if you can break up the big calculation into smaller, maybe even with different timeouts for each part.
+- ADP might get you older data than the invalidation that is specified. Especially when a thread/worker gets "false" for "get" request, but fails to "set" the new calculated value afterwards.
+- ADP's "getAdp" and ADP "setAdp" are more expensive than the normal "get" and "set", slowing down all cache hits.
+- ADP does not guarantee that the dog pile will not occur. Restarting Memcache, flushing data or not enough RAM will also get keys evicted and you will run into the problem anyway.
 
 ### Considerations
 

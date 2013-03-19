@@ -105,14 +105,7 @@ class LswMemcacheExtension extends Extension
             throw LogicException('Memcached extension is not loaded! To configure memcached clients it MUST be loaded!');
         }
 
-        // Check if it we have to enable anti dog pile
-        if (isset($config['anti_dog_pile']) && $config['anti_dog_pile']) {
-            $class = 'Lsw\MemcacheBundle\Cache\AntiDogPileMemcache';
-        } else {
-            $class = 'Lsw\MemcacheBundle\Cache\LoggingMemcache';
-        }
-
-        $memcached = new Definition($class);
+        $memcached = new Definition('Lsw\MemcacheBundle\Cache\AntiDogPileMemcache');
         $debug = new Parameter('kernel.debug');
         $memcached->addArgument($debug);
 
