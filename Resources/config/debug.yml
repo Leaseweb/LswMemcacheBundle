@@ -1,5 +1,4 @@
 parameters:
-    memcache.session_handler.class: Lsw\MemcacheBundle\Session\Storage\Handler\MemcacheSessionHandler
     memcache.data_collector.class: Lsw\MemcacheBundle\DataCollector\MemcacheDataCollector
     memcache.data_collector.template: "LswMemcacheBundle:Collector:memcache"
 

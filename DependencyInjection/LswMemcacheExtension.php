@@ -26,7 +26,9 @@ class LswMemcacheExtension extends Extension
 
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('config.yml');
-        $loader->load('services.yml');
+        if ($container->getParameter('kernel.debug')) {
+            $loader->load('debug.yml');
+        }
 
         if (isset($config['session'])) {
             $this->enableSessionSupport($config, $container);
@@ -106,8 +108,7 @@ class LswMemcacheExtension extends Extension
         }
 
         $memcached = new Definition('Lsw\MemcacheBundle\Cache\AntiDogPileMemcache');
-        $debug = new Parameter('kernel.debug');
-        $memcached->addArgument($debug);
+        $memcached->addArgument(new Parameter('kernel.debug'));
 
         // Check if it has to be persistent
         if (isset($config['persistent_id'])) {
@@ -164,7 +165,7 @@ class LswMemcacheExtension extends Extension
         $serviceName = sprintf('memcache.%s', $name);
         $container->setDefinition($serviceName, $memcached);
         // Add the service to the data collector
-        if ($debug) {
+        if ($container->hasDefinition('memcache.data_collector')) {
             $definition = $container->getDefinition('memcache.data_collector');
             $definition->addMethodCall('addClient', array($name, $options, new Reference($serviceName)));
         }

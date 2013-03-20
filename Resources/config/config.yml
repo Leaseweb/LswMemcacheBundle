@@ -1,4 +1,5 @@
 parameters:
+    memcache.session_handler.class: Lsw\MemcacheBundle\Session\Storage\Handler\MemcacheSessionHandler
     memcache.default_options:
         compression: false
         serializer: php
