@@ -51,7 +51,7 @@
         {% for key, value in collector.statistics[name] %}
         <th>{{ key|capitalize }}</th>
         {% endfor %}
-        </tr><tbody><tr>
+        </tr></thead><tbody><tr>
         {% for key, value in collector.statistics[name] %}
             {% if key == 'time' %}
                 <td>{{ '%0.2f'|format(value * 1000) }} ms</td>
