@@ -18,7 +18,7 @@ To install LswMemcacheBundle with Composer just add the following to your 'compo
 
     {
         require: {
-            "leaseweb/memcache-bundle": "dev-master",
+            "leaseweb/memcache-bundle": "1.0.*@dev"
             ...
         }
     }
