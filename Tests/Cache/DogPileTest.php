@@ -3,16 +3,14 @@ namespace Lsw\MemcacheBundle\Tests\Cache;
 
 use Lsw\MemcacheBundle\Cache\AntiDogPileMemcache;
 
-require_once "../../Cache/AntiDogPileMemcache.php";
+require_once "../../Cache/LoggingMemcacheInterface.php";
 require_once "../../Cache/LoggingMemcache.php";
+require_once "../../Cache/AntiDogPileMemcache.php";
 
 class DogPileTest //extends \PHPUnit_Framework_TestCase
 {
     public function testDogPile()
     {
-        $m = new AntiDogPileMemcache(false);
-        $m->addServer('localhost', 11211);
-
         for ($t=1; $t<3; $t++) {
             $pid = pcntl_fork();
             if ($pid == -1) {
