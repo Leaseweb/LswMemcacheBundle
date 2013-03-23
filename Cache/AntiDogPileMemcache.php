@@ -23,7 +23,8 @@ class AntiDogPileMemcache extends LoggingMemcache
      */
     public function getAdp($key)
     {
-        $value = $this->get($key, null, $cas=null);
+        $cas=0;
+        $value = $this->get($key, null, &$cas);
         if ($value===false) {
             return false;
         }
