@@ -17,7 +17,6 @@ foreach ($methods as $method) {
     }
     $implementation .= $methodName.'(';
     $interface .= $methodName.'(';
-    $call = 'parent::'.$methodName.'(';
     $arguments = '';
     foreach ($parameters as $i => $parameter) {
         if ($i > 0) {
@@ -48,7 +47,7 @@ foreach ($methods as $method) {
     }
     $implementation .= ")\n";
     $interface .= ");\n\n";
-    $call .= $arguments.')';
+    $call = 'parent::'.$methodName.'('.$arguments.')';
     if (in_array($methodName, array('setOption', 'setOptions', 'addServer', 'addServers'))) {
         $intialize = 'if (!\$this->initialize) return;';
     } else {
