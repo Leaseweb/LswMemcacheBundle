@@ -1,7 +1,5 @@
 <?php
-$newClassName = 'LoggingMemcache';
-$className = 'Memcached';
-$class = new ReflectionClass($className);
+$class = new ReflectionClass('Memcached');
 $methods = $class->getMethods();
 $implementation = '';
 $interface = '';
