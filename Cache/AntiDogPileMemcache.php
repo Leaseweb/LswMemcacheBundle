@@ -1,8 +1,6 @@
 <?php
 namespace Lsw\MemcacheBundle\Cache;
 
-use Lsw\MemcacheBundle\Cache\LoggingMemcache;
-
 /**
  * Class to encapsulate PHP Memcached object to avoid the "Dog Pile" effect
  */
@@ -24,7 +22,7 @@ class AntiDogPileMemcache extends LoggingMemcache
     public function getAdp($key)
     {
         $cas=0;
-        $value = $this->get($key, null, &$cas);
+        $value = $this->get($key, null, $cas);
         if ($value===false) {
             return false;
         }

@@ -4,6 +4,7 @@ namespace Lsw\MemcacheBundle\Tests\Cache;
 use Lsw\MemcacheBundle\Cache\AntiDogPileMemcache;
 
 require_once "../../Cache/LoggingMemcacheInterface.php";
+require_once "../../Cache/MemcacheInterface.php";
 require_once "../../Cache/LoggingMemcache.php";
 require_once "../../Cache/AntiDogPileMemcache.php";
 
