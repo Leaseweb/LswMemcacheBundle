@@ -1,8 +1,6 @@
 <?php
 namespace Lsw\MemcacheBundle\Cache;
 
-use Lsw\MemcacheBundle\Cache\LoggingMemcacheInterface;
-
 /**
  * Class to encapsulate PHP Memcached object for unit tests and to add logging in logging mode
  */
