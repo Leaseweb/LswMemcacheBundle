@@ -165,3 +165,12 @@ https://github.com/Emagister/MemcachedBundle by Christian Soronellas
 Is based on an implementation in:
 
 https://github.com/beryllium/CacheBundle by Kevin Boyd
+
+### License
+
+This bundle is under the MIT license.
+
+The "fast-forward" icon in the web debug toolbar is part of the Picas icon set (official website: http://www.picasicons.com).
+The icon is licensed and may only be used to identifying the LswMemcacheBundle in the Symfony2 web debug toolbar.
+All ownership and copyright of this icon remain the property of Rok Benedik.
+
