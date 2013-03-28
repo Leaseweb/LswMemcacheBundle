@@ -12,6 +12,12 @@ Web Debug Toolbar integration that allows you to analyze and debug the cache beh
 
 [Read the LeaseWebLabs blog about LswMemcacheBundle](http://www.leaseweblabs.com/2013/03/memcache-support-in-symfony2-wdt/)
 
+### Requirements
+
+- PHP 5.3.x or 5.4.x
+- php5-memcached 1.x or 2.x
+
+
 ### Installation
 
 To install LswMemcacheBundle with Composer just add the following to your 'composer.json' file:
