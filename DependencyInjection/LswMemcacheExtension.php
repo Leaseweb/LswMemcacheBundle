@@ -60,9 +60,9 @@ class LswMemcacheExtension extends Extension
         $sessionOptions = $container->getParameter('session.storage.options');
         $options = array();
         if (isset($config['session']['ttl'])) {
-            $options['ttl'] = $config['session']['ttl'];
+            $options['expiretime'] = $config['session']['ttl'];
         } elseif (isset($sessionOptions['cookie_lifetime'])) {
-            $options['ttl'] = $sessionOptions['cookie_lifetime'];
+            $options['expiretime'] = $sessionOptions['cookie_lifetime'];
         }
         if (isset($config['session']['prefix'])) {
             $options['prefix'] = $config['session']['prefix'];
