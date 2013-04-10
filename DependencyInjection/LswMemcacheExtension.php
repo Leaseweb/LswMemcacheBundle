@@ -146,10 +146,7 @@ class LswMemcacheExtension extends Extension
                         $newValue = $config['options'][$key];
                     }
                     if ($config['options'][$key]!=$value) {
-                        $type = gettype($value);
-                        if ($type!='NULL') {
-                            settype($newValue, $type);
-                        }
+                        // not default, add method call and update options
                         $constant = 'Memcached::OPT_'.strtoupper($key);
                         $memcached->addMethodCall('setOption', array(constant($constant), $newValue));
                         $options[$key] = $newValue;
