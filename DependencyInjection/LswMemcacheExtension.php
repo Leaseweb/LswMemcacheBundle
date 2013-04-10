@@ -133,7 +133,6 @@ class LswMemcacheExtension extends Extension
         if (isset($config['options'])) {
             foreach ($options as $key => $value) {
                 if (isset($config['options'][$key])) {
-                    $type = gettype($value);
                     if ($key == 'serializer') {
                         // serializer option needs to be supported and is a constant
                         if ($value != 'php' && !constant('Memcached::HAVE_' . strtoupper($value))) {
@@ -146,8 +145,11 @@ class LswMemcacheExtension extends Extension
                     } else {
                         $newValue = $config['options'][$key];
                     }
-                    if ($config['options'][$key]!=$value && $type!='null') {
-                        settype($newValue, $type);
+                    if ($config['options'][$key]!=$value) {
+                        $type = gettype($value);
+                        if ($type!='NULL') {
+                            settype($newValue, $type);
+                        }
                         $constant = 'Memcached::OPT_'.strtoupper($key);
                         $memcached->addMethodCall('setOption', array(constant($constant), $newValue));
                         $options[$key] = $newValue;
