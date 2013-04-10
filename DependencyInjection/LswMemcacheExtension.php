@@ -139,17 +139,18 @@ class LswMemcacheExtension extends Extension
                         if ($value != 'php' && !constant('Memcached::HAVE_' . strtoupper($value))) {
                             throw new \LogicException("Invalid serializer specified for Memcached: $value");
                         }
-                        $value = constant('Memcached::SERIALIZER_' . strtoupper($value));
+                        $newValue = constant('Memcached::SERIALIZER_' . strtoupper($value));
                     } elseif ($key == 'distribution') {
                         // distribution is defined as a constant
-                        $value = constant('Memcached::DISTRIBUTION_' . strtoupper($value));
+                        $newValue = constant('Memcached::DISTRIBUTION_' . strtoupper($value));
                     } else {
-                        $value = $config['options'][$key];
+                        $newValue = $config['options'][$key];
                     }
-                    if ($type!='null') {
-                        settype($value, $type);
+                    if ($config['options'][$key]!=$value && $type!='null') {
+                        settype($newValue, $type);
                         $constant = 'Memcached::OPT_'.strtoupper($key);
-                        $memcached->addMethodCall('setOption', array(constant($constant), $value));
+                        $memcached->addMethodCall('setOption', array(constant($constant), $newValue));
+                        $options[$key] = $newValue;
                     }
 
                 }
