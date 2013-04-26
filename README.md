@@ -15,8 +15,9 @@ Web Debug Toolbar integration that allows you to analyze and debug the cache beh
 ### Requirements
 
 - PHP 5.3.x or 5.4.x
-- php5-memcached 1.x or 2.x
+- php5-memcached 1.x or 2.x (this is the PHP "memcached" extension that uses "libmemcached")
 
+NB: Unlike the PHP "memcache" extension, the PHP "memcached" extension is not included in the PHP Windows binaries.
 
 ### Installation
 
