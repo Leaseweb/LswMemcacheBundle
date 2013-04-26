@@ -17,7 +17,7 @@ Web Debug Toolbar integration that allows you to analyze and debug the cache beh
 - PHP 5.3.x or 5.4.x
 - php5-memcached 1.x or 2.x (this is the PHP "memcached" extension that uses "libmemcached")
 
-NB: Unlike the PHP "memcache" extension, the PHP "memcached" extension is not included in the PHP Windows binaries.
+NB: Unlike the PHP "memcache" extension, the PHP "memcached" extension is not (yet) included in the PHP Windows binaries.
 
 ### Installation
 
@@ -147,7 +147,7 @@ Please note:
 
 ### Considerations
 
-LswMemcacheBundle uses the 'memcached' php object (client) not the older 'memcache' php object.
+LswMemcacheBundle uses the 'memcached' PHP extension (client) not the older 'memcache' PHP extension.
 For a comparison of the available clients see: http://code.google.com/p/memcached/wiki/PHPClientComparison
 
 ### Known issues
