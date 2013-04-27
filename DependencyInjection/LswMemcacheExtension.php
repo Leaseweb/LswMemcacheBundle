@@ -3,6 +3,7 @@
 namespace Lsw\MemcacheBundle\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
@@ -32,6 +33,9 @@ class LswMemcacheExtension extends Extension
 
         if (isset($config['session'])) {
             $this->enableSessionSupport($config, $container);
+        }
+        if (isset($config['doctrine'])) {
+          $this->loadDoctrine($config, $container);
         }
         if (isset($config['clients'])) {
             $this->addClients($config['clients'], $container);
@@ -74,6 +78,37 @@ class LswMemcacheExtension extends Extension
             ->addArgument(new Reference(sprintf('memcache.%s', $client)))
             ->addArgument($options);
         $this->addClassesToCompile(array($definition->getClass()));
+    }
+
+    /**
+     * Loads the Doctrine configuration.
+     *
+     * @param array $config A configuration array
+     * @param ContainerBuilder $container A ContainerBuilder instance
+     */
+    protected function loadDoctrine(array $config, ContainerBuilder $container)
+    {
+        foreach ($config['doctrine'] as $name => $cache) {
+            $client = new Reference(sprintf('memcache.%s', $cache['client']));
+            foreach ($cache['entity_managers'] as $em) {
+                $def = new Definition($container->getParameter('memcache.doctrine_cache.class'));
+                $def->setScope(ContainerInterface::SCOPE_CONTAINER);
+                $def->addMethodCall('setMemcached', array($client));
+                if ($cache['prefix']) {
+                    $def->addMethodCall('setPrefix', array($cache['prefix']));
+                }
+                $container->setDefinition(sprintf('doctrine.orm.%s_%s', $em, $name), $def);
+            }
+            foreach ($cache['document_managers'] as $dm) {
+                $def = new Definition($container->getParameter('memcache.doctrine_cache.class'));
+                $def->setScope(ContainerInterface::SCOPE_CONTAINER);
+                $def->addMethodCall('setMemcached', array($client));
+                if ($cache['prefix']) {
+                    $def->addMethodCall('setPrefix', array($cache['prefix']));
+                }
+                $container->setDefinition(sprintf('doctrine.odm.mongodb.%s_%s', $dm, $name), $def);
+            }
+        }
     }
 
     /**

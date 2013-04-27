@@ -127,6 +127,30 @@ lsw_memcache:
     # clients
 ```
 
+### Doctrine Support ###
+
+This bundle also provides support for Doctrine caching on Memcache servers. To enable Doctrine caching
+you will have to enable it through the ```doctrine``` key. Note that you can specify all three kinds of
+Doctrine caching: 'metadata', 'result' and 'query'. The required keys within those subkeys are both 
+```client``` (a valid client) and ```entity_manager``` (normally: default). You can also specify a prefix.
+
+```yml
+lsw_memcache:
+    doctrine:
+        metadata_cache:
+            client: default
+            entity_manager: default          # the name of your entity_manager connection
+            document_manager: default        # the name of your document_manager connection
+        result_cache:
+            client: default
+            entity_manager: [default, read]  # you may specify multiple entity_managers
+            prefix: "result_"                # you may specify a prefix for the entries
+        query_cache:
+            client: default
+            entity_manager: default
+    # clients
+```
+
 ### ADP: Anti Dog Pile
 
 Let us examine a high traffic website case and see how Memcache behaves:

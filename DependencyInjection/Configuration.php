@@ -21,9 +21,9 @@ class Configuration implements ConfigurationInterface
     {
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('lsw_memcache');
-
         $rootNode
             ->append($this->addSessionSupportSection())
+            ->append($this->addDoctrineSection())
             ->append($this->addclientsSection())
         ;
 
@@ -31,7 +31,7 @@ class Configuration implements ConfigurationInterface
     }
 
     /**
-     * Configure the "clients" section
+     * Configure the "lsw_memcache.clients" section
      *
      * @return ArrayNodeDefinition
      */
@@ -81,7 +81,7 @@ class Configuration implements ConfigurationInterface
     }
 
     /**
-     * Configure the "session" section
+     * Configure the "lsw_memcache.session" section
      *
      * @return ArrayNodeDefinition
      */
@@ -102,7 +102,48 @@ class Configuration implements ConfigurationInterface
     }
 
     /**
-     * Configure the "memcached_options" section
+     * Configure the "lsw_memcache.doctrine" section
+     *
+     * @return ArrayNodeDefinition
+     */
+    private function addDoctrineSection()
+    {
+        $tree = new TreeBuilder();
+        $node = $tree->root('doctrine');
+
+        foreach (array('metadata_cache', 'result_cache', 'query_cache') as $type) {
+            $node->children()
+                ->arrayNode($type)
+                    ->canBeUnset()
+                    ->children()
+                        ->scalarNode('client')->isRequired()->end()
+                        ->scalarNode('prefix')->defaultValue('')->end()
+                    ->end()
+                    ->fixXmlConfig('entity_manager')
+                    ->children()
+                        ->arrayNode('entity_managers')
+                            ->defaultValue(array())
+                            ->beforeNormalization()->ifString()->then(function($v) { return (array) $v; })->end()
+                            ->prototype('scalar')->end()
+                        ->end()
+                    ->end()
+                    ->fixXmlConfig('document_manager')
+                    ->children()
+                        ->arrayNode('document_managers')
+                            ->defaultValue(array())
+                            ->beforeNormalization()->ifString()->then(function($v) { return (array) $v; })->end()
+                            ->prototype('scalar')->end()
+                        ->end()
+                    ->end()
+                ->end()
+            ->end();
+        }
+
+        return $node;
+    }
+
+    /**
+     * Configure the "lsw_memcache.options" section
      *
      * @return ArrayNodeDefinition
      */

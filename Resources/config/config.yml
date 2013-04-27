@@ -1,4 +1,5 @@
 parameters:
+    memcache.doctrine_cache.class: Lsw\MemcacheBundle\Doctrine\Cache\MemcachedCache
     memcache.session_handler.class: Symfony\Component\HttpFoundation\Session\Storage\Handler\MemcachedSessionHandler
     memcache.default_options:
         compression: false
