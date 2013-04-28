@@ -7,8 +7,8 @@ If you want to optimize your web application for high load and/or low load times
 It will manage your session data without doing disk I/O on web or database servers. You can also run it as a
 central object storage for your website. In this role it is used for caching expensive API calls or database queries.
 
-This Symfony2 bundle will provide Memcache integration into Symfony2 for session and object storage. It has full
-Web Debug Toolbar integration that allows you to analyze and debug the cache behavior and performance.
+This Symfony2 bundle will provide Memcache integration into Symfony2 and Doctrine for session storage and caching. 
+It has full Web Debug Toolbar integration that allows you to analyze and debug the cache behavior and performance.
 
 [Read the LeaseWebLabs blog about LswMemcacheBundle](http://www.leaseweblabs.com/2013/03/memcache-support-in-symfony2-wdt/)
 
@@ -25,7 +25,7 @@ To install LswMemcacheBundle with Composer just add the following to your 'compo
 
     {
         require: {
-            "leaseweb/memcache-bundle": "*"
+            "leaseweb/memcache-bundle": "*",
             ...
         }
     }
