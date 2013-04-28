@@ -1,7 +1,7 @@
 {
     "name": "leaseweb/memcache-bundle",
     "type": "symfony-bundle",
-    "description": "Memcache session management with Web Debug Toolbar integration",
+    "description": "Memcache Doctrine caching and session storage in the Web Debug Toolbar",
     "keywords": ["memcache","memcached","cache","session"],
     "homepage": "http://www.leaseweblabs.com",
     "license": "MIT",
