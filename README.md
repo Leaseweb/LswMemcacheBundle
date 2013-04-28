@@ -25,7 +25,7 @@ To install LswMemcacheBundle with Composer just add the following to your 'compo
 
     {
         require: {
-            "leaseweb/memcache-bundle": "1.0.*@dev"
+            "leaseweb/memcache-bundle": "*"
             ...
         }
     }
@@ -182,6 +182,10 @@ and therefor also before the session write is executed. This causes the session 
 the Web Debug Toolbar.
 
 ### Credits
+
+Doctrine support is based on the implementation in SncRedisBundle:
+
+https://github.com/snc/SncRedisBundle by Henrik Westphal
 
 - DependencyInjection/LswMemcacheExtension.php
 - DependencyInjection/Configuration.php
