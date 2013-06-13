@@ -139,7 +139,7 @@ class LswMemcacheExtension extends Extension
     {
         // Check if the Memcached extension is loaded
         if (!extension_loaded('memcached')) {
-            throw LogicException('Memcached extension is not loaded! To configure memcached clients it MUST be loaded!');
+            throw new \LogicException('Memcached extension is not loaded! To configure memcached clients it MUST be loaded!');
         }
 
         $memcached = new Definition('Lsw\MemcacheBundle\Cache\AntiDogPileMemcache');
