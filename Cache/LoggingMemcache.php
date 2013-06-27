@@ -24,7 +24,7 @@ if ($extension->getVersion()<2) {
             $this->logging = $logging;
             if ($persistentId) {
                 parent::__construct($persistentId);
-                $this->initialize = count($this->memcache->getServerList())==0;
+                $this->initialize = count($this->getServerList())==0;
             } else {
                 parent::__construct();
                 $this->initialize = true;
@@ -515,7 +515,7 @@ if ($extension->getVersion()<2) {
             $this->logging = $logging;
             if ($persistentId) {
                 parent::__construct($persistentId);
-                $this->initialize = count($this->memcache->getServerList())==0;
+                $this->initialize = count($this->getServerList())==0;
             } else {
                 parent::__construct();
                 $this->initialize = true;
