@@ -74,7 +74,7 @@ class MemcacheDataCollector extends DataCollector
                     } else {
                         $statistics[$name]['misses'] += 1;
                     }
-                } elseif ($call->name == 'get') {
+                } elseif ($call->name == 'set') {
                     $statistics[$name]['writes'] += 1;
                 }
             }
