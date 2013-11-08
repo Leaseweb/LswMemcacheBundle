@@ -81,6 +81,11 @@ class LockingSessionHandler implements \SessionHandlerInterface
      */
     public function open($savePath, $sessionId)
     {
+        if (!$this->locked) {
+            if (!$this->lockSession($sessionId)) {
+                return false;
+            }
+        }
         return true;
     }
 
@@ -97,7 +102,7 @@ class LockingSessionHandler implements \SessionHandlerInterface
                 return true;
             }
             $status = $this->memcached->getResultCode();
-            if ($status != \Memcached::MEMCACHED_NOTSTORED && $status != \Memcached::MEMCACHED_DATA_EXISTS) {
+            if ($status != \Memcached::RES_NOTSTORED && $status != \Memcached::RES_DATA_EXISTS) {
                 break;
             }
             usleep($this->lockWait);
@@ -128,11 +133,6 @@ class LockingSessionHandler implements \SessionHandlerInterface
      */
     public function read($sessionId)
     {
-        if (!$this->locked) {
-            if (!$this->lockSession($sessionId)) {
-                return false;
-            }
-        }
         return $this->memcached->get($this->prefix.$sessionId) ?: '';
     }
 
