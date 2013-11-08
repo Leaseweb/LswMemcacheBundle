@@ -96,7 +96,7 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('prefix')->end()
                 ->scalarNode('ttl')->end()
                 ->booleanNode('locking')->defaultTrue()->end()
-                ->scalarNode('lock_wait')->defaultValue(150000)->end()
+                ->scalarNode('lockwait')->defaultValue(150000)->end()
             ->end()
         ->end();
 
