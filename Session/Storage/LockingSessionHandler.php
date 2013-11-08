@@ -5,7 +5,7 @@ namespace Lsw\MemcacheBundle\Session\Storage;
  * LockingSessionHandler.
  *
  * Memcached based session storage handler based on the Memcached class
- * provided by the PHP memcached extension.
+ * provided by the PHP memcached extension with added locking support.
  *
  * @see http://php.net/memcached
  *
@@ -14,12 +14,27 @@ namespace Lsw\MemcacheBundle\Session\Storage;
 class LockingSessionHandler implements \SessionHandlerInterface
 {
 
-    const MEMC_SESS_DEFAULT_LOCK_WAIT  = 150000;
-    const MEMC_SESS_LOCK_EXPIRATION  = 30;
+    const DEFAULT_LOCK_WAIT  = 150000;
+    const LOCK_EXPIRATION  = 30;
 
+    /**
+     * @var boolean Indicates an active session lock
+     */
     private $locked;
+
+    /**
+     * @var string Session lock key
+     */
     private $lockKey;
+
+    /**
+     * @var integer Microseconds to wait between acquire lock tries
+     */
     private $lockWait;
+
+    /**
+     * @var integer Maximum amount of seconds to wait for the lock
+     */
     private $lockMaxWait;
 
     /**
@@ -62,17 +77,15 @@ class LockingSessionHandler implements \SessionHandlerInterface
         $this->ttl = isset($options['expiretime']) ? (int) $options['expiretime'] : 86400;
         $this->prefix = isset($options['prefix']) ? $options['prefix'] : 'sf2s';
 
-        // added for locking
-
         $this->locked = 0;
         $this->lockKey = null;
         $this->lockWait = ini_get('memcached.sess_lock_wait');
         if ($this->lockWait == 0) {
-            $this->lockWait = self::MEMC_SESS_DEFAULT_LOCK_WAIT;
+            $this->lockWait = self::DEFAULT_LOCK_WAIT;
         }
         $this->lockMaxWait = ini_get('max_execution_time');
         if ($this->lockMaxWait === false) {
-            $this->lockMaxWait = self::MEMC_SESS_LOCK_EXPIRATION;
+            $this->lockMaxWait = self::LOCK_EXPIRATION;
         }
     }
 
