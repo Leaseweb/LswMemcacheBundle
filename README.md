@@ -125,8 +125,12 @@ lsw_memcache:
         client: sessions
         prefix: "session_"
         ttl: 7200
+        locking: true
+        lock_wait: 150000
     # clients
 ```
+
+Note that the session locking is enabled by default and the default spin lock is set to poll every 150 milliseconds (150000 microseconds).
 
 ### Doctrine Support ###
 
