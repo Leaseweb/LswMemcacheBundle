@@ -85,7 +85,7 @@ class LockingSessionHandler implements \SessionHandlerInterface
         $this->prefix = isset($options['prefix']) ? $options['prefix'] : 'sf2s';
 
         $this->locking = $options['locking'];
-        $this->locked = 0;
+        $this->locked = false;
         $this->lockKey = null;
         $this->spinLockWait = $options['spin_lock_wait'];
         $this->lockMaxWait = ini_get('max_execution_time');
@@ -111,14 +111,13 @@ class LockingSessionHandler implements \SessionHandlerInterface
 
     private function lockSession($sessionId)
     {
-        $expiration  = time() + $this->lockMaxWait + 1;
         $attempts = (1000000 / $this->spinLockWait) * $this->lockMaxWait;
 
         $this->lockKey = $sessionId.'.lock';
         for ($i=0;$i<$attempts;$i++) {
-            $success = $this->memcached->add($this->prefix.$this->lockKey, '1', $expiration);
+            $success = $this->memcached->add($this->prefix.$this->lockKey, '1', $this->lockMaxWait+1);
             if ($success) {
-                $this->locked = 1;
+                $this->locked = true;
                 return true;
             }
             $status = $this->memcached->getResultCode();
@@ -134,7 +133,7 @@ class LockingSessionHandler implements \SessionHandlerInterface
     private function unlockSession()
     {
         $this->memcached->delete($this->prefix.$this->lockKey);
-        $this->locked = 0;
+        $this->locked = false;
     }
 
     /**
