@@ -37,7 +37,7 @@ class LockingSessionHandler implements \SessionHandlerInterface
     /**
      * @var integer Microseconds to wait between acquire lock tries
      */
-    private $spin_lock_wait;
+    private $spinLockWait;
 
     /**
      * @var integer Maximum amount of seconds to wait for the lock
@@ -87,7 +87,7 @@ class LockingSessionHandler implements \SessionHandlerInterface
         $this->locking = $options['locking'];
         $this->locked = 0;
         $this->lockKey = null;
-        $this->spin_lock_wait = $options['spin_lock_wait'];
+        $this->spinLockWait = $options['spin_lock_wait'];
         $this->lockMaxWait = ini_get('max_execution_time');
         if (!$this->lockMaxWait) {
             $this->lockMaxWait = self::DEFAULT_MAX_EXECUTION_TIME;
@@ -112,7 +112,7 @@ class LockingSessionHandler implements \SessionHandlerInterface
     private function lockSession($sessionId)
     {
         $expiration  = time() + $this->lockMaxWait + 1;
-        $attempts = (1000000 / $this->spin_lock_wait) * $this->lockMaxWait;
+        $attempts = (1000000 / $this->spinLockWait) * $this->lockMaxWait;
 
         $this->lockKey = $sessionId.'.lock';
         for ($i=0;$i<$attempts;$i++) {
@@ -125,7 +125,7 @@ class LockingSessionHandler implements \SessionHandlerInterface
             if ($status != \Memcached::RES_NOTSTORED && $status != \Memcached::RES_DATA_EXISTS) {
                 break;
             }
-            usleep($this->spin_lock_wait);
+            usleep($this->spinLockWait);
         }
 
         return false;
