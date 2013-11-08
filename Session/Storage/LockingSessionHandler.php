@@ -14,8 +14,12 @@ namespace Lsw\MemcacheBundle\Session\Storage;
 class LockingSessionHandler implements \SessionHandlerInterface
 {
 
-    const DEFAULT_LOCK_WAIT  = 150000;
     const LOCK_EXPIRATION  = 30;
+
+    /**
+     * @var boolean Indicates an sessions should be locked
+     */
+    private $locking;
 
     /**
      * @var boolean Indicates an active session lock
@@ -68,7 +72,7 @@ class LockingSessionHandler implements \SessionHandlerInterface
     {
         $this->memcached = $memcached;
 
-        if ($diff = array_diff(array_keys($options), array('prefix', 'expiretime'))) {
+        if ($diff = array_diff(array_keys($options), array('prefix', 'expiretime', 'locking', 'lock_wait'))) {
             throw new \InvalidArgumentException(sprintf(
                 'The following options are not supported "%s"', implode(', ', $diff)
             ));
@@ -77,14 +81,12 @@ class LockingSessionHandler implements \SessionHandlerInterface
         $this->ttl = isset($options['expiretime']) ? (int) $options['expiretime'] : 86400;
         $this->prefix = isset($options['prefix']) ? $options['prefix'] : 'sf2s';
 
+        $this->locking = $options['locking'];
         $this->locked = 0;
         $this->lockKey = null;
-        $this->lockWait = ini_get('memcached.sess_lock_wait');
-        if ($this->lockWait == 0) {
-            $this->lockWait = self::DEFAULT_LOCK_WAIT;
-        }
+        $this->lockWait = $options['lock_wait'];
         $this->lockMaxWait = ini_get('max_execution_time');
-        if ($this->lockMaxWait === false) {
+        if (!$this->lockMaxWait) {
             $this->lockMaxWait = self::LOCK_EXPIRATION;
         }
     }
@@ -94,9 +96,11 @@ class LockingSessionHandler implements \SessionHandlerInterface
      */
     public function open($savePath, $sessionId)
     {
-        if (!$this->locked) {
-            if (!$this->lockSession($sessionId)) {
-                return false;
+        if ($this->locking) {
+            if (!$this->locked) {
+                if (!$this->lockSession($sessionId)) {
+                    return false;
+                }
             }
         }
         return true;
@@ -135,8 +139,10 @@ class LockingSessionHandler implements \SessionHandlerInterface
      */
     public function close()
     {
-        if ($this->locked) {
-            $this->unlockSession();
+        if ($this->locking) {
+            if ($this->locked) {
+                $this->unlockSession();
+            }
         }
         return true;
     }

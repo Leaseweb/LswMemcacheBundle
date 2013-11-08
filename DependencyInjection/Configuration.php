@@ -95,6 +95,8 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('client')->isRequired()->end()
                 ->scalarNode('prefix')->end()
                 ->scalarNode('ttl')->end()
+                ->booleanNode('locking')->defaultTrue()->end()
+                ->scalarNode('lock_wait')->defaultValue(150000)->end()
             ->end()
         ->end();
 
