@@ -126,7 +126,7 @@ lsw_memcache:
         prefix: "session_"
         ttl: 7200
         locking: true
-        lock_wait: 150000
+        lockwait: 150000
     # clients
 ```
 

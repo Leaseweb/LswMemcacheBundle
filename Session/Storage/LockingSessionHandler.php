@@ -75,7 +75,7 @@ class LockingSessionHandler implements \SessionHandlerInterface
     {
         $this->memcached = $memcached;
 
-        if ($diff = array_diff(array_keys($options), array('prefix', 'expiretime', 'locking', 'lock_wait'))) {
+        if ($diff = array_diff(array_keys($options), array('prefix', 'expiretime', 'locking', 'lockwait'))) {
             throw new \InvalidArgumentException(sprintf(
                 'The following options are not supported "%s"', implode(', ', $diff)
             ));
@@ -87,7 +87,7 @@ class LockingSessionHandler implements \SessionHandlerInterface
         $this->locking = $options['locking'];
         $this->locked = 0;
         $this->lockKey = null;
-        $this->lockWait = $options['lock_wait'];
+        $this->lockWait = $options['lockwait'];
         $this->lockMaxWait = ini_get('max_execution_time');
         if (!$this->lockMaxWait) {
             $this->lockMaxWait = self::DEFAULT_MAX_EXECUTION_TIME;
