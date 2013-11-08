@@ -14,7 +14,10 @@ namespace Lsw\MemcacheBundle\Session\Storage;
 class LockingSessionHandler implements \SessionHandlerInterface
 {
 
-    const LOCK_EXPIRATION  = 30;
+    /**
+     * @var integer Default PHP max execution time in seconds
+     */
+    const DEFAULT_MAX_EXECUTION_TIME = 30;
 
     /**
      * @var boolean Indicates an sessions should be locked
@@ -87,7 +90,7 @@ class LockingSessionHandler implements \SessionHandlerInterface
         $this->lockWait = $options['lock_wait'];
         $this->lockMaxWait = ini_get('max_execution_time');
         if (!$this->lockMaxWait) {
-            $this->lockMaxWait = self::LOCK_EXPIRATION;
+            $this->lockMaxWait = self::DEFAULT_MAX_EXECUTION_TIME;
         }
     }
 
