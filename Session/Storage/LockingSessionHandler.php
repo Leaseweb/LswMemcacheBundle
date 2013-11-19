@@ -192,4 +192,13 @@ class LockingSessionHandler implements \SessionHandlerInterface
         // not required here because memcached will auto expire the records anyhow.
         return true;
     }
+
+    /**
+     * Destructor
+     */
+    public function __destruct()
+    {
+        $this->close();
+    }
+
 }
