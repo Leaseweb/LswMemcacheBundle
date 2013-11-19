@@ -99,13 +99,6 @@ class LockingSessionHandler implements \SessionHandlerInterface
      */
     public function open($savePath, $sessionId)
     {
-        if ($this->locking) {
-            if (!$this->locked) {
-                if (!$this->lockSession($sessionId)) {
-                    return false;
-                }
-            }
-        }
         return true;
     }
 
@@ -154,6 +147,14 @@ class LockingSessionHandler implements \SessionHandlerInterface
      */
     public function read($sessionId)
     {
+        if ($this->locking) {
+            if (!$this->locked) {
+                if (!$this->lockSession($sessionId)) {
+                    return false;
+                }
+            }
+        }
+
         return $this->memcached->get($this->prefix.$sessionId) ?: '';
     }
 
@@ -162,6 +163,14 @@ class LockingSessionHandler implements \SessionHandlerInterface
      */
     public function write($sessionId, $data)
     {
+        if ($this->locking) {
+            if (!$this->locked) {
+                if (!$this->lockSession($sessionId)) {
+                    return false;
+                }
+            }
+        }
+        
         return $this->memcached->set($this->prefix.$sessionId, $data, time() + $this->ttl);
     }
 
