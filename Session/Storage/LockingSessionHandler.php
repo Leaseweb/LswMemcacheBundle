@@ -97,7 +97,7 @@ class LockingSessionHandler implements \SessionHandlerInterface
     /**
      * {@inheritDoc}
      */
-    public function open($savePath, $sessionId)
+    public function open($savePath, $sessionName)
     {
         return true;
     }
