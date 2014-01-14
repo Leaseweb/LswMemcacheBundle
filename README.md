@@ -83,7 +83,7 @@ Below you can see a full configuration for this bundle.
 lsw_memcache:
     clients:
         default:
-            persistent_id: default
+            persistent_id: default         # Advice: do not use, it is known to cause problems
             hosts:
                 - { dsn: 10.0.0.1, port: 11211, weight: 15 }
                 - { dsn: 10.0.0.2, port: 11211, weight: 30 }
@@ -186,8 +186,8 @@ The collect call of the memcache data collector is executed before the rendering
 and therefor also before the session write is executed. This causes the session writes not to show up in
 the Web Debug Toolbar.
 
-Persistent connections (setting "persistent_id") is known to crash php5 (core dump) on some systems.
-Use with caution: it is strongly recommended to NOT set it (leave out "persistent_id" from configuration).
+Enabling persistent connections (setting "persistent_id") is known to crash php5 (core dump) on some systems.
+Use with caution: it is strongly recommended to leave out "persistent_id" from the configuration.
 
 ### Credits
 
