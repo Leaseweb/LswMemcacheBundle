@@ -83,7 +83,7 @@ Below you can see a full configuration for this bundle.
 lsw_memcache:
     clients:
         default:
-            persistent_id: default         # Advice: do not use, it is known to cause problems
+            persistent_id: default  # Do NOT use this, see known issues
             hosts:
                 - { dsn: 10.0.0.1, port: 11211, weight: 15 }
                 - { dsn: 10.0.0.2, port: 11211, weight: 30 }
