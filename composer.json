@@ -14,8 +14,7 @@
     "minimum-stability": "dev",
     "require": {
         "php": ">=5.3.2",
-        "symfony/framework-bundle": ">=2.1",
-        "ext-memcached": ">=1.0"
+        "symfony/framework-bundle": ">=2.1"
     },
     "autoload": {
         "psr-0": { "Lsw\\MemcacheBundle": "" }
