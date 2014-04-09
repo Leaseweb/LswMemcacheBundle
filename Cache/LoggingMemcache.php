@@ -827,9 +827,9 @@ if ($extension->getVersion()<2) {
             return $result;
         }
 
-        public function replace($key, $value, $expiration = null)
+        public function replace($key, $value, $expiration = null, $udf_flags = 0)
         {
-            if (!$this->logging) return parent::replace($key, $value, $expiration);
+            if (!$this->logging) return parent::replace($key, $value, $expiration, $udf_flags);
             $start = microtime(true);
             $name = 'replace';
             $result = parent::replace($key, $value, $expiration);
