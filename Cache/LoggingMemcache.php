@@ -832,8 +832,8 @@ if ($extension->getVersion()<2) {
             if (!$this->logging) return parent::replace($key, $value, $expiration, $udf_flags);
             $start = microtime(true);
             $name = 'replace';
-            $result = parent::replace($key, $value, $expiration);
-            $arguments = array($key, $value, $expiration);
+            $result = parent::replace($key, $value, $expiration, $udf_flags);
+            $arguments = array($key, $value, $expiration, $udf_flags);
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
