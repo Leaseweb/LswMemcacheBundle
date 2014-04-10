@@ -2,24 +2,9 @@
 namespace Lsw\MemcacheBundle\Cache;
 
 $extension = new \ReflectionExtension('memcached');
-if ($extension->getVersion()<2) {
-
-    /**
-     * Class to encapsulate PHP Memcached object for unit tests and to add logging in logging mode
-     */
-    class LoggingMemcache extends \Memcached implements MemcacheInterface, LoggingMemcacheInterface
-    {
-        private $calls;
-        private $initialize;
-        private $logging;
-
-        /**
-         * Constructor instantiates and stores Memcached object
-         *
-         * @param string  $persistentId Identifier for persistent connections
-         */
-        public function __construct($logging = false, $persistentId = null)
-        {
+if ($extension->getVersion()=='1.0.2') {
+    class LoggingMemcache extends \Memcached implements MemcacheInterface, LoggingMemcacheInterface {
+        public function __construct( $persistent_id = '' ) {
             $this->calls = array();
             $this->logging = $logging;
             if ($persistentId) {
@@ -30,487 +15,383 @@ if ($extension->getVersion()<2) {
                 $this->initialize = true;
             }
         }
-
-        /**
-         * Get the logged calls for this Memcached object
-         *
-         * @return array Array of calls made to the Memcached object
-         */
+        private $calls;
+        private $initialize;
+        private $logging;
         public function getLoggedCalls()
         {
             return $this->calls;
         }
-
         private function logCall($start, $result)
         {
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-
-        public function getResultCode()
-        {
-            if (!$this->logging) return parent::getResultCode();
-            $start = microtime(true);
-            $name = 'getResultCode';
-            $result = parent::getResultCode();
-            $arguments = array();
-            $time = microtime(true) - $start;
-            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
-            return $result;
-        }
-
-        public function getResultMessage()
-        {
-            if (!$this->logging) return parent::getResultMessage();
-            $start = microtime(true);
-            $name = 'getResultMessage';
-            $result = parent::getResultMessage();
-            $arguments = array();
-            $time = microtime(true) - $start;
-            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
-            return $result;
-        }
-
-        public function get($key, $cache_cb = null, &$cas_token = null)
-        {
-            if (!$this->logging) return parent::get($key, $cache_cb, $cas_token);
+        public function get( $key, $cache_cb = null, &$cas_token = null ) {
+            if (!$this->logging) return forward_static_call_array('parent::get', func_get_args());
             $start = microtime(true);
             $name = 'get';
-            $result = parent::get($key, $cache_cb, $cas_token);
-            $arguments = array($key, $cache_cb, $cas_token);
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-
-        public function getByKey($server_key, $key, $cache_cb = null, &$cas_token = null)
-        {
-            if (!$this->logging) return parent::getByKey($server_key, $key, $cache_cb, $cas_token);
+        public function getByKey( $server_key, $key, $cache_cb = null, &$cas_token = null ) {
+            if (!$this->logging) return forward_static_call_array('parent::getByKey', func_get_args());
             $start = microtime(true);
             $name = 'getByKey';
-            $result = parent::getByKey($server_key, $key, $cache_cb, $cas_token);
-            $arguments = array($server_key, $key, $cache_cb, $cas_token);
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-
-        public function getMulti(array $keys, &$cas_tokens = null, $flags = null)
-        {
-            if (!$this->logging) return parent::getMulti($keys, $cas_tokens, $flags);
+        public function getMulti( array $keys, &$cas_tokens = null, $flags = 0 ) {
+            if (!$this->logging) return forward_static_call_array('parent::getMulti', func_get_args());
             $start = microtime(true);
             $name = 'getMulti';
-            $result = parent::getMulti($keys, $cas_tokens, $flags);
-            $arguments = array($keys, $cas_tokens, $flags);
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-
-        public function getMultiByKey($server_key, array $keys, &$cas_tokens = null, $flags = null)
-        {
-            if (!$this->logging) return parent::getMultiByKey($server_key, $keys, $cas_tokens, $flags);
+        public function getMultiByKey( $server_key, array $keys, &$cas_tokens = null, $flags = 0 ) {
+            if (!$this->logging) return forward_static_call_array('parent::getMultiByKey', func_get_args());
             $start = microtime(true);
             $name = 'getMultiByKey';
-            $result = parent::getMultiByKey($server_key, $keys, $cas_tokens, $flags);
-            $arguments = array($server_key, $keys, $cas_tokens, $flags);
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-
-        public function getDelayed(array $keys, $with_cas = null, $value_cb = null)
-        {
-            if (!$this->logging) return parent::getDelayed($keys, $with_cas, $value_cb);
+        public function getDelayed( array $keys, $with_cas = null, $value_cb = null ) {
+            if (!$this->logging) return forward_static_call_array('parent::getDelayed', func_get_args());
             $start = microtime(true);
             $name = 'getDelayed';
-            $result = parent::getDelayed($keys, $with_cas, $value_cb);
-            $arguments = array($keys, $with_cas, $value_cb);
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-
-        public function getDelayedByKey($server_key, array $keys, $with_cas = null, $value_cb = null)
-        {
-            if (!$this->logging) return parent::getDelayedByKey($server_key, $keys, $with_cas, $value_cb);
+        public function getDelayedByKey( $server_key, array $keys, $with_cas = null, $value_cb = null ) {
+            if (!$this->logging) return forward_static_call_array('parent::getDelayedByKey', func_get_args());
             $start = microtime(true);
             $name = 'getDelayedByKey';
-            $result = parent::getDelayedByKey($server_key, $keys, $with_cas, $value_cb);
-            $arguments = array($server_key, $keys, $with_cas, $value_cb);
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-
-        public function fetch()
-        {
-            if (!$this->logging) return parent::fetch();
+        public function fetch( ) {
+            if (!$this->logging) return forward_static_call_array('parent::fetch', func_get_args());
             $start = microtime(true);
             $name = 'fetch';
-            $result = parent::fetch();
-            $arguments = array();
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-
-        public function fetchAll()
-        {
-            if (!$this->logging) return parent::fetchAll();
+        public function fetchAll( ) {
+            if (!$this->logging) return forward_static_call_array('parent::fetchAll', func_get_args());
             $start = microtime(true);
             $name = 'fetchAll';
-            $result = parent::fetchAll();
-            $arguments = array();
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-
-        public function set($key, $value, $expiration = null)
-        {
-            if (!$this->logging) return parent::set($key, $value, $expiration);
+        public function set( $key, $value, $expiration = 0 ) {
+            if (!$this->logging) return forward_static_call_array('parent::set', func_get_args());
             $start = microtime(true);
             $name = 'set';
-            $result = parent::set($key, $value, $expiration);
-            $arguments = array($key, $value, $expiration);
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-
-        public function setByKey($server_key, $key, $value, $expiration = null)
-        {
-            if (!$this->logging) return parent::setByKey($server_key, $key, $value, $expiration);
+        public function setByKey( $server_key, $key, $value, $expiration = 0 ) {
+            if (!$this->logging) return forward_static_call_array('parent::setByKey', func_get_args());
             $start = microtime(true);
             $name = 'setByKey';
-            $result = parent::setByKey($server_key, $key, $value, $expiration);
-            $arguments = array($server_key, $key, $value, $expiration);
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-
-        public function setMulti(array $items, $expiration = null)
-        {
-            if (!$this->logging) return parent::setMulti($items, $expiration);
+        public function setMulti( array $items, $expiration = 0 ) {
+            if (!$this->logging) return forward_static_call_array('parent::setMulti', func_get_args());
             $start = microtime(true);
             $name = 'setMulti';
-            $result = parent::setMulti($items, $expiration);
-            $arguments = array($items, $expiration);
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-
-        public function setMultiByKey($server_key, array $items, $expiration = null)
-        {
-            if (!$this->logging) return parent::setMultiByKey($server_key, $items, $expiration);
+        public function setMultiByKey( $server_key, array $items, $expiration = 0 ) {
+            if (!$this->logging) return forward_static_call_array('parent::setMultiByKey', func_get_args());
             $start = microtime(true);
             $name = 'setMultiByKey';
-            $result = parent::setMultiByKey($server_key, $items, $expiration);
-            $arguments = array($server_key, $items, $expiration);
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-
-        public function cas($cas_token, $key, $value, $expiration = null)
-        {
-            if (!$this->logging) return parent::cas($cas_token, $key, $value, $expiration);
+        public function cas( $token, $key, $value, $expiration = 0 ) {
+            if (!$this->logging) return forward_static_call_array('parent::cas', func_get_args());
             $start = microtime(true);
             $name = 'cas';
-            $result = parent::cas($cas_token, $key, $value, $expiration);
-            $arguments = array($cas_token, $key, $value, $expiration);
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-
-        public function casByKey($cas_token, $server_key, $key, $value, $expiration = null)
-        {
-            if (!$this->logging) return parent::casByKey($cas_token, $server_key, $key, $value, $expiration);
+        public function casByKey( $token, $server_key, $key, $value, $expiration = 0 ) {
+            if (!$this->logging) return forward_static_call_array('parent::casByKey', func_get_args());
             $start = microtime(true);
             $name = 'casByKey';
-            $result = parent::casByKey($cas_token, $server_key, $key, $value, $expiration);
-            $arguments = array($cas_token, $server_key, $key, $value, $expiration);
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-
-        public function add($key, $value, $expiration = null)
-        {
-            if (!$this->logging) return parent::add($key, $value, $expiration);
+        public function add( $key, $value, $expiration = 0 ) {
+            if (!$this->logging) return forward_static_call_array('parent::add', func_get_args());
             $start = microtime(true);
             $name = 'add';
-            $result = parent::add($key, $value, $expiration);
-            $arguments = array($key, $value, $expiration);
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-
-        public function addByKey($server_key, $key, $value, $expiration = null)
-        {
-            if (!$this->logging) return parent::addByKey($server_key, $key, $value, $expiration);
+        public function addByKey( $server_key, $key, $value, $expiration = 0 ) {
+            if (!$this->logging) return forward_static_call_array('parent::addByKey', func_get_args());
             $start = microtime(true);
             $name = 'addByKey';
-            $result = parent::addByKey($server_key, $key, $value, $expiration);
-            $arguments = array($server_key, $key, $value, $expiration);
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-
-        public function append($key, $value, $expiration = null)
-        {
-            if (!$this->logging) return parent::append($key, $value, $expiration);
+        public function append( $key, $value, $expiration = 0 ) {
+            if (!$this->logging) return forward_static_call_array('parent::append', func_get_args());
             $start = microtime(true);
             $name = 'append';
-            $result = parent::append($key, $value, $expiration);
-            $arguments = array($key, $value, $expiration);
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-
-        public function appendByKey($server_key, $key, $value, $expiration = null)
-        {
-            if (!$this->logging) return parent::appendByKey($server_key, $key, $value, $expiration);
+        public function appendByKey( $server_ke, $key, $value, $expiration = 0 ) {
+            if (!$this->logging) return forward_static_call_array('parent::appendByKey', func_get_args());
             $start = microtime(true);
             $name = 'appendByKey';
-            $result = parent::appendByKey($server_key, $key, $value, $expiration);
-            $arguments = array($server_key, $key, $value, $expiration);
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-
-        public function prepend($key, $value, $expiration = null)
-        {
-            if (!$this->logging) return parent::prepend($key, $value, $expiration);
+        public function prepend( $key, $value, $expiration = 0 ) {
+            if (!$this->logging) return forward_static_call_array('parent::prepend', func_get_args());
             $start = microtime(true);
             $name = 'prepend';
-            $result = parent::prepend($key, $value, $expiration);
-            $arguments = array($key, $value, $expiration);
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-
-        public function prependByKey($server_key, $key, $value, $expiration = null)
-        {
-            if (!$this->logging) return parent::prependByKey($server_key, $key, $value, $expiration);
+        public function prependByKey( $server_key, $key, $value, $expiration = 0 ) {
+            if (!$this->logging) return forward_static_call_array('parent::prependByKey', func_get_args());
             $start = microtime(true);
             $name = 'prependByKey';
-            $result = parent::prependByKey($server_key, $key, $value, $expiration);
-            $arguments = array($server_key, $key, $value, $expiration);
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-
-        public function replace($key, $value, $expiration = null)
-        {
-            if (!$this->logging) return parent::replace($key, $value, $expiration);
+        public function replace( $key, $value, $expiration = 0 ) {
+            if (!$this->logging) return forward_static_call_array('parent::replace', func_get_args());
             $start = microtime(true);
             $name = 'replace';
-            $result = parent::replace($key, $value, $expiration);
-            $arguments = array($key, $value, $expiration);
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-
-        public function replaceByKey($server_key, $key, $value, $expiration = null)
-        {
-            if (!$this->logging) return parent::replaceByKey($server_key, $key, $value, $expiration);
+        public function replaceByKey( $serve_key, $key, $value, $expiration = 0 ) {
+            if (!$this->logging) return forward_static_call_array('parent::replaceByKey', func_get_args());
             $start = microtime(true);
             $name = 'replaceByKey';
-            $result = parent::replaceByKey($server_key, $key, $value, $expiration);
-            $arguments = array($server_key, $key, $value, $expiration);
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-
-        public function delete($key, $time = null)
-        {
-            if (!$this->logging) return parent::delete($key, $time);
+        public function delete( $key, $time = 0 ) {
+            if (!$this->logging) return forward_static_call_array('parent::delete', func_get_args());
             $start = microtime(true);
             $name = 'delete';
-            $result = parent::delete($key, $time);
-            $arguments = array($key, $time);
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-
-        public function deleteByKey($server_key, $key, $time = null)
-        {
-            if (!$this->logging) return parent::deleteByKey($server_key, $key, $time);
+        public function deleteByKey( $key, $time = 0 ) {
+            if (!$this->logging) return forward_static_call_array('parent::deleteByKey', func_get_args());
             $start = microtime(true);
             $name = 'deleteByKey';
-            $result = parent::deleteByKey($server_key, $key, $time);
-            $arguments = array($server_key, $key, $time);
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-
-        public function increment($key, $offset = null)
-        {
-            if (!$this->logging) return parent::increment($key, $offset);
+        public function increment( $key, $offset = 1) {
+            if (!$this->logging) return forward_static_call_array('parent::increment', func_get_args());
             $start = microtime(true);
             $name = 'increment';
-            $result = parent::increment($key, $offset);
-            $arguments = array($key, $offset);
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-
-        public function decrement($key, $offset = null)
-        {
-            if (!$this->logging) return parent::decrement($key, $offset);
+        public function decrement( $key, $offset = 1) {
+            if (!$this->logging) return forward_static_call_array('parent::decrement', func_get_args());
             $start = microtime(true);
             $name = 'decrement';
-            $result = parent::decrement($key, $offset);
-            $arguments = array($key, $offset);
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-
-        public function addServer($host, $port, $weight = null)
-        {
-            if (!$this->logging) return parent::addServer($host, $port, $weight);
-            $start = microtime(true);
-            $name = 'addServer';
-            $result = parent::addServer($host, $port, $weight);
-            $arguments = array($host, $port, $weight);
-            $time = microtime(true) - $start;
-            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
-            return $result;
-        }
-
-        public function addServers(array $servers)
-        {
-            if (!$this->logging) return parent::addServers($servers);
-            $start = microtime(true);
-            $name = 'addServers';
-            $result = parent::addServers($servers);
-            $arguments = array($servers);
-            $time = microtime(true) - $start;
-            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
-            return $result;
-        }
-
-        public function getServerList()
-        {
-            if (!$this->logging) return parent::getServerList();
-            $start = microtime(true);
-            $name = 'getServerList';
-            $result = parent::getServerList();
-            $arguments = array();
-            $time = microtime(true) - $start;
-            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
-            return $result;
-        }
-
-        public function getServerByKey($server_key)
-        {
-            if (!$this->logging) return parent::getServerByKey($server_key);
-            $start = microtime(true);
-            $name = 'getServerByKey';
-            $result = parent::getServerByKey($server_key);
-            $arguments = array($server_key);
-            $time = microtime(true) - $start;
-            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
-            return $result;
-        }
-
-        public function getStats()
-        {
-            if (!$this->logging) return parent::getStats();
-            $start = microtime(true);
-            $name = 'getStats';
-            $result = parent::getStats();
-            $arguments = array();
-            $time = microtime(true) - $start;
-            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
-            return $result;
-        }
-
-        public function getVersion()
-        {
-            if (!$this->logging) return parent::getVersion();
-            $start = microtime(true);
-            $name = 'getVersion';
-            $result = parent::getVersion();
-            $arguments = array();
-            $time = microtime(true) - $start;
-            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
-            return $result;
-        }
-
-        public function flush($delay = null)
-        {
-            if (!$this->logging) return parent::flush($delay);
-            $start = microtime(true);
-            $name = 'flush';
-            $result = parent::flush($delay);
-            $arguments = array($delay);
-            $time = microtime(true) - $start;
-            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
-            return $result;
-        }
-
-        public function getOption($option)
-        {
-            if (!$this->logging) return parent::getOption($option);
+        public function getOption( $option ) {
+            if (!$this->logging) return forward_static_call_array('parent::getOption', func_get_args());
             $start = microtime(true);
             $name = 'getOption';
-            $result = parent::getOption($option);
-            $arguments = array($option);
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-
-        public function setOption($option, $value)
-        {
-            if (!$this->logging) return parent::setOption($option, $value);
+        public function setOption( $option, $value ) {
+            if (!$this->logging) return forward_static_call_array('parent::setOption', func_get_args());
             $start = microtime(true);
             $name = 'setOption';
-            $result = parent::setOption($option, $value);
-            $arguments = array($option, $value);
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function addServer( $host, $port,  $weight = 0 ) {
+            if (!$this->logging) return forward_static_call_array('parent::addServer', func_get_args());
+            $start = microtime(true);
+            $name = 'addServer';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function addServers( array $servers ) {
+            if (!$this->logging) return forward_static_call_array('parent::addServers', func_get_args());
+            $start = microtime(true);
+            $name = 'addServers';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function getServerList( ) {
+            if (!$this->logging) return forward_static_call_array('parent::getServerList', func_get_args());
+            $start = microtime(true);
+            $name = 'getServerList';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function getServerByKey( $server_key ) {
+            if (!$this->logging) return forward_static_call_array('parent::getServerByKey', func_get_args());
+            $start = microtime(true);
+            $name = 'getServerByKey';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function flush( $delay = 0 ) {
+            if (!$this->logging) return forward_static_call_array('parent::flush', func_get_args());
+            $start = microtime(true);
+            $name = 'flush';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function getStats( ) {
+            if (!$this->logging) return forward_static_call_array('parent::getStats', func_get_args());
+            $start = microtime(true);
+            $name = 'getStats';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function getResultCode( ) {
+            if (!$this->logging) return forward_static_call_array('parent::getResultCode', func_get_args());
+            $start = microtime(true);
+            $name = 'getResultCode';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function getResultMessage( ) {
+            if (!$this->logging) return forward_static_call_array('parent::getResultMessage', func_get_args());
+            $start = microtime(true);
+            $name = 'getResultMessage';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
     }
-
-} else {
-
-    /**
-     * Class to encapsulate PHP Memcached object for unit tests and to add logging in logging mode
-     */
-    class LoggingMemcache extends \Memcached implements MemcacheInterface, LoggingMemcacheInterface
-    {
-        private $calls;
-        private $initialize;
-        private $logging;
-
-        /**
-         * Constructor instantiates and stores Memcached object
-         *
-         * @param string  $persistentId Identifier for persistent connections
-         */
-        public function __construct($logging = false, $persistentId = null)
-        {
+} else if ($extension->getVersion()=='2.0.1') {
+    class LoggingMemcache extends \Memcached implements MemcacheInterface, LoggingMemcacheInterface {
+        public function __construct( $persistent_id = '', $on_new_object_cb = null ) {
             $this->calls = array();
             $this->logging = $logging;
             if ($persistentId) {
@@ -521,611 +402,1454 @@ if ($extension->getVersion()<2) {
                 $this->initialize = true;
             }
         }
-
-        /**
-         * Get the logged calls for this Memcached object
-         *
-         * @return array Array of calls made to the Memcached object
-         */
+        private $calls;
+        private $initialize;
+        private $logging;
         public function getLoggedCalls()
         {
             return $this->calls;
         }
-
         private function logCall($start, $result)
         {
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-
-        public function getResultCode()
-        {
-            if (!$this->logging) return parent::getResultCode();
-            $start = microtime(true);
-            $name = 'getResultCode';
-            $result = parent::getResultCode();
-            $arguments = array();
-            $time = microtime(true) - $start;
-            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
-            return $result;
-        }
-
-        public function getResultMessage()
-        {
-            if (!$this->logging) return parent::getResultMessage();
-            $start = microtime(true);
-            $name = 'getResultMessage';
-            $result = parent::getResultMessage();
-            $arguments = array();
-            $time = microtime(true) - $start;
-            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
-            return $result;
-        }
-
-        public function get($key, $cache_cb = null, &$cas_token = null)
-        {
-            if (!$this->logging) return parent::get($key, $cache_cb, $cas_token);
+        public function get( $key, $cache_cb = null, &$cas_token = null ) {
+            if (!$this->logging) return forward_static_call_array('parent::get', func_get_args());
             $start = microtime(true);
             $name = 'get';
-            $result = parent::get($key, $cache_cb, $cas_token);
-            $arguments = array($key, $cache_cb, $cas_token);
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-
-        public function getByKey($server_key, $key, $cache_cb = null, &$cas_token = null)
-        {
-            if (!$this->logging) return parent::getByKey($server_key, $key, $cache_cb, $cas_token);
+        public function getByKey( $server_key, $key, $cache_cb = null, &$cas_token = null ) {
+            if (!$this->logging) return forward_static_call_array('parent::getByKey', func_get_args());
             $start = microtime(true);
             $name = 'getByKey';
-            $result = parent::getByKey($server_key, $key, $cache_cb, $cas_token);
-            $arguments = array($server_key, $key, $cache_cb, $cas_token);
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-
-        public function getMulti(array $keys, &$cas_tokens = null, $flags = null)
-        {
-            if (!$this->logging) return parent::getMulti($keys, $cas_tokens, $flags);
+        public function getMulti( array $keys, &$cas_tokens = null, $flags = 0 ) {
+            if (!$this->logging) return forward_static_call_array('parent::getMulti', func_get_args());
             $start = microtime(true);
             $name = 'getMulti';
-            $result = parent::getMulti($keys, $cas_tokens, $flags);
-            $arguments = array($keys, $cas_tokens, $flags);
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-
-        public function getMultiByKey($server_key, array $keys, &$cas_tokens = null, $flags = null)
-        {
-            if (!$this->logging) return parent::getMultiByKey($server_key, $keys, $cas_tokens, $flags);
+        public function getMultiByKey( $server_key, array $keys, &$cas_tokens = null, $flags = 0 ) {
+            if (!$this->logging) return forward_static_call_array('parent::getMultiByKey', func_get_args());
             $start = microtime(true);
             $name = 'getMultiByKey';
-            $result = parent::getMultiByKey($server_key, $keys, $cas_tokens, $flags);
-            $arguments = array($server_key, $keys, $cas_tokens, $flags);
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-
-        public function getDelayed(array $keys, $with_cas = null, $value_cb = null)
-        {
-            if (!$this->logging) return parent::getDelayed($keys, $with_cas, $value_cb);
+        public function getDelayed( array $keys, $with_cas = null, $value_cb = null ) {
+            if (!$this->logging) return forward_static_call_array('parent::getDelayed', func_get_args());
             $start = microtime(true);
             $name = 'getDelayed';
-            $result = parent::getDelayed($keys, $with_cas, $value_cb);
-            $arguments = array($keys, $with_cas, $value_cb);
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-
-        public function getDelayedByKey($server_key, array $keys, $with_cas = null, $value_cb = null)
-        {
-            if (!$this->logging) return parent::getDelayedByKey($server_key, $keys, $with_cas, $value_cb);
+        public function getDelayedByKey( $server_key, array $keys, $with_cas = null, $value_cb = null ) {
+            if (!$this->logging) return forward_static_call_array('parent::getDelayedByKey', func_get_args());
             $start = microtime(true);
             $name = 'getDelayedByKey';
-            $result = parent::getDelayedByKey($server_key, $keys, $with_cas, $value_cb);
-            $arguments = array($server_key, $keys, $with_cas, $value_cb);
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-
-        public function fetch()
-        {
-            if (!$this->logging) return parent::fetch();
+        public function fetch( ) {
+            if (!$this->logging) return forward_static_call_array('parent::fetch', func_get_args());
             $start = microtime(true);
             $name = 'fetch';
-            $result = parent::fetch();
-            $arguments = array();
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-
-        public function fetchAll()
-        {
-            if (!$this->logging) return parent::fetchAll();
+        public function fetchAll( ) {
+            if (!$this->logging) return forward_static_call_array('parent::fetchAll', func_get_args());
             $start = microtime(true);
             $name = 'fetchAll';
-            $result = parent::fetchAll();
-            $arguments = array();
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-
-        public function set($key, $value, $expiration = null)
-        {
-            if (!$this->logging) return parent::set($key, $value, $expiration);
+        public function set( $key, $value, $expiration = 0 ) {
+            if (!$this->logging) return forward_static_call_array('parent::set', func_get_args());
             $start = microtime(true);
             $name = 'set';
-            $result = parent::set($key, $value, $expiration);
-            $arguments = array($key, $value, $expiration);
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-
-        public function setByKey($server_key, $key, $value, $expiration = null)
-        {
-            if (!$this->logging) return parent::setByKey($server_key, $key, $value, $expiration);
-            $start = microtime(true);
-            $name = 'setByKey';
-            $result = parent::setByKey($server_key, $key, $value, $expiration);
-            $arguments = array($server_key, $key, $value, $expiration);
-            $time = microtime(true) - $start;
-            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
-            return $result;
-        }
-
-        public function touch($key, $expiration)
-        {
-            if (!$this->logging) return parent::touch($key, $expiration);
+        public function touch( $key, $expiration = 0 ) {
+            if (!$this->logging) return forward_static_call_array('parent::touch', func_get_args());
             $start = microtime(true);
             $name = 'touch';
-            $result = parent::touch($key, $expiration);
-            $arguments = array($key, $expiration);
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-
-        public function touchByKey($server_key, $key, $expiration)
-        {
-            if (!$this->logging) return parent::touchByKey($server_key, $key, $expiration);
+        public function touchbyKey( $key, $expiration = 0 ) {
+            if (!$this->logging) return forward_static_call_array('parent::touchbyKey', func_get_args());
             $start = microtime(true);
-            $name = 'touchByKey';
-            $result = parent::touchByKey($server_key, $key, $expiration);
-            $arguments = array($server_key, $key, $expiration);
+            $name = 'touchbyKey';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-
-        public function setMulti(array $items, $expiration = null)
-        {
-            if (!$this->logging) return parent::setMulti($items, $expiration);
+        public function setByKey( $server_key, $key, $value, $expiration = 0 ) {
+            if (!$this->logging) return forward_static_call_array('parent::setByKey', func_get_args());
+            $start = microtime(true);
+            $name = 'setByKey';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function setMulti( array $items, $expiration = 0 ) {
+            if (!$this->logging) return forward_static_call_array('parent::setMulti', func_get_args());
             $start = microtime(true);
             $name = 'setMulti';
-            $result = parent::setMulti($items, $expiration);
-            $arguments = array($items, $expiration);
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-
-        public function setMultiByKey($server_key, array $items, $expiration = null)
-        {
-            if (!$this->logging) return parent::setMultiByKey($server_key, $items, $expiration);
+        public function setMultiByKey( $server_key, array $items, $expiration = 0 ) {
+            if (!$this->logging) return forward_static_call_array('parent::setMultiByKey', func_get_args());
             $start = microtime(true);
             $name = 'setMultiByKey';
-            $result = parent::setMultiByKey($server_key, $items, $expiration);
-            $arguments = array($server_key, $items, $expiration);
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-
-        public function cas($cas_token, $key, $value, $expiration = null)
-        {
-            if (!$this->logging) return parent::cas($cas_token, $key, $value, $expiration);
+        public function cas( $token, $key, $value, $expiration = 0 ) {
+            if (!$this->logging) return forward_static_call_array('parent::cas', func_get_args());
             $start = microtime(true);
             $name = 'cas';
-            $result = parent::cas($cas_token, $key, $value, $expiration);
-            $arguments = array($cas_token, $key, $value, $expiration);
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-
-        public function casByKey($cas_token, $server_key, $key, $value, $expiration = null)
-        {
-            if (!$this->logging) return parent::casByKey($cas_token, $server_key, $key, $value, $expiration);
+        public function casByKey( $token, $server_key, $key, $value, $expiration = 0 ) {
+            if (!$this->logging) return forward_static_call_array('parent::casByKey', func_get_args());
             $start = microtime(true);
             $name = 'casByKey';
-            $result = parent::casByKey($cas_token, $server_key, $key, $value, $expiration);
-            $arguments = array($cas_token, $server_key, $key, $value, $expiration);
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-
-        public function add($key, $value, $expiration = null)
-        {
-            if (!$this->logging) return parent::add($key, $value, $expiration);
+        public function add( $key, $value, $expiration = 0 ) {
+            if (!$this->logging) return forward_static_call_array('parent::add', func_get_args());
             $start = microtime(true);
             $name = 'add';
-            $result = parent::add($key, $value, $expiration);
-            $arguments = array($key, $value, $expiration);
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-
-        public function addByKey($server_key, $key, $value, $expiration = null)
-        {
-            if (!$this->logging) return parent::addByKey($server_key, $key, $value, $expiration);
+        public function addByKey( $server_key, $key, $value, $expiration = 0 ) {
+            if (!$this->logging) return forward_static_call_array('parent::addByKey', func_get_args());
             $start = microtime(true);
             $name = 'addByKey';
-            $result = parent::addByKey($server_key, $key, $value, $expiration);
-            $arguments = array($server_key, $key, $value, $expiration);
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-
-        public function append($key, $value, $expiration = null)
-        {
-            if (!$this->logging) return parent::append($key, $value, $expiration);
+        public function append( $key, $value ) {
+            if (!$this->logging) return forward_static_call_array('parent::append', func_get_args());
             $start = microtime(true);
             $name = 'append';
-            $result = parent::append($key, $value, $expiration);
-            $arguments = array($key, $value, $expiration);
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-
-        public function appendByKey($server_key, $key, $value, $expiration = null)
-        {
-            if (!$this->logging) return parent::appendByKey($server_key, $key, $value, $expiration);
+        public function appendByKey( $server_key, $key, $value ) {
+            if (!$this->logging) return forward_static_call_array('parent::appendByKey', func_get_args());
             $start = microtime(true);
             $name = 'appendByKey';
-            $result = parent::appendByKey($server_key, $key, $value, $expiration);
-            $arguments = array($server_key, $key, $value, $expiration);
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-
-        public function prepend($key, $value, $expiration = null)
-        {
-            if (!$this->logging) return parent::prepend($key, $value, $expiration);
+        public function prepend( $key, $value ) {
+            if (!$this->logging) return forward_static_call_array('parent::prepend', func_get_args());
             $start = microtime(true);
             $name = 'prepend';
-            $result = parent::prepend($key, $value, $expiration);
-            $arguments = array($key, $value, $expiration);
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-
-        public function prependByKey($server_key, $key, $value, $expiration = null)
-        {
-            if (!$this->logging) return parent::prependByKey($server_key, $key, $value, $expiration);
+        public function prependByKey( $server_key, $key, $value ) {
+            if (!$this->logging) return forward_static_call_array('parent::prependByKey', func_get_args());
             $start = microtime(true);
             $name = 'prependByKey';
-            $result = parent::prependByKey($server_key, $key, $value, $expiration);
-            $arguments = array($server_key, $key, $value, $expiration);
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-
-        public function replace($key, $value, $expiration = null, $udf_flags = 0)
-        {
-            if (!$this->logging) return parent::replace($key, $value, $expiration, $udf_flags);
+        public function replace( $key, $value, $expiration = 0 ) {
+            if (!$this->logging) return forward_static_call_array('parent::replace', func_get_args());
             $start = microtime(true);
             $name = 'replace';
-            $result = parent::replace($key, $value, $expiration, $udf_flags);
-            $arguments = array($key, $value, $expiration, $udf_flags);
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-
-        public function replaceByKey($server_key, $key, $value, $expiration = null)
-        {
-            if (!$this->logging) return parent::replaceByKey($server_key, $key, $value, $expiration);
+        public function replaceByKey( $server_key, $key, $value, $expiration = 0 ) {
+            if (!$this->logging) return forward_static_call_array('parent::replaceByKey', func_get_args());
             $start = microtime(true);
             $name = 'replaceByKey';
-            $result = parent::replaceByKey($server_key, $key, $value, $expiration);
-            $arguments = array($server_key, $key, $value, $expiration);
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-
-        public function delete($key, $time = null)
-        {
-            if (!$this->logging) return parent::delete($key, $time);
+        public function delete( $key, $time = 0 ) {
+            if (!$this->logging) return forward_static_call_array('parent::delete', func_get_args());
             $start = microtime(true);
             $name = 'delete';
-            $result = parent::delete($key, $time);
-            $arguments = array($key, $time);
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-
-        public function deleteMulti($keys, $time = null)
-        {
-            if (!$this->logging) return parent::deleteMulti($keys, $time);
-            $start = microtime(true);
-            $name = 'deleteMulti';
-            $result = parent::deleteMulti($keys, $time);
-            $arguments = array($keys, $time);
-            $time = microtime(true) - $start;
-            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
-            return $result;
-        }
-
-        public function deleteByKey($server_key, $key, $time = null)
-        {
-            if (!$this->logging) return parent::deleteByKey($server_key, $key, $time);
+        public function deleteByKey( $server_key, $key, $time = 0 ) {
+            if (!$this->logging) return forward_static_call_array('parent::deleteByKey', func_get_args());
             $start = microtime(true);
             $name = 'deleteByKey';
-            $result = parent::deleteByKey($server_key, $key, $time);
-            $arguments = array($server_key, $key, $time);
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-
-        public function deleteMultiByKey($server_key, $keys, $time = null)
-        {
-            if (!$this->logging) return parent::deleteMultiByKey($server_key, $keys, $time);
+        public function deleteMulti( array $keys, $expiration = 0 ) {
+            if (!$this->logging) return forward_static_call_array('parent::deleteMulti', func_get_args());
+            $start = microtime(true);
+            $name = 'deleteMulti';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function deleteMultiByKey( $server_key, array $keys, $expiration = 0 ) {
+            if (!$this->logging) return forward_static_call_array('parent::deleteMultiByKey', func_get_args());
             $start = microtime(true);
             $name = 'deleteMultiByKey';
-            $result = parent::deleteMultiByKey($server_key, $keys, $time);
-            $arguments = array($server_key, $keys, $time);
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-
-        public function increment($key, $offset = null, $initial_value = null, $expiry = null)
-        {
-            if (!$this->logging) return parent::increment($key, $offset, $initial_value, $expiry);
+        public function increment( $key, $offset = 1) {
+            if (!$this->logging) return forward_static_call_array('parent::increment', func_get_args());
             $start = microtime(true);
             $name = 'increment';
-            $result = parent::increment($key, $offset, $initial_value, $expiry);
-            $arguments = array($key, $offset, $initial_value, $expiry);
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-
-        public function decrement($key, $offset = null, $initial_value = null, $expiry = null)
-        {
-            if (!$this->logging) return parent::decrement($key, $offset, $initial_value, $expiry);
+        public function decrement( $key, $offset = 1) {
+            if (!$this->logging) return forward_static_call_array('parent::decrement', func_get_args());
             $start = microtime(true);
             $name = 'decrement';
-            $result = parent::decrement($key, $offset, $initial_value, $expiry);
-            $arguments = array($key, $offset, $initial_value, $expiry);
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-
-        public function incrementByKey($server_key, $key, $offset = null, $initial_value = null, $expiry = null)
-        {
-            if (!$this->logging) return parent::incrementByKey($server_key, $key, $offset, $initial_value, $expiry);
-            $start = microtime(true);
-            $name = 'incrementByKey';
-            $result = parent::incrementByKey($server_key, $key, $offset, $initial_value, $expiry);
-            $arguments = array($server_key, $key, $offset, $initial_value, $expiry);
-            $time = microtime(true) - $start;
-            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
-            return $result;
-        }
-
-        public function decrementByKey($server_key, $key, $offset = null, $initial_value = null, $expiry = null)
-        {
-            if (!$this->logging) return parent::decrementByKey($server_key, $key, $offset, $initial_value, $expiry);
-            $start = microtime(true);
-            $name = 'decrementByKey';
-            $result = parent::decrementByKey($server_key, $key, $offset, $initial_value, $expiry);
-            $arguments = array($server_key, $key, $offset, $initial_value, $expiry);
-            $time = microtime(true) - $start;
-            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
-            return $result;
-        }
-
-        public function addServer($host, $port, $weight = null)
-        {
-            if (!$this->logging) return parent::addServer($host, $port, $weight);
-            $start = microtime(true);
-            $name = 'addServer';
-            $result = parent::addServer($host, $port, $weight);
-            $arguments = array($host, $port, $weight);
-            $time = microtime(true) - $start;
-            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
-            return $result;
-        }
-
-        public function addServers(array $servers)
-        {
-            if (!$this->logging) return parent::addServers($servers);
-            $start = microtime(true);
-            $name = 'addServers';
-            $result = parent::addServers($servers);
-            $arguments = array($servers);
-            $time = microtime(true) - $start;
-            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
-            return $result;
-        }
-
-        public function getServerList()
-        {
-            if (!$this->logging) return parent::getServerList();
-            $start = microtime(true);
-            $name = 'getServerList';
-            $result = parent::getServerList();
-            $arguments = array();
-            $time = microtime(true) - $start;
-            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
-            return $result;
-        }
-
-        public function getServerByKey($server_key)
-        {
-            if (!$this->logging) return parent::getServerByKey($server_key);
-            $start = microtime(true);
-            $name = 'getServerByKey';
-            $result = parent::getServerByKey($server_key);
-            $arguments = array($server_key);
-            $time = microtime(true) - $start;
-            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
-            return $result;
-        }
-
-        public function resetServerList()
-        {
-            if (!$this->logging) return parent::resetServerList();
-            $start = microtime(true);
-            $name = 'resetServerList';
-            $result = parent::resetServerList();
-            $arguments = array();
-            $time = microtime(true) - $start;
-            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
-            return $result;
-        }
-
-        public function quit()
-        {
-            if (!$this->logging) return parent::quit();
-            $start = microtime(true);
-            $name = 'quit';
-            $result = parent::quit();
-            $arguments = array();
-            $time = microtime(true) - $start;
-            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
-            return $result;
-        }
-
-        public function getStats()
-        {
-            if (!$this->logging) return parent::getStats();
-            $start = microtime(true);
-            $name = 'getStats';
-            $result = parent::getStats();
-            $arguments = array();
-            $time = microtime(true) - $start;
-            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
-            return $result;
-        }
-
-        public function getVersion()
-        {
-            if (!$this->logging) return parent::getVersion();
-            $start = microtime(true);
-            $name = 'getVersion';
-            $result = parent::getVersion();
-            $arguments = array();
-            $time = microtime(true) - $start;
-            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
-            return $result;
-        }
-
-        public function getAllKeys()
-        {
-            if (!$this->logging) return parent::getAllKeys();
-            $start = microtime(true);
-            $name = 'getAllKeys';
-            $result = parent::getAllKeys();
-            $arguments = array();
-            $time = microtime(true) - $start;
-            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
-            return $result;
-        }
-
-        public function flush($delay = null)
-        {
-            if (!$this->logging) return parent::flush($delay);
-            $start = microtime(true);
-            $name = 'flush';
-            $result = parent::flush($delay);
-            $arguments = array($delay);
-            $time = microtime(true) - $start;
-            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
-            return $result;
-        }
-
-        public function getOption($option)
-        {
-            if (!$this->logging) return parent::getOption($option);
+        public function getOption( $option ) {
+            if (!$this->logging) return forward_static_call_array('parent::getOption', func_get_args());
             $start = microtime(true);
             $name = 'getOption';
-            $result = parent::getOption($option);
-            $arguments = array($option);
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-
-        public function setOption($option, $value)
-        {
-            if (!$this->logging) return parent::setOption($option, $value);
+        public function setOption( $option, $value ) {
+            if (!$this->logging) return forward_static_call_array('parent::setOption', func_get_args());
             $start = microtime(true);
             $name = 'setOption';
-            $result = parent::setOption($option, $value);
-            $arguments = array($option, $value);
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-
-        public function setOptions($options)
-        {
-            if (!$this->logging) return parent::setOptions($options);
+        public function setOptions( array $options ) {
+            if (!$this->logging) return forward_static_call_array('parent::setOptions', func_get_args());
             $start = microtime(true);
             $name = 'setOptions';
-            $result = parent::setOptions($options);
-            $arguments = array($options);
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-
-        public function isPersistent()
-        {
-            if (!$this->logging) return parent::isPersistent();
+        public function addServer( $host, $port,  $weight = 0 ) {
+            if (!$this->logging) return forward_static_call_array('parent::addServer', func_get_args());
+            $start = microtime(true);
+            $name = 'addServer';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function addServers( array $servers ) {
+            if (!$this->logging) return forward_static_call_array('parent::addServers', func_get_args());
+            $start = microtime(true);
+            $name = 'addServers';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function getServerList( ) {
+            if (!$this->logging) return forward_static_call_array('parent::getServerList', func_get_args());
+            $start = microtime(true);
+            $name = 'getServerList';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function getServerByKey( $server_key ) {
+            if (!$this->logging) return forward_static_call_array('parent::getServerByKey', func_get_args());
+            $start = microtime(true);
+            $name = 'getServerByKey';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function flush( $delay = 0 ) {
+            if (!$this->logging) return forward_static_call_array('parent::flush', func_get_args());
+            $start = microtime(true);
+            $name = 'flush';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function getStats( ) {
+            if (!$this->logging) return forward_static_call_array('parent::getStats', func_get_args());
+            $start = microtime(true);
+            $name = 'getStats';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function getVersion( ) {
+            if (!$this->logging) return forward_static_call_array('parent::getVersion', func_get_args());
+            $start = microtime(true);
+            $name = 'getVersion';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function getResultCode( ) {
+            if (!$this->logging) return forward_static_call_array('parent::getResultCode', func_get_args());
+            $start = microtime(true);
+            $name = 'getResultCode';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function getResultMessage( ) {
+            if (!$this->logging) return forward_static_call_array('parent::getResultMessage', func_get_args());
+            $start = microtime(true);
+            $name = 'getResultMessage';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function isPersistent( ) {
+            if (!$this->logging) return forward_static_call_array('parent::isPersistent', func_get_args());
             $start = microtime(true);
             $name = 'isPersistent';
-            $result = parent::isPersistent();
-            $arguments = array();
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-
-        public function isPristine()
-        {
-            if (!$this->logging) return parent::isPristine();
+        public function isPristine( ) {
+            if (!$this->logging) return forward_static_call_array('parent::isPristine', func_get_args());
             $start = microtime(true);
             $name = 'isPristine';
-            $result = parent::isPristine();
-            $arguments = array();
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
     }
-
+} else if ($extension->getVersion()=='2.1.0') {
+    class LoggingMemcache extends \Memcached implements MemcacheInterface, LoggingMemcacheInterface {
+        public function __construct( $persistent_id = '', $on_new_object_cb = null ) {
+            $this->calls = array();
+            $this->logging = $logging;
+            if ($persistentId) {
+                parent::__construct($persistentId);
+                $this->initialize = count($this->getServerList())==0;
+            } else {
+                parent::__construct();
+                $this->initialize = true;
+            }
+        }
+        private $calls;
+        private $initialize;
+        private $logging;
+        public function getLoggedCalls()
+        {
+            return $this->calls;
+        }
+        private function logCall($start, $result)
+        {
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function get( $key, $cache_cb = null, &$cas_token = null ) {
+            if (!$this->logging) return forward_static_call_array('parent::get', func_get_args());
+            $start = microtime(true);
+            $name = 'get';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function getByKey( $server_key, $key, $cache_cb = null, &$cas_token = null ) {
+            if (!$this->logging) return forward_static_call_array('parent::getByKey', func_get_args());
+            $start = microtime(true);
+            $name = 'getByKey';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function getMulti( array $keys, &$cas_tokens = null, $flags = 0 ) {
+            if (!$this->logging) return forward_static_call_array('parent::getMulti', func_get_args());
+            $start = microtime(true);
+            $name = 'getMulti';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function getMultiByKey( $server_key, array $keys, &$cas_tokens = null, $flags = 0 ) {
+            if (!$this->logging) return forward_static_call_array('parent::getMultiByKey', func_get_args());
+            $start = microtime(true);
+            $name = 'getMultiByKey';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function getDelayed( array $keys, $with_cas = null, $value_cb = null ) {
+            if (!$this->logging) return forward_static_call_array('parent::getDelayed', func_get_args());
+            $start = microtime(true);
+            $name = 'getDelayed';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function getDelayedByKey( $server_key, array $keys, $with_cas = null, $value_cb = null ) {
+            if (!$this->logging) return forward_static_call_array('parent::getDelayedByKey', func_get_args());
+            $start = microtime(true);
+            $name = 'getDelayedByKey';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function fetch( ) {
+            if (!$this->logging) return forward_static_call_array('parent::fetch', func_get_args());
+            $start = microtime(true);
+            $name = 'fetch';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function fetchAll( ) {
+            if (!$this->logging) return forward_static_call_array('parent::fetchAll', func_get_args());
+            $start = microtime(true);
+            $name = 'fetchAll';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function set( $key, $value, $expiration = 0 ) {
+            if (!$this->logging) return forward_static_call_array('parent::set', func_get_args());
+            $start = microtime(true);
+            $name = 'set';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function touch( $key, $expiration = 0 ) {
+            if (!$this->logging) return forward_static_call_array('parent::touch', func_get_args());
+            $start = microtime(true);
+            $name = 'touch';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function touchbyKey( $key, $expiration = 0 ) {
+            if (!$this->logging) return forward_static_call_array('parent::touchbyKey', func_get_args());
+            $start = microtime(true);
+            $name = 'touchbyKey';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function setByKey( $server_key, $key, $value, $expiration = 0 ) {
+            if (!$this->logging) return forward_static_call_array('parent::setByKey', func_get_args());
+            $start = microtime(true);
+            $name = 'setByKey';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function setMulti( array $items, $expiration = 0 ) {
+            if (!$this->logging) return forward_static_call_array('parent::setMulti', func_get_args());
+            $start = microtime(true);
+            $name = 'setMulti';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function setMultiByKey( $server_key, array $items, $expiration = 0 ) {
+            if (!$this->logging) return forward_static_call_array('parent::setMultiByKey', func_get_args());
+            $start = microtime(true);
+            $name = 'setMultiByKey';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function cas( $token, $key, $value, $expiration = 0 ) {
+            if (!$this->logging) return forward_static_call_array('parent::cas', func_get_args());
+            $start = microtime(true);
+            $name = 'cas';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function casByKey( $token, $server_key, $key, $value, $expiration = 0 ) {
+            if (!$this->logging) return forward_static_call_array('parent::casByKey', func_get_args());
+            $start = microtime(true);
+            $name = 'casByKey';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function add( $key, $value, $expiration = 0 ) {
+            if (!$this->logging) return forward_static_call_array('parent::add', func_get_args());
+            $start = microtime(true);
+            $name = 'add';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function addByKey( $server_key, $key, $value, $expiration = 0 ) {
+            if (!$this->logging) return forward_static_call_array('parent::addByKey', func_get_args());
+            $start = microtime(true);
+            $name = 'addByKey';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function append( $key, $value ) {
+            if (!$this->logging) return forward_static_call_array('parent::append', func_get_args());
+            $start = microtime(true);
+            $name = 'append';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function appendByKey( $server_key, $key, $value ) {
+            if (!$this->logging) return forward_static_call_array('parent::appendByKey', func_get_args());
+            $start = microtime(true);
+            $name = 'appendByKey';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function prepend( $key, $value ) {
+            if (!$this->logging) return forward_static_call_array('parent::prepend', func_get_args());
+            $start = microtime(true);
+            $name = 'prepend';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function prependByKey( $server_key, $key, $value ) {
+            if (!$this->logging) return forward_static_call_array('parent::prependByKey', func_get_args());
+            $start = microtime(true);
+            $name = 'prependByKey';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function replace( $key, $value, $expiration = 0 ) {
+            if (!$this->logging) return forward_static_call_array('parent::replace', func_get_args());
+            $start = microtime(true);
+            $name = 'replace';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function replaceByKey( $server_key, $key, $value, $expiration = 0 ) {
+            if (!$this->logging) return forward_static_call_array('parent::replaceByKey', func_get_args());
+            $start = microtime(true);
+            $name = 'replaceByKey';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function delete( $key, $time = 0 ) {
+            if (!$this->logging) return forward_static_call_array('parent::delete', func_get_args());
+            $start = microtime(true);
+            $name = 'delete';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function deleteByKey( $server_key, $key, $time = 0 ) {
+            if (!$this->logging) return forward_static_call_array('parent::deleteByKey', func_get_args());
+            $start = microtime(true);
+            $name = 'deleteByKey';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function deleteMulti( array $keys, $expiration = 0 ) {
+            if (!$this->logging) return forward_static_call_array('parent::deleteMulti', func_get_args());
+            $start = microtime(true);
+            $name = 'deleteMulti';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function deleteMultiByKey( $server_key, array $keys, $expiration = 0 ) {
+            if (!$this->logging) return forward_static_call_array('parent::deleteMultiByKey', func_get_args());
+            $start = microtime(true);
+            $name = 'deleteMultiByKey';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function increment( $key, $offset = 1) {
+            if (!$this->logging) return forward_static_call_array('parent::increment', func_get_args());
+            $start = microtime(true);
+            $name = 'increment';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function decrement( $key, $offset = 1) {
+            if (!$this->logging) return forward_static_call_array('parent::decrement', func_get_args());
+            $start = microtime(true);
+            $name = 'decrement';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function getOption( $option ) {
+            if (!$this->logging) return forward_static_call_array('parent::getOption', func_get_args());
+            $start = microtime(true);
+            $name = 'getOption';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function setOption( $option, $value ) {
+            if (!$this->logging) return forward_static_call_array('parent::setOption', func_get_args());
+            $start = microtime(true);
+            $name = 'setOption';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function setOptions( array $options ) {
+            if (!$this->logging) return forward_static_call_array('parent::setOptions', func_get_args());
+            $start = microtime(true);
+            $name = 'setOptions';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function addServer( $host, $port,  $weight = 0 ) {
+            if (!$this->logging) return forward_static_call_array('parent::addServer', func_get_args());
+            $start = microtime(true);
+            $name = 'addServer';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function addServers( array $servers ) {
+            if (!$this->logging) return forward_static_call_array('parent::addServers', func_get_args());
+            $start = microtime(true);
+            $name = 'addServers';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function getServerList( ) {
+            if (!$this->logging) return forward_static_call_array('parent::getServerList', func_get_args());
+            $start = microtime(true);
+            $name = 'getServerList';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function getServerByKey( $server_key ) {
+            if (!$this->logging) return forward_static_call_array('parent::getServerByKey', func_get_args());
+            $start = microtime(true);
+            $name = 'getServerByKey';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function flush( $delay = 0 ) {
+            if (!$this->logging) return forward_static_call_array('parent::flush', func_get_args());
+            $start = microtime(true);
+            $name = 'flush';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function getStats( ) {
+            if (!$this->logging) return forward_static_call_array('parent::getStats', func_get_args());
+            $start = microtime(true);
+            $name = 'getStats';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function getVersion( ) {
+            if (!$this->logging) return forward_static_call_array('parent::getVersion', func_get_args());
+            $start = microtime(true);
+            $name = 'getVersion';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function getResultCode( ) {
+            if (!$this->logging) return forward_static_call_array('parent::getResultCode', func_get_args());
+            $start = microtime(true);
+            $name = 'getResultCode';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function getResultMessage( ) {
+            if (!$this->logging) return forward_static_call_array('parent::getResultMessage', func_get_args());
+            $start = microtime(true);
+            $name = 'getResultMessage';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function isPersistent( ) {
+            if (!$this->logging) return forward_static_call_array('parent::isPersistent', func_get_args());
+            $start = microtime(true);
+            $name = 'isPersistent';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function isPristine( ) {
+            if (!$this->logging) return forward_static_call_array('parent::isPristine', func_get_args());
+            $start = microtime(true);
+            $name = 'isPristine';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+    }
+} else if ($extension->getVersion()=='2.2.0') {
+    class LoggingMemcache extends \Memcached implements MemcacheInterface, LoggingMemcacheInterface {
+        public function __construct( $persistent_id = '', $on_new_object_cb = null ) {
+            $this->calls = array();
+            $this->logging = $logging;
+            if ($persistentId) {
+                parent::__construct($persistentId);
+                $this->initialize = count($this->getServerList())==0;
+            } else {
+                parent::__construct();
+                $this->initialize = true;
+            }
+        }
+        private $calls;
+        private $initialize;
+        private $logging;
+        public function getLoggedCalls()
+        {
+            return $this->calls;
+        }
+        private function logCall($start, $result)
+        {
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function get( $key, $cache_cb = null, &$cas_token = null, &$udf_flags = null ) {
+            if (!$this->logging) return forward_static_call_array('parent::get', func_get_args());
+            $start = microtime(true);
+            $name = 'get';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function getByKey( $server_key, $key, $cache_cb = null, &$cas_token = null, &$udf_flags = null ) {
+            if (!$this->logging) return forward_static_call_array('parent::getByKey', func_get_args());
+            $start = microtime(true);
+            $name = 'getByKey';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function getMulti( array $keys, &$cas_tokens = null, $flags = 0, &$udf_flags = null ) {
+            if (!$this->logging) return forward_static_call_array('parent::getMulti', func_get_args());
+            $start = microtime(true);
+            $name = 'getMulti';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function getMultiByKey( $server_key, array $keys, &$cas_tokens = null, $flags = 0, &$udf_flags = null ) {
+            if (!$this->logging) return forward_static_call_array('parent::getMultiByKey', func_get_args());
+            $start = microtime(true);
+            $name = 'getMultiByKey';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function getDelayed( array $keys, $with_cas = null, $value_cb = null ) {
+            if (!$this->logging) return forward_static_call_array('parent::getDelayed', func_get_args());
+            $start = microtime(true);
+            $name = 'getDelayed';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function getDelayedByKey( $server_key, array $keys, $with_cas = null, $value_cb = null ) {
+            if (!$this->logging) return forward_static_call_array('parent::getDelayedByKey', func_get_args());
+            $start = microtime(true);
+            $name = 'getDelayedByKey';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function fetch( ) {
+            if (!$this->logging) return forward_static_call_array('parent::fetch', func_get_args());
+            $start = microtime(true);
+            $name = 'fetch';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function fetchAll( ) {
+            if (!$this->logging) return forward_static_call_array('parent::fetchAll', func_get_args());
+            $start = microtime(true);
+            $name = 'fetchAll';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function set( $key, $value, $expiration = 0, $udf_flags = 0 ) {
+            if (!$this->logging) return forward_static_call_array('parent::set', func_get_args());
+            $start = microtime(true);
+            $name = 'set';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function touch( $key, $expiration = 0 ) {
+            if (!$this->logging) return forward_static_call_array('parent::touch', func_get_args());
+            $start = microtime(true);
+            $name = 'touch';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function touchbyKey( $key, $expiration = 0 ) {
+            if (!$this->logging) return forward_static_call_array('parent::touchbyKey', func_get_args());
+            $start = microtime(true);
+            $name = 'touchbyKey';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function setByKey( $server_key, $key, $value, $expiration = 0, $udf_flags = 0 ) {
+            if (!$this->logging) return forward_static_call_array('parent::setByKey', func_get_args());
+            $start = microtime(true);
+            $name = 'setByKey';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function setMulti( array $items, $expiration = 0, $udf_flags = 0 ) {
+            if (!$this->logging) return forward_static_call_array('parent::setMulti', func_get_args());
+            $start = microtime(true);
+            $name = 'setMulti';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function setMultiByKey( $server_key, array $items, $expiration = 0, $udf_flags = 0 ) {
+            if (!$this->logging) return forward_static_call_array('parent::setMultiByKey', func_get_args());
+            $start = microtime(true);
+            $name = 'setMultiByKey';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function cas( $token, $key, $value, $expiration = 0, $udf_flags = 0 ) {
+            if (!$this->logging) return forward_static_call_array('parent::cas', func_get_args());
+            $start = microtime(true);
+            $name = 'cas';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function casByKey( $token, $server_key, $key, $value, $expiration = 0, $udf_flags = 0 ) {
+            if (!$this->logging) return forward_static_call_array('parent::casByKey', func_get_args());
+            $start = microtime(true);
+            $name = 'casByKey';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function add( $key, $value, $expiration = 0, $udf_flags = 0 ) {
+            if (!$this->logging) return forward_static_call_array('parent::add', func_get_args());
+            $start = microtime(true);
+            $name = 'add';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function addByKey( $server_key, $key, $value, $expiration = 0, $udf_flags = 0 ) {
+            if (!$this->logging) return forward_static_call_array('parent::addByKey', func_get_args());
+            $start = microtime(true);
+            $name = 'addByKey';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function append( $key, $value ) {
+            if (!$this->logging) return forward_static_call_array('parent::append', func_get_args());
+            $start = microtime(true);
+            $name = 'append';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function appendByKey( $server_key, $key, $value ) {
+            if (!$this->logging) return forward_static_call_array('parent::appendByKey', func_get_args());
+            $start = microtime(true);
+            $name = 'appendByKey';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function prepend( $key, $value ) {
+            if (!$this->logging) return forward_static_call_array('parent::prepend', func_get_args());
+            $start = microtime(true);
+            $name = 'prepend';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function prependByKey( $server_key, $key, $value ) {
+            if (!$this->logging) return forward_static_call_array('parent::prependByKey', func_get_args());
+            $start = microtime(true);
+            $name = 'prependByKey';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function replace( $key, $value, $expiration = 0, $udf_flags = 0 ) {
+            if (!$this->logging) return forward_static_call_array('parent::replace', func_get_args());
+            $start = microtime(true);
+            $name = 'replace';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function replaceByKey( $server_key, $key, $value, $expiration = 0, $udf_flags = 0 ) {
+            if (!$this->logging) return forward_static_call_array('parent::replaceByKey', func_get_args());
+            $start = microtime(true);
+            $name = 'replaceByKey';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function delete( $key, $time = 0 ) {
+            if (!$this->logging) return forward_static_call_array('parent::delete', func_get_args());
+            $start = microtime(true);
+            $name = 'delete';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function deleteByKey( $server_key, $key, $time = 0 ) {
+            if (!$this->logging) return forward_static_call_array('parent::deleteByKey', func_get_args());
+            $start = microtime(true);
+            $name = 'deleteByKey';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function deleteMulti( array $keys, $expiration = 0 ) {
+            if (!$this->logging) return forward_static_call_array('parent::deleteMulti', func_get_args());
+            $start = microtime(true);
+            $name = 'deleteMulti';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function deleteMultiByKey( $server_key, array $keys, $expiration = 0 ) {
+            if (!$this->logging) return forward_static_call_array('parent::deleteMultiByKey', func_get_args());
+            $start = microtime(true);
+            $name = 'deleteMultiByKey';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function increment( $key, $offset = 1, $initial_value = 0, $expiry = 0) {
+            if (!$this->logging) return forward_static_call_array('parent::increment', func_get_args());
+            $start = microtime(true);
+            $name = 'increment';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function decrement( $key, $offset = 1, $initial_value = 0, $expiry = 0) {
+            if (!$this->logging) return forward_static_call_array('parent::decrement', func_get_args());
+            $start = microtime(true);
+            $name = 'decrement';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function getOption( $option ) {
+            if (!$this->logging) return forward_static_call_array('parent::getOption', func_get_args());
+            $start = microtime(true);
+            $name = 'getOption';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function setOption( $option, $value ) {
+            if (!$this->logging) return forward_static_call_array('parent::setOption', func_get_args());
+            $start = microtime(true);
+            $name = 'setOption';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function setOptions( array $options ) {
+            if (!$this->logging) return forward_static_call_array('parent::setOptions', func_get_args());
+            $start = microtime(true);
+            $name = 'setOptions';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function setBucket( array $host_map, array $forward_map, $replicas ) {
+            if (!$this->logging) return forward_static_call_array('parent::setBucket', func_get_args());
+            $start = microtime(true);
+            $name = 'setBucket';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function addServer( $host, $port,  $weight = 0 ) {
+            if (!$this->logging) return forward_static_call_array('parent::addServer', func_get_args());
+            $start = microtime(true);
+            $name = 'addServer';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function addServers( array $servers ) {
+            if (!$this->logging) return forward_static_call_array('parent::addServers', func_get_args());
+            $start = microtime(true);
+            $name = 'addServers';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function getServerList( ) {
+            if (!$this->logging) return forward_static_call_array('parent::getServerList', func_get_args());
+            $start = microtime(true);
+            $name = 'getServerList';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function getServerByKey( $server_key ) {
+            if (!$this->logging) return forward_static_call_array('parent::getServerByKey', func_get_args());
+            $start = microtime(true);
+            $name = 'getServerByKey';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function getLastErrorMessage( ) {
+            if (!$this->logging) return forward_static_call_array('parent::getLastErrorMessage', func_get_args());
+            $start = microtime(true);
+            $name = 'getLastErrorMessage';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function getLastErrorCode( ) {
+            if (!$this->logging) return forward_static_call_array('parent::getLastErrorCode', func_get_args());
+            $start = microtime(true);
+            $name = 'getLastErrorCode';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function getLastErrorErrno( ) {
+            if (!$this->logging) return forward_static_call_array('parent::getLastErrorErrno', func_get_args());
+            $start = microtime(true);
+            $name = 'getLastErrorErrno';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function getLastDisconnectedServer( ) {
+            if (!$this->logging) return forward_static_call_array('parent::getLastDisconnectedServer', func_get_args());
+            $start = microtime(true);
+            $name = 'getLastDisconnectedServer';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function flush( $delay = 0 ) {
+            if (!$this->logging) return forward_static_call_array('parent::flush', func_get_args());
+            $start = microtime(true);
+            $name = 'flush';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function getStats( ) {
+            if (!$this->logging) return forward_static_call_array('parent::getStats', func_get_args());
+            $start = microtime(true);
+            $name = 'getStats';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function getVersion( ) {
+            if (!$this->logging) return forward_static_call_array('parent::getVersion', func_get_args());
+            $start = microtime(true);
+            $name = 'getVersion';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function getResultCode( ) {
+            if (!$this->logging) return forward_static_call_array('parent::getResultCode', func_get_args());
+            $start = microtime(true);
+            $name = 'getResultCode';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function getResultMessage( ) {
+            if (!$this->logging) return forward_static_call_array('parent::getResultMessage', func_get_args());
+            $start = microtime(true);
+            $name = 'getResultMessage';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function isPersistent( ) {
+            if (!$this->logging) return forward_static_call_array('parent::isPersistent', func_get_args());
+            $start = microtime(true);
+            $name = 'isPersistent';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function isPristine( ) {
+            if (!$this->logging) return forward_static_call_array('parent::isPristine', func_get_args());
+            $start = microtime(true);
+            $name = 'isPristine';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function setSaslAuthData( $username, $password ) {
+            if (!$this->logging) return forward_static_call_array('parent::setSaslAuthData', func_get_args());
+            $start = microtime(true);
+            $name = 'setSaslAuthData';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+    }
+} else {
+    throw new \Exception('LswMemcacheBundle does not support version '.$extension->getVersion().' of the memcached extension.');
 }
