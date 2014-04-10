@@ -109,7 +109,7 @@ class Memcached {
 
 	public function append( $key, $value, $expiration = 0 ) {}
 
-	public function appendByKey( $server_ke, $key, $value, $expiration = 0 ) {}
+	public function appendByKey( $server_key, $key, $value, $expiration = 0 ) {}
 
 	public function prepend( $key, $value, $expiration = 0 ) {}
 
@@ -121,7 +121,7 @@ class Memcached {
 
 	public function delete( $key, $time = 0 ) {}
 
-	public function deleteByKey( $key, $time = 0 ) {}
+	public function deleteByKey( $server_key, $key, $time = 0 ) {}
 
 	public function increment( $key, $offset = 1) {}
 

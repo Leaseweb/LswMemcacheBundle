@@ -4,7 +4,6 @@ namespace Lsw\MemcacheBundle\Cache;
 $extension = new \ReflectionExtension('memcached');
 if ($extension->getVersion()=='1.0.2') {
     interface MemcacheInterface {
-        public function __construct( $persistent_id = '' );
         public function get( $key, $cache_cb = null, &$cas_token = null );
         public function getByKey( $server_key, $key, $cache_cb = null, &$cas_token = null );
         public function getMulti( array $keys, &$cas_tokens = null, $flags = 0 );
@@ -22,13 +21,13 @@ if ($extension->getVersion()=='1.0.2') {
         public function add( $key, $value, $expiration = 0 );
         public function addByKey( $server_key, $key, $value, $expiration = 0 );
         public function append( $key, $value, $expiration = 0 );
-        public function appendByKey( $server_ke, $key, $value, $expiration = 0 );
+        public function appendByKey( $server_key, $key, $value, $expiration = 0 );
         public function prepend( $key, $value, $expiration = 0 );
         public function prependByKey( $server_key, $key, $value, $expiration = 0 );
         public function replace( $key, $value, $expiration = 0 );
         public function replaceByKey( $serve_key, $key, $value, $expiration = 0 );
         public function delete( $key, $time = 0 );
-        public function deleteByKey( $key, $time = 0 );
+        public function deleteByKey( $server_key, $key, $time = 0 );
         public function increment( $key, $offset = 1);
         public function decrement( $key, $offset = 1);
         public function getOption( $option );
@@ -44,7 +43,6 @@ if ($extension->getVersion()=='1.0.2') {
     }
 } else if ($extension->getVersion()=='2.0.1') {
     interface MemcacheInterface {
-        public function __construct( $persistent_id = '', $on_new_object_cb = null );
         public function get( $key, $cache_cb = null, &$cas_token = null );
         public function getByKey( $server_key, $key, $cache_cb = null, &$cas_token = null );
         public function getMulti( array $keys, &$cas_tokens = null, $flags = 0 );
@@ -92,7 +90,6 @@ if ($extension->getVersion()=='1.0.2') {
     }
 } else if ($extension->getVersion()=='2.1.0') {
     interface MemcacheInterface {
-        public function __construct( $persistent_id = '', $on_new_object_cb = null );
         public function get( $key, $cache_cb = null, &$cas_token = null );
         public function getByKey( $server_key, $key, $cache_cb = null, &$cas_token = null );
         public function getMulti( array $keys, &$cas_tokens = null, $flags = 0 );
@@ -140,7 +137,6 @@ if ($extension->getVersion()=='1.0.2') {
     }
 } else if ($extension->getVersion()=='2.2.0') {
     interface MemcacheInterface {
-        public function __construct( $persistent_id = '', $on_new_object_cb = null );
         public function get( $key, $cache_cb = null, &$cas_token = null, &$udf_flags = null );
         public function getByKey( $server_key, $key, $cache_cb = null, &$cas_token = null, &$udf_flags = null );
         public function getMulti( array $keys, &$cas_tokens = null, $flags = 0, &$udf_flags = null );

@@ -4,26 +4,25 @@ namespace Lsw\MemcacheBundle\Cache;
 $extension = new \ReflectionExtension('memcached');
 if ($extension->getVersion()=='1.0.2') {
     class LoggingMemcache extends \Memcached implements MemcacheInterface, LoggingMemcacheInterface {
-        public function __construct( $persistent_id = '' ) {
+        public function __construct($logging, $persistentId = '') {
             $this->calls = array();
             $this->logging = $logging;
             if ($persistentId) {
-                parent::__construct($persistentId);
                 $this->initialize = count($this->getServerList())==0;
             } else {
-                parent::__construct();
                 $this->initialize = true;
             }
+            $arguments = func_get_args();
+            array_shift($arguments);
+            forward_static_call_array("parent::__construct", $arguments);
         }
         private $calls;
         private $initialize;
         private $logging;
-        public function getLoggedCalls()
-        {
+        public function getLoggedCalls() {
             return $this->calls;
         }
-        private function logCall($start, $result)
-        {
+        private function logCall($start, $result) {
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
@@ -198,7 +197,7 @@ if ($extension->getVersion()=='1.0.2') {
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-        public function appendByKey( $server_ke, $key, $value, $expiration = 0 ) {
+        public function appendByKey( $server_key, $key, $value, $expiration = 0 ) {
             if (!$this->logging) return forward_static_call_array('parent::appendByKey', func_get_args());
             $start = microtime(true);
             $name = 'appendByKey';
@@ -258,7 +257,7 @@ if ($extension->getVersion()=='1.0.2') {
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-        public function deleteByKey( $key, $time = 0 ) {
+        public function deleteByKey( $server_key, $key, $time = 0 ) {
             if (!$this->logging) return forward_static_call_array('parent::deleteByKey', func_get_args());
             $start = microtime(true);
             $name = 'deleteByKey';
@@ -391,26 +390,25 @@ if ($extension->getVersion()=='1.0.2') {
     }
 } else if ($extension->getVersion()=='2.0.1') {
     class LoggingMemcache extends \Memcached implements MemcacheInterface, LoggingMemcacheInterface {
-        public function __construct( $persistent_id = '', $on_new_object_cb = null ) {
+        public function __construct($logging, $persistentId = '') {
             $this->calls = array();
             $this->logging = $logging;
             if ($persistentId) {
-                parent::__construct($persistentId);
                 $this->initialize = count($this->getServerList())==0;
             } else {
-                parent::__construct();
                 $this->initialize = true;
             }
+            $arguments = func_get_args();
+            array_shift($arguments);
+            forward_static_call_array("parent::__construct", $arguments);
         }
         private $calls;
         private $initialize;
         private $logging;
-        public function getLoggedCalls()
-        {
+        public function getLoggedCalls() {
             return $this->calls;
         }
-        private function logCall($start, $result)
-        {
+        private function logCall($start, $result) {
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
@@ -858,26 +856,25 @@ if ($extension->getVersion()=='1.0.2') {
     }
 } else if ($extension->getVersion()=='2.1.0') {
     class LoggingMemcache extends \Memcached implements MemcacheInterface, LoggingMemcacheInterface {
-        public function __construct( $persistent_id = '', $on_new_object_cb = null ) {
+        public function __construct($logging, $persistentId = '') {
             $this->calls = array();
             $this->logging = $logging;
             if ($persistentId) {
-                parent::__construct($persistentId);
                 $this->initialize = count($this->getServerList())==0;
             } else {
-                parent::__construct();
                 $this->initialize = true;
             }
+            $arguments = func_get_args();
+            array_shift($arguments);
+            forward_static_call_array("parent::__construct", $arguments);
         }
         private $calls;
         private $initialize;
         private $logging;
-        public function getLoggedCalls()
-        {
+        public function getLoggedCalls() {
             return $this->calls;
         }
-        private function logCall($start, $result)
-        {
+        private function logCall($start, $result) {
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
@@ -1325,26 +1322,25 @@ if ($extension->getVersion()=='1.0.2') {
     }
 } else if ($extension->getVersion()=='2.2.0') {
     class LoggingMemcache extends \Memcached implements MemcacheInterface, LoggingMemcacheInterface {
-        public function __construct( $persistent_id = '', $on_new_object_cb = null ) {
+        public function __construct($logging, $persistentId = '') {
             $this->calls = array();
             $this->logging = $logging;
             if ($persistentId) {
-                parent::__construct($persistentId);
                 $this->initialize = count($this->getServerList())==0;
             } else {
-                parent::__construct();
                 $this->initialize = true;
             }
+            $arguments = func_get_args();
+            array_shift($arguments);
+            forward_static_call_array("parent::__construct", $arguments);
         }
         private $calls;
         private $initialize;
         private $logging;
-        public function getLoggedCalls()
-        {
+        public function getLoggedCalls() {
             return $this->calls;
         }
-        private function logCall($start, $result)
-        {
+        private function logCall($start, $result) {
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
