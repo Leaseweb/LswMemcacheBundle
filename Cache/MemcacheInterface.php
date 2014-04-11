@@ -53,7 +53,7 @@ if ($extension->getVersion()=='1.0.2') {
         public function fetchAll( );
         public function set( $key, $value, $expiration = 0 );
         public function touch( $key, $expiration = 0 );
-        public function touchbyKey( $key, $expiration = 0 );
+        public function touchbyKey( $server_key, $key, $expiration = 0 );
         public function setByKey( $server_key, $key, $value, $expiration = 0 );
         public function setMulti( array $items, $expiration = 0 );
         public function setMultiByKey( $server_key, array $items, $expiration = 0 );
@@ -100,7 +100,7 @@ if ($extension->getVersion()=='1.0.2') {
         public function fetchAll( );
         public function set( $key, $value, $expiration = 0 );
         public function touch( $key, $expiration = 0 );
-        public function touchbyKey( $key, $expiration = 0 );
+        public function touchbyKey( $server_key, $key, $expiration = 0 );
         public function setByKey( $server_key, $key, $value, $expiration = 0 );
         public function setMulti( array $items, $expiration = 0 );
         public function setMultiByKey( $server_key, array $items, $expiration = 0 );
@@ -147,7 +147,7 @@ if ($extension->getVersion()=='1.0.2') {
         public function fetchAll( );
         public function set( $key, $value, $expiration = 0, $udf_flags = 0 );
         public function touch( $key, $expiration = 0 );
-        public function touchbyKey( $key, $expiration = 0 );
+        public function touchbyKey( $server_key, $key, $expiration = 0 );
         public function setByKey( $server_key, $key, $value, $expiration = 0, $udf_flags = 0 );
         public function setMulti( array $items, $expiration = 0, $udf_flags = 0 );
         public function setMultiByKey( $server_key, array $items, $expiration = 0, $udf_flags = 0 );

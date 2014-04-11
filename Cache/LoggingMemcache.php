@@ -513,7 +513,7 @@ if ($extension->getVersion()=='1.0.2') {
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-        public function touchbyKey( $key, $expiration = 0 ) {
+        public function touchbyKey( $server_key, $key, $expiration = 0 ) {
             if (!$this->logging) return forward_static_call_array('parent::touchbyKey', func_get_args());
             $start = microtime(true);
             $name = 'touchbyKey';
@@ -979,7 +979,7 @@ if ($extension->getVersion()=='1.0.2') {
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-        public function touchbyKey( $key, $expiration = 0 ) {
+        public function touchbyKey( $server_key, $key, $expiration = 0 ) {
             if (!$this->logging) return forward_static_call_array('parent::touchbyKey', func_get_args());
             $start = microtime(true);
             $name = 'touchbyKey';
@@ -1445,7 +1445,7 @@ if ($extension->getVersion()=='1.0.2') {
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-        public function touchbyKey( $key, $expiration = 0 ) {
+        public function touchbyKey( $server_key, $key, $expiration = 0 ) {
             if (!$this->logging) return forward_static_call_array('parent::touchbyKey', func_get_args());
             $start = microtime(true);
             $name = 'touchbyKey';
