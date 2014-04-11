@@ -733,7 +733,7 @@ if ($extension->getVersion()=='1.0.2') {
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-        public function setOptions( array $options ) {
+        public function setOptions( $options ) {
             if (!$this->logging) return forward_static_call_array('parent::setOptions', func_get_args());
             $start = microtime(true);
             $name = 'setOptions';
@@ -1199,7 +1199,7 @@ if ($extension->getVersion()=='1.0.2') {
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-        public function setOptions( array $options ) {
+        public function setOptions( $options ) {
             if (!$this->logging) return forward_static_call_array('parent::setOptions', func_get_args());
             $start = microtime(true);
             $name = 'setOptions';
@@ -1665,7 +1665,7 @@ if ($extension->getVersion()=='1.0.2') {
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-        public function setOptions( array $options ) {
+        public function setOptions( $options ) {
             if (!$this->logging) return forward_static_call_array('parent::setOptions', func_get_args());
             $start = microtime(true);
             $name = 'setOptions';

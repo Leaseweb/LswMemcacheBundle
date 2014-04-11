@@ -247,7 +247,7 @@ class Memcached {
 	
 	public function setOption( $option, $value ) {}
 
-	public function setOptions( array $options ) {}
+	public function setOptions( $options ) {}
 
 	public function addServer( $host, $port,  $weight = 0 ) {}
 

@@ -75,7 +75,7 @@ if ($extension->getVersion()=='1.0.2') {
         public function decrement( $key, $offset = 1);
         public function getOption( $option );
         public function setOption( $option, $value );
-        public function setOptions( array $options );
+        public function setOptions( $options );
         public function addServer( $host, $port,  $weight = 0 );
         public function addServers( array $servers );
         public function getServerList( );
@@ -122,7 +122,7 @@ if ($extension->getVersion()=='1.0.2') {
         public function decrement( $key, $offset = 1);
         public function getOption( $option );
         public function setOption( $option, $value );
-        public function setOptions( array $options );
+        public function setOptions( $options );
         public function addServer( $host, $port,  $weight = 0 );
         public function addServers( array $servers );
         public function getServerList( );
@@ -169,7 +169,7 @@ if ($extension->getVersion()=='1.0.2') {
         public function decrement( $key, $offset = 1, $initial_value = 0, $expiry = 0);
         public function getOption( $option );
         public function setOption( $option, $value );
-        public function setOptions( array $options );
+        public function setOptions( $options );
         public function setBucket( array $host_map, array $forward_map, $replicas );
         public function addServer( $host, $port,  $weight = 0 );
         public function addServers( array $servers );

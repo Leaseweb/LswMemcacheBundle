@@ -253,7 +253,7 @@ class Memcached {
 	
 	public function setOption( $option, $value ) {}
 
-	public function setOptions( array $options ) {}
+	public function setOptions( $options ) {}
 
 	public function setBucket( array $host_map, array $forward_map, $replicas ) {}
 
