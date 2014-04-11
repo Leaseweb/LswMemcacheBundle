@@ -593,7 +593,7 @@ if ($extension->getVersion()=='1.0.2') {
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-        public function append( $key, $value ) {
+        public function append( $key, $value, $expiration = 0 ) {
             if (!$this->logging) return forward_static_call_array('parent::append', func_get_args());
             $start = microtime(true);
             $name = 'append';
@@ -603,7 +603,7 @@ if ($extension->getVersion()=='1.0.2') {
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-        public function appendByKey( $server_key, $key, $value ) {
+        public function appendByKey( $server_key, $key, $value, $expiration = 0 ) {
             if (!$this->logging) return forward_static_call_array('parent::appendByKey', func_get_args());
             $start = microtime(true);
             $name = 'appendByKey';
@@ -613,7 +613,7 @@ if ($extension->getVersion()=='1.0.2') {
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-        public function prepend( $key, $value ) {
+        public function prepend( $key, $value, $expiration = 0 ) {
             if (!$this->logging) return forward_static_call_array('parent::prepend', func_get_args());
             $start = microtime(true);
             $name = 'prepend';
@@ -623,7 +623,7 @@ if ($extension->getVersion()=='1.0.2') {
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-        public function prependByKey( $server_key, $key, $value ) {
+        public function prependByKey( $server_key, $key, $value, $expiration = 0 ) {
             if (!$this->logging) return forward_static_call_array('parent::prependByKey', func_get_args());
             $start = microtime(true);
             $name = 'prependByKey';
@@ -1059,7 +1059,7 @@ if ($extension->getVersion()=='1.0.2') {
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-        public function append( $key, $value ) {
+        public function append( $key, $value, $expiration = 0 ) {
             if (!$this->logging) return forward_static_call_array('parent::append', func_get_args());
             $start = microtime(true);
             $name = 'append';
@@ -1069,7 +1069,7 @@ if ($extension->getVersion()=='1.0.2') {
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-        public function appendByKey( $server_key, $key, $value ) {
+        public function appendByKey( $server_key, $key, $value, $expiration = 0 ) {
             if (!$this->logging) return forward_static_call_array('parent::appendByKey', func_get_args());
             $start = microtime(true);
             $name = 'appendByKey';
@@ -1079,7 +1079,7 @@ if ($extension->getVersion()=='1.0.2') {
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-        public function prepend( $key, $value ) {
+        public function prepend( $key, $value, $expiration = 0 ) {
             if (!$this->logging) return forward_static_call_array('parent::prepend', func_get_args());
             $start = microtime(true);
             $name = 'prepend';
@@ -1089,7 +1089,7 @@ if ($extension->getVersion()=='1.0.2') {
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-        public function prependByKey( $server_key, $key, $value ) {
+        public function prependByKey( $server_key, $key, $value, $expiration = 0 ) {
             if (!$this->logging) return forward_static_call_array('parent::prependByKey', func_get_args());
             $start = microtime(true);
             $name = 'prependByKey';
@@ -1525,7 +1525,7 @@ if ($extension->getVersion()=='1.0.2') {
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-        public function append( $key, $value ) {
+        public function append( $key, $value, $expiration = 0 ) {
             if (!$this->logging) return forward_static_call_array('parent::append', func_get_args());
             $start = microtime(true);
             $name = 'append';
@@ -1535,7 +1535,7 @@ if ($extension->getVersion()=='1.0.2') {
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-        public function appendByKey( $server_key, $key, $value ) {
+        public function appendByKey( $server_key, $key, $value, $expiration = 0 ) {
             if (!$this->logging) return forward_static_call_array('parent::appendByKey', func_get_args());
             $start = microtime(true);
             $name = 'appendByKey';
@@ -1545,7 +1545,7 @@ if ($extension->getVersion()=='1.0.2') {
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-        public function prepend( $key, $value ) {
+        public function prepend( $key, $value, $expiration = 0 ) {
             if (!$this->logging) return forward_static_call_array('parent::prepend', func_get_args());
             $start = microtime(true);
             $name = 'prepend';
@@ -1555,7 +1555,7 @@ if ($extension->getVersion()=='1.0.2') {
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-        public function prependByKey( $server_key, $key, $value ) {
+        public function prependByKey( $server_key, $key, $value, $expiration = 0 ) {
             if (!$this->logging) return forward_static_call_array('parent::prependByKey', func_get_args());
             $start = microtime(true);
             $name = 'prependByKey';

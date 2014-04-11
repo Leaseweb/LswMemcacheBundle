@@ -225,13 +225,13 @@ class Memcached {
 
 	public function addByKey( $server_key, $key, $value, $expiration = 0, $udf_flags = 0 ) {}
 
-	public function append( $key, $value ) {}
+	public function append( $key, $value, $expiration = 0 ) {}
 
-	public function appendByKey( $server_key, $key, $value ) {}
+	public function appendByKey( $server_key, $key, $value, $expiration = 0 ) {}
 
-	public function prepend( $key, $value ) {}
+	public function prepend( $key, $value, $expiration = 0 ) {}
 
-	public function prependByKey( $server_key, $key, $value ) {}
+	public function prependByKey( $server_key, $key, $value, $expiration = 0 ) {}
 
 	public function replace( $key, $value, $expiration = 0, $udf_flags = 0 ) {}
 
