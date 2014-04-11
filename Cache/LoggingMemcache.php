@@ -433,7 +433,7 @@ if ($extension->getVersion()=='1.0.2') {
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-        public function getMulti( array $keys, &$cas_tokens = null, $flags = 0 ) {
+        public function getMulti( array $keys, &$cas_tokens = null, $flags = null ) {
             if (!$this->logging) return forward_static_call_array('parent::getMulti', func_get_args());
             $start = microtime(true);
             $name = 'getMulti';
@@ -443,7 +443,7 @@ if ($extension->getVersion()=='1.0.2') {
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-        public function getMultiByKey( $server_key, array $keys, &$cas_tokens = null, $flags = 0 ) {
+        public function getMultiByKey( $server_key, array $keys, &$cas_tokens = null, $flags = null ) {
             if (!$this->logging) return forward_static_call_array('parent::getMultiByKey', func_get_args());
             $start = microtime(true);
             $name = 'getMultiByKey';
@@ -919,7 +919,7 @@ if ($extension->getVersion()=='1.0.2') {
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-        public function getMulti( array $keys, &$cas_tokens = null, $flags = 0 ) {
+        public function getMulti( array $keys, &$cas_tokens = null, $flags = null ) {
             if (!$this->logging) return forward_static_call_array('parent::getMulti', func_get_args());
             $start = microtime(true);
             $name = 'getMulti';
@@ -929,7 +929,7 @@ if ($extension->getVersion()=='1.0.2') {
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-        public function getMultiByKey( $server_key, array $keys, &$cas_tokens = null, $flags = 0 ) {
+        public function getMultiByKey( $server_key, array $keys, &$cas_tokens = null, $flags = null ) {
             if (!$this->logging) return forward_static_call_array('parent::getMultiByKey', func_get_args());
             $start = microtime(true);
             $name = 'getMultiByKey';
@@ -1405,7 +1405,7 @@ if ($extension->getVersion()=='1.0.2') {
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-        public function getMulti( array $keys, &$cas_tokens = null, $flags = 0, &$udf_flags = null ) {
+        public function getMulti( array $keys, &$cas_tokens = null, $flags = null, &$udf_flags = null ) {
             if (!$this->logging) return forward_static_call_array('parent::getMulti', func_get_args());
             $start = microtime(true);
             $name = 'getMulti';
@@ -1415,7 +1415,7 @@ if ($extension->getVersion()=='1.0.2') {
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-        public function getMultiByKey( $server_key, array $keys, &$cas_tokens = null, $flags = 0, &$udf_flags = null ) {
+        public function getMultiByKey( $server_key, array $keys, &$cas_tokens = null, $flags = null, &$udf_flags = null ) {
             if (!$this->logging) return forward_static_call_array('parent::getMultiByKey', func_get_args());
             $start = microtime(true);
             $name = 'getMultiByKey';

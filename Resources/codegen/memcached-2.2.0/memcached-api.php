@@ -193,9 +193,9 @@ class Memcached {
 
 	public function getByKey( $server_key, $key, $cache_cb = null, &$cas_token = null, &$udf_flags = null ) {}
 
-	public function getMulti( array $keys, &$cas_tokens = null, $flags = 0, &$udf_flags = null ) {}
+	public function getMulti( array $keys, &$cas_tokens = null, $flags = null, &$udf_flags = null ) {}
 
-	public function getMultiByKey( $server_key, array $keys, &$cas_tokens = null, $flags = 0, &$udf_flags = null ) {}
+	public function getMultiByKey( $server_key, array $keys, &$cas_tokens = null, $flags = null, &$udf_flags = null ) {}
 
 	public function getDelayed( array $keys, $with_cas = null, $value_cb = null ) {}
 
