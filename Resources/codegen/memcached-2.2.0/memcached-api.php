@@ -241,9 +241,9 @@ class Memcached {
 
 	public function deleteByKey( $server_key, $key, $time = 0 ) {}
 
-	public function deleteMulti( array $keys, $expiration = 0 ) {}
+	public function deleteMulti( $keys, $expiration = 0 ) {}
 
-	public function deleteMultiByKey( $server_key, array $keys, $expiration = 0 ) {}
+	public function deleteMultiByKey( $server_key, $keys, $expiration = 0 ) {}
 
 	public function increment( $key, $offset = 1, $initial_value = 0, $expiry = 0) {}
 
@@ -259,7 +259,7 @@ class Memcached {
 
 	public function setOptions( $options ) {}
 
-	public function setBucket( array $host_map, array $forward_map, $replicas ) {}
+	public function setBucket( $host_map, $forward_map, $replicas ) {}
 
 	public function addServer( $host, $port,  $weight = 0 ) {}
 

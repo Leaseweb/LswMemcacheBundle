@@ -69,8 +69,8 @@ if ($extension->getVersion()=='1.0.2') {
         public function replaceByKey( $server_key, $key, $value, $expiration = 0 );
         public function delete( $key, $time = 0 );
         public function deleteByKey( $server_key, $key, $time = 0 );
-        public function deleteMulti( array $keys, $expiration = 0 );
-        public function deleteMultiByKey( $server_key, array $keys, $expiration = 0 );
+        public function deleteMulti( $keys, $expiration = 0 );
+        public function deleteMultiByKey( $server_key, $keys, $expiration = 0 );
         public function increment( $key, $offset = 1, $initial_value = 0, $expiry = 0 );
         public function incrementByKey( $server_key, $key, $offset = 1, $initial_value = 0, $expiry = 0 );
         public function decrement( $key, $offset = 1, $initial_value = 0, $expiry = 0 );
@@ -118,8 +118,8 @@ if ($extension->getVersion()=='1.0.2') {
         public function replaceByKey( $server_key, $key, $value, $expiration = 0 );
         public function delete( $key, $time = 0 );
         public function deleteByKey( $server_key, $key, $time = 0 );
-        public function deleteMulti( array $keys, $expiration = 0 );
-        public function deleteMultiByKey( $server_key, array $keys, $expiration = 0 );
+        public function deleteMulti( $keys, $expiration = 0 );
+        public function deleteMultiByKey( $server_key, $keys, $expiration = 0 );
         public function increment( $key, $offset = 1, $initial_value = 0, $expiry = 0 );
         public function incrementByKey( $server_key, $key, $offset = 1, $initial_value = 0, $expiry = 0 );
         public function decrement( $key, $offset = 1, $initial_value = 0, $expiry = 0 );
@@ -167,8 +167,8 @@ if ($extension->getVersion()=='1.0.2') {
         public function replaceByKey( $server_key, $key, $value, $expiration = 0, $udf_flags = 0 );
         public function delete( $key, $time = 0 );
         public function deleteByKey( $server_key, $key, $time = 0 );
-        public function deleteMulti( array $keys, $expiration = 0 );
-        public function deleteMultiByKey( $server_key, array $keys, $expiration = 0 );
+        public function deleteMulti( $keys, $expiration = 0 );
+        public function deleteMultiByKey( $server_key, $keys, $expiration = 0 );
         public function increment( $key, $offset = 1, $initial_value = 0, $expiry = 0);
         public function incrementByKey( $server_key, $key, $offset = 1, $initial_value = 0, $expiry = 0 );
         public function decrement( $key, $offset = 1, $initial_value = 0, $expiry = 0);
@@ -176,7 +176,7 @@ if ($extension->getVersion()=='1.0.2') {
         public function getOption( $option );
         public function setOption( $option, $value );
         public function setOptions( $options );
-        public function setBucket( array $host_map, array $forward_map, $replicas );
+        public function setBucket( $host_map, $forward_map, $replicas );
         public function addServer( $host, $port,  $weight = 0 );
         public function addServers( array $servers );
         public function getServerList( );

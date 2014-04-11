@@ -673,7 +673,7 @@ if ($extension->getVersion()=='1.0.2') {
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-        public function deleteMulti( array $keys, $expiration = 0 ) {
+        public function deleteMulti( $keys, $expiration = 0 ) {
             if (!$this->logging) return forward_static_call_array('parent::deleteMulti', func_get_args());
             $start = microtime(true);
             $name = 'deleteMulti';
@@ -683,7 +683,7 @@ if ($extension->getVersion()=='1.0.2') {
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-        public function deleteMultiByKey( $server_key, array $keys, $expiration = 0 ) {
+        public function deleteMultiByKey( $server_key, $keys, $expiration = 0 ) {
             if (!$this->logging) return forward_static_call_array('parent::deleteMultiByKey', func_get_args());
             $start = microtime(true);
             $name = 'deleteMultiByKey';
@@ -1159,7 +1159,7 @@ if ($extension->getVersion()=='1.0.2') {
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-        public function deleteMulti( array $keys, $expiration = 0 ) {
+        public function deleteMulti( $keys, $expiration = 0 ) {
             if (!$this->logging) return forward_static_call_array('parent::deleteMulti', func_get_args());
             $start = microtime(true);
             $name = 'deleteMulti';
@@ -1169,7 +1169,7 @@ if ($extension->getVersion()=='1.0.2') {
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-        public function deleteMultiByKey( $server_key, array $keys, $expiration = 0 ) {
+        public function deleteMultiByKey( $server_key, $keys, $expiration = 0 ) {
             if (!$this->logging) return forward_static_call_array('parent::deleteMultiByKey', func_get_args());
             $start = microtime(true);
             $name = 'deleteMultiByKey';
@@ -1645,7 +1645,7 @@ if ($extension->getVersion()=='1.0.2') {
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-        public function deleteMulti( array $keys, $expiration = 0 ) {
+        public function deleteMulti( $keys, $expiration = 0 ) {
             if (!$this->logging) return forward_static_call_array('parent::deleteMulti', func_get_args());
             $start = microtime(true);
             $name = 'deleteMulti';
@@ -1655,7 +1655,7 @@ if ($extension->getVersion()=='1.0.2') {
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-        public function deleteMultiByKey( $server_key, array $keys, $expiration = 0 ) {
+        public function deleteMultiByKey( $server_key, $keys, $expiration = 0 ) {
             if (!$this->logging) return forward_static_call_array('parent::deleteMultiByKey', func_get_args());
             $start = microtime(true);
             $name = 'deleteMultiByKey';
@@ -1735,7 +1735,7 @@ if ($extension->getVersion()=='1.0.2') {
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-        public function setBucket( array $host_map, array $forward_map, $replicas ) {
+        public function setBucket( $host_map, $forward_map, $replicas ) {
             if (!$this->logging) return forward_static_call_array('parent::setBucket', func_get_args());
             $start = microtime(true);
             $name = 'setBucket';
