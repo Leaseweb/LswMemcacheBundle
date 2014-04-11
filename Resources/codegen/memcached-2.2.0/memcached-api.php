@@ -247,7 +247,7 @@ class Memcached {
 
 	public function increment( $key, $offset = 1, $initial_value = 0, $expiry = 0) {}
 
-  public function incrementByKey( $server_key, $key, $offset = 1, $initial_value = 0, $expiry = 0 ) {}
+	public function incrementByKey( $server_key, $key, $offset = 1, $initial_value = 0, $expiry = 0 ) {}
 
 	public function decrement( $key, $offset = 1, $initial_value = 0, $expiry = 0) {}
 

@@ -245,9 +245,9 @@ class Memcached {
 
 	public function decrement( $key, $offset = 1, $initial_value = 0, $expiry = 0 ) {}
 
-  public function decrementByKey( $server_key, $key, $offset = 1, $initial_value = 0, $expiry = 0 ) {}
+	public function decrementByKey( $server_key, $key, $offset = 1, $initial_value = 0, $expiry = 0 ) {}
 
-  public function getOption( $option ) {}
+	public function getOption( $option ) {}
 
 	public function setOption( $option, $value ) {}
 
