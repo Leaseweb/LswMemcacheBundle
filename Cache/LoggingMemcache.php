@@ -693,7 +693,7 @@ if ($extension->getVersion()=='1.0.2') {
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-        public function increment( $key, $offset = 1) {
+        public function increment( $key, $offset = 1, $initial_value = 0, $expiry = 0 ) {
             if (!$this->logging) return forward_static_call_array('parent::increment', func_get_args());
             $start = microtime(true);
             $name = 'increment';
@@ -703,10 +703,30 @@ if ($extension->getVersion()=='1.0.2') {
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-        public function decrement( $key, $offset = 1) {
+        public function incrementByKey( $server_key, $key, $offset = 1, $initial_value = 0, $expiry = 0 ) {
+            if (!$this->logging) return forward_static_call_array('parent::incrementByKey', func_get_args());
+            $start = microtime(true);
+            $name = 'incrementByKey';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function decrement( $key, $offset = 1, $initial_value = 0, $expiry = 0 ) {
             if (!$this->logging) return forward_static_call_array('parent::decrement', func_get_args());
             $start = microtime(true);
             $name = 'decrement';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function decrementByKey( $server_key, $key, $offset = 1, $initial_value = 0, $expiry = 0 ) {
+            if (!$this->logging) return forward_static_call_array('parent::decrementByKey', func_get_args());
+            $start = microtime(true);
+            $name = 'decrementByKey';
             $arguments = func_get_args();
             $result = forward_static_call_array("parent::$name", $arguments);
             $time = microtime(true) - $start;
@@ -1159,7 +1179,7 @@ if ($extension->getVersion()=='1.0.2') {
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-        public function increment( $key, $offset = 1) {
+        public function increment( $key, $offset = 1, $initial_value = 0, $expiry = 0 ) {
             if (!$this->logging) return forward_static_call_array('parent::increment', func_get_args());
             $start = microtime(true);
             $name = 'increment';
@@ -1169,10 +1189,30 @@ if ($extension->getVersion()=='1.0.2') {
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-        public function decrement( $key, $offset = 1) {
+        public function incrementByKey( $server_key, $key, $offset = 1, $initial_value = 0, $expiry = 0 ) {
+            if (!$this->logging) return forward_static_call_array('parent::incrementByKey', func_get_args());
+            $start = microtime(true);
+            $name = 'incrementByKey';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function decrement( $key, $offset = 1, $initial_value = 0, $expiry = 0 ) {
             if (!$this->logging) return forward_static_call_array('parent::decrement', func_get_args());
             $start = microtime(true);
             $name = 'decrement';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function decrementByKey( $server_key, $key, $offset = 1, $initial_value = 0, $expiry = 0 ) {
+            if (!$this->logging) return forward_static_call_array('parent::decrementByKey', func_get_args());
+            $start = microtime(true);
+            $name = 'decrementByKey';
             $arguments = func_get_args();
             $result = forward_static_call_array("parent::$name", $arguments);
             $time = microtime(true) - $start;
@@ -1635,10 +1675,30 @@ if ($extension->getVersion()=='1.0.2') {
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
+        public function incrementByKey( $server_key, $key, $offset = 1, $initial_value = 0, $expiry = 0 ) {
+            if (!$this->logging) return forward_static_call_array('parent::incrementByKey', func_get_args());
+            $start = microtime(true);
+            $name = 'incrementByKey';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
         public function decrement( $key, $offset = 1, $initial_value = 0, $expiry = 0) {
             if (!$this->logging) return forward_static_call_array('parent::decrement', func_get_args());
             $start = microtime(true);
             $name = 'decrement';
+            $arguments = func_get_args();
+            $result = forward_static_call_array("parent::$name", $arguments);
+            $time = microtime(true) - $start;
+            $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            return $result;
+        }
+        public function decrementByKey( $server_key, $key, $offset = 1, $initial_value = 0, $expiry = 0 ) {
+            if (!$this->logging) return forward_static_call_array('parent::decrementByKey', func_get_args());
+            $start = microtime(true);
+            $name = 'decrementByKey';
             $arguments = func_get_args();
             $result = forward_static_call_array("parent::$name", $arguments);
             $time = microtime(true) - $start;

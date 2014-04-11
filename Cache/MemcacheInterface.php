@@ -71,8 +71,10 @@ if ($extension->getVersion()=='1.0.2') {
         public function deleteByKey( $server_key, $key, $time = 0 );
         public function deleteMulti( array $keys, $expiration = 0 );
         public function deleteMultiByKey( $server_key, array $keys, $expiration = 0 );
-        public function increment( $key, $offset = 1);
-        public function decrement( $key, $offset = 1);
+        public function increment( $key, $offset = 1, $initial_value = 0, $expiry = 0 );
+        public function incrementByKey( $server_key, $key, $offset = 1, $initial_value = 0, $expiry = 0 );
+        public function decrement( $key, $offset = 1, $initial_value = 0, $expiry = 0 );
+        public function decrementByKey( $server_key, $key, $offset = 1, $initial_value = 0, $expiry = 0 );
         public function getOption( $option );
         public function setOption( $option, $value );
         public function setOptions( $options );
@@ -118,8 +120,10 @@ if ($extension->getVersion()=='1.0.2') {
         public function deleteByKey( $server_key, $key, $time = 0 );
         public function deleteMulti( array $keys, $expiration = 0 );
         public function deleteMultiByKey( $server_key, array $keys, $expiration = 0 );
-        public function increment( $key, $offset = 1);
-        public function decrement( $key, $offset = 1);
+        public function increment( $key, $offset = 1, $initial_value = 0, $expiry = 0 );
+        public function incrementByKey( $server_key, $key, $offset = 1, $initial_value = 0, $expiry = 0 );
+        public function decrement( $key, $offset = 1, $initial_value = 0, $expiry = 0 );
+        public function decrementByKey( $server_key, $key, $offset = 1, $initial_value = 0, $expiry = 0 );
         public function getOption( $option );
         public function setOption( $option, $value );
         public function setOptions( $options );
@@ -166,7 +170,9 @@ if ($extension->getVersion()=='1.0.2') {
         public function deleteMulti( array $keys, $expiration = 0 );
         public function deleteMultiByKey( $server_key, array $keys, $expiration = 0 );
         public function increment( $key, $offset = 1, $initial_value = 0, $expiry = 0);
+        public function incrementByKey( $server_key, $key, $offset = 1, $initial_value = 0, $expiry = 0 );
         public function decrement( $key, $offset = 1, $initial_value = 0, $expiry = 0);
+        public function decrementByKey( $server_key, $key, $offset = 1, $initial_value = 0, $expiry = 0 );
         public function getOption( $option );
         public function setOption( $option, $value );
         public function setOptions( $options );
