@@ -20,6 +20,10 @@ It has full Web Debug Toolbar integration that allows you to analyze and debug t
 
 NB: Unlike the PHP "memcache" extension, the PHP "memcached" extension is not (yet) included in the PHP Windows binaries.
 
+### Known Issues
+
+- php5-memcached 2.2.x gives runtime notices and should be avoided.
+
 ### Installation
 
 To install LswMemcacheBundle with Composer just add the following to your 'composer.json' file:
