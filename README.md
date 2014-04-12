@@ -16,13 +16,12 @@ It has full Web Debug Toolbar integration that allows you to analyze and debug t
 ### Requirements
 
 - PHP 5.3.x or 5.4.x
-- php5-memcached 1.x or 2.x (this is the PHP "memcached" extension that uses "libmemcached")
+- php-memcached 1.0.2, 2.0.1, 2.1.0 (this is the PHP "memcached" extension that uses "libmemcached")
+
+NB: php-memcached 2.2.x gives runtime notices and should be avoided!
 
 NB: Unlike the PHP "memcache" extension, the PHP "memcached" extension is not (yet) included in the PHP Windows binaries.
 
-### Known Issues
-
-- php5-memcached 2.2.x gives runtime notices and should be avoided.
 
 ### Installation
 
