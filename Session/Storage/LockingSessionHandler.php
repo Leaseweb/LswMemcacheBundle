@@ -163,14 +163,6 @@ class LockingSessionHandler implements \SessionHandlerInterface
      */
     public function write($sessionId, $data)
     {
-        if ($this->locking) {
-            if (!$this->locked) {
-                if (!$this->lockSession($sessionId)) {
-                    return false;
-                }
-            }
-        }
-        
         return $this->memcached->set($this->prefix.$sessionId, $data, time() + $this->ttl);
     }
 
