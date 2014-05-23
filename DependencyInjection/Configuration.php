@@ -25,6 +25,7 @@ class Configuration implements ConfigurationInterface
             ->append($this->addSessionSupportSection())
             ->append($this->addDoctrineSection())
             ->append($this->addclientsSection())
+            ->append($this->addMemcachedOptionsSection())
         ;
 
         return $treeBuilder;
