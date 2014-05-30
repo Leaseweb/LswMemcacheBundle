@@ -73,6 +73,7 @@ class LswMemcacheExtension extends Extension
         }
         $options['locking'] = $config['session']['locking'];
         $options['spin_lock_wait'] = $config['session']['spin_lock_wait'];
+        $options['lock_max_wait'] = $config['session']['lock_max_wait'];
         // load the session handler
         $definition = new Definition($container->getParameter('memcache.session_handler.class'));
         $container->setDefinition('memcache.session_handler', $definition);

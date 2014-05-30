@@ -5,6 +5,7 @@ namespace Lsw\MemcacheBundle\DependencyInjection;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
+use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
 /**
  * Defines the configuration options for the Memcached object
@@ -97,6 +98,21 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('ttl')->end()
                 ->booleanNode('locking')->defaultTrue()->end()
                 ->scalarNode('spin_lock_wait')->defaultValue(150000)->end()
+                ->scalarNode('lock_max_wait')
+                    ->defaultNull()
+                    ->validate()
+                    ->always(function($v) {
+                        if (null === $v) {
+                            return $v;
+                        }
+
+                        if (!is_numeric($v)) {
+                            throw new InvalidConfigurationException("Option 'lock_max_wait' must either be NULL or an integer value");
+                        }
+
+                        return (int) $v;
+                    })
+                ->end()
             ->end()
         ->end();
 
