@@ -101,8 +101,11 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('lock_max_wait')
                     ->defaultNull()
                     ->validate()
-                    ->ifNull()
-                    ->then(function($v) {
+                    ->always(function($v) {
+                        if (null === $v) {
+                            return $v;
+                        }
+
                         if (!is_numeric($v)) {
                             throw new InvalidConfigurationException("Option 'lock_max_wait' must either be NULL or an integer value");
                         }
