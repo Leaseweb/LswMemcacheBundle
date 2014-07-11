@@ -32,7 +32,7 @@ if ($extension->getVersion()=='1.0.2') {
             $start = microtime(true);
             $name = 'get';
             $arguments = func_get_args();
-            $result = parent::get($key, $cache_cb, $cas_token);
+            $result = parent::$name($key, $cache_cb, $cas_token);
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
@@ -42,7 +42,7 @@ if ($extension->getVersion()=='1.0.2') {
             $start = microtime(true);
             $name = 'getByKey';
             $arguments = func_get_args();
-            $result = parent::getByKey($server_key, $key, $cache_cb, $cas_token);
+            $result = parent::$name($server_key, $key, $cache_cb, $cas_token);
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
@@ -52,7 +52,7 @@ if ($extension->getVersion()=='1.0.2') {
             $start = microtime(true);
             $name = 'getMulti';
             $arguments = func_get_args();
-            $result = parent::getMulti($keys, $cas_tokens, $flags);
+            $result = parent::$name($keys, $cas_tokens, $flags);
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
@@ -62,7 +62,7 @@ if ($extension->getVersion()=='1.0.2') {
             $start = microtime(true);
             $name = 'getMultiByKey';
             $arguments = func_get_args();
-            $result = parent::getMultiByKey($server_key, $keys, $cas_tokens, $flags);
+            $result = parent::$name($server_key, $keys, $cas_tokens, $flags);
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
@@ -418,7 +418,7 @@ if ($extension->getVersion()=='1.0.2') {
             $start = microtime(true);
             $name = 'get';
             $arguments = func_get_args();
-            $result = parent::get($key, $cache_cb, $cas_token);
+            $result = parent::$name($key, $cache_cb, $cas_token);
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
@@ -428,7 +428,7 @@ if ($extension->getVersion()=='1.0.2') {
             $start = microtime(true);
             $name = 'getByKey';
             $arguments = func_get_args();
-            $result = parent::getByKey($server_key, $key, $cache_cb, $cas_token);
+            $result = parent::$name($server_key, $key, $cache_cb, $cas_token);
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
@@ -438,7 +438,7 @@ if ($extension->getVersion()=='1.0.2') {
             $start = microtime(true);
             $name = 'getMulti';
             $arguments = func_get_args();
-            $result = parent::getMulti($keys, $cas_tokens, $flags);
+            $result = parent::$name($keys, $cas_tokens, $flags);
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
@@ -448,7 +448,7 @@ if ($extension->getVersion()=='1.0.2') {
             $start = microtime(true);
             $name = 'getMultiByKey';
             $arguments = func_get_args();
-            $result = parent::getMultiByKey($server_key, $keys, $cas_tokens, $flags);
+            $result = parent::$name($server_key, $keys, $cas_tokens, $flags);
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
@@ -904,7 +904,7 @@ if ($extension->getVersion()=='1.0.2') {
             $start = microtime(true);
             $name = 'get';
             $arguments = func_get_args();
-            $result = parent::get($key, $cache_cb, $cas_token);
+            $result = parent::$name($key, $cache_cb, $cas_token);
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
@@ -914,7 +914,7 @@ if ($extension->getVersion()=='1.0.2') {
             $start = microtime(true);
             $name = 'getByKey';
             $arguments = func_get_args();
-            $result = parent::getByKey($server_key, $key, $cache_cb, $cas_token);
+            $result = parent::$name($server_key, $key, $cache_cb, $cas_token);
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
@@ -924,7 +924,7 @@ if ($extension->getVersion()=='1.0.2') {
             $start = microtime(true);
             $name = 'getMulti';
             $arguments = func_get_args();
-            $result = parent::getMulti($keys, $cas_tokens, $flags);
+            $result = parent::$name($keys, $cas_tokens, $flags);
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
@@ -934,7 +934,7 @@ if ($extension->getVersion()=='1.0.2') {
             $start = microtime(true);
             $name = 'getMultiByKey';
             $arguments = func_get_args();
-            $result = parent::getMultiByKey($server_key, $keys, $cas_tokens, $flags);
+            $result = parent::$name($server_key, $keys, $cas_tokens, $flags);
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
@@ -1390,7 +1390,7 @@ if ($extension->getVersion()=='1.0.2') {
             $start = microtime(true);
             $name = 'get';
             $arguments = func_get_args();
-            $result = parent::get($key, $cache_cb, $cas_token, $udf_flags);
+            $result = parent::$name($key, $cache_cb, $cas_token, $udf_flags);
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
@@ -1400,7 +1400,7 @@ if ($extension->getVersion()=='1.0.2') {
             $start = microtime(true);
             $name = 'getByKey';
             $arguments = func_get_args();
-            $result = parent::getByKey($server_key, $key, $cache_cb, $cas_token);
+            $result = parent::$name($server_key, $key, $cache_cb, $cas_token);
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
@@ -1410,7 +1410,7 @@ if ($extension->getVersion()=='1.0.2') {
             $start = microtime(true);
             $name = 'getMulti';
             $arguments = func_get_args();
-            $result = parent::getMulti($keys, $cas_tokens, $flags, $udf_flags);
+            $result = parent::$name($keys, $cas_tokens, $flags, $udf_flags);
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
@@ -1420,7 +1420,7 @@ if ($extension->getVersion()=='1.0.2') {
             $start = microtime(true);
             $name = 'getMultiByKey';
             $arguments = func_get_args();
-            $result = parent::getMultiByKey($server_key, $keys, $cas_tokens, $flags, $udf_flags);
+            $result = parent::$name($server_key, $keys, $cas_tokens, $flags, $udf_flags);
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
