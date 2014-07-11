@@ -900,11 +900,21 @@ if ($extension->getVersion()=='1.0.2') {
             return $result;
         }
         public function get( $key, $cache_cb = null, &$cas_token = null ) {
-            if (!$this->logging) return forward_static_call_array('parent::get', func_get_args());
+            if (!$this->logging) {
+//                return forward_static_call_array('parent::get', func_get_args());
+                return parent::get($key, $cache_cb, $cas_token);
+            }
             $start = microtime(true);
-            $name = 'get';
-            $arguments = func_get_args();
-            $result = forward_static_call_array("parent::$name", $arguments);
+//            $name = 'get';
+//            $arguments = func_get_args();
+//            $result = forward_static_call_array("parent::$name", $arguments);
+
+            /* Removed forward_static_call_array due to it not sending arguments
+             * by reference. This (at the very least) breaks unit testing
+             * extensions on it.
+             * This is probably required in a lot of other locations as well.
+             */
+            $result = parent::get($key, $cache_cb, $cas_token);
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
