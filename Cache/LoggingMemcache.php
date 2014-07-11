@@ -38,11 +38,11 @@ if ($extension->getVersion()=='1.0.2') {
             return $result;
         }
         public function getByKey( $server_key, $key, $cache_cb = null, &$cas_token = null ) {
-            if (!$this->logging) return forward_static_call_array('parent::getByKey', func_get_args());
+            if (!$this->logging) return parent::getByKey($server_key, $key, $cache_cb, $cas_token);
             $start = microtime(true);
             $name = 'getByKey';
             $arguments = func_get_args();
-            $result = forward_static_call_array("parent::$name", $arguments);
+            $result = parent::getByKey($server_key, $key, $cache_cb, $cas_token);
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
@@ -424,11 +424,11 @@ if ($extension->getVersion()=='1.0.2') {
             return $result;
         }
         public function getByKey( $server_key, $key, $cache_cb = null, &$cas_token = null ) {
-            if (!$this->logging) return forward_static_call_array('parent::getByKey', func_get_args());
+            if (!$this->logging) return parent::getByKey($server_key, $key, $cache_cb, $cas_token);
             $start = microtime(true);
             $name = 'getByKey';
             $arguments = func_get_args();
-            $result = forward_static_call_array("parent::$name", $arguments);
+            $result = parent::getByKey($server_key, $key, $cache_cb, $cas_token);
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
@@ -910,11 +910,11 @@ if ($extension->getVersion()=='1.0.2') {
             return $result;
         }
         public function getByKey( $server_key, $key, $cache_cb = null, &$cas_token = null ) {
-            if (!$this->logging) return forward_static_call_array('parent::getByKey', func_get_args());
+            if (!$this->logging) return parent::getByKey($server_key, $key, $cache_cb, $cas_token);
             $start = microtime(true);
             $name = 'getByKey';
             $arguments = func_get_args();
-            $result = forward_static_call_array("parent::$name", $arguments);
+            $result = parent::getByKey($server_key, $key, $cache_cb, $cas_token);
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
@@ -1396,11 +1396,11 @@ if ($extension->getVersion()=='1.0.2') {
             return $result;
         }
         public function getByKey( $server_key, $key, $cache_cb = null, &$cas_token = null, &$udf_flags = null ) {
-            if (!$this->logging) return forward_static_call_array('parent::getByKey', func_get_args());
+            if (!$this->logging) return parent::getByKey($server_key, $key, $cache_cb, $cas_token, $udf_flags);
             $start = microtime(true);
             $name = 'getByKey';
             $arguments = func_get_args();
-            $result = forward_static_call_array("parent::$name", $arguments);
+            $result = parent::getByKey($server_key, $key, $cache_cb, $cas_token);
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
