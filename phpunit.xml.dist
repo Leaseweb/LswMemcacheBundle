@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit
+        colors="true"
+        bootstrap="vendor/autoload.php"
+        forceCoversAnnotation="true"
+        >
+
+    <testsuites>
+        <testsuite name="LswMemcacheBundleTest Suite">
+            <directory>./Tests</directory>
+        </testsuite>
+    </testsuites>
+
+    <filter>
+        <whitelist>
+            <directory>./</directory>
+            <exclude>
+                <directory>./vendor</directory>
+                <directory>./Tests</directory>
+                <directory>./Resources</directory>
+            </exclude>
+        </whitelist>
+    </filter>
+
+</phpunit>

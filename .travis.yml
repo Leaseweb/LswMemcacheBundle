@@ -1,0 +1,25 @@
+language: php
+
+php:
+   - 5.3
+   - 5.4
+   - 5.5
+   - 5.6
+
+services:
+   - memcached
+
+env:
+   - PECL_MEMCACHED=memcached-1.0.2
+   - PECL_MEMCACHED=memcached-2.0.1
+   - PECL_MEMCACHED=memcached-2.1.0
+   - PECL_MEMCACHED=memcached-2.2.0
+
+before_script:
+   - yes '' | pecl install -f "$PECL_MEMCACHED"
+   - composer self-update || true
+   - composer show --platform ext-memcached
+   - composer install --no-interaction
+
+script:
+   - vendor/bin/phpunit -c phpunit.xml.dist --coverage-text
