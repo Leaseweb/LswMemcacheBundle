@@ -1,9 +1,6 @@
 language: php
 
 php:
-   - 5.3
-   - 5.4
-   - 5.5
    - 5.6
 
 services:
@@ -16,7 +13,8 @@ env:
    - PECL_MEMCACHED=memcached-2.2.0
 
 before_script:
-   - yes '' | pecl install -f "$PECL_MEMCACHED"
+   - sudo apt-get -y install libmemcached-dev libmemcached10
+   - yes '' | sudo pecl install -f "$PECL_MEMCACHED"
    - composer self-update || true
    - composer show --platform ext-memcached
    - composer install --no-interaction
