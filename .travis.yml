@@ -1,6 +1,9 @@
 language: php
 
 php:
+   - 5.3
+   - 5.4
+   - 5.5
    - 5.6
 
 services:
@@ -13,8 +16,9 @@ env:
    - PECL_MEMCACHED=memcached-2.2.0
 
 before_script:
-   - sudo apt-get -y install libmemcached-dev libmemcached10
-   - yes '' | sudo pecl install -f "$PECL_MEMCACHED"
+   - yes '' | pecl install -f "$PECL_MEMCACHED"
+   # Need to activate memchached extension explictly to work with all versions.
+   - phpenv config-add .travis-php.ini
    - composer self-update || true
    - composer show --platform ext-memcached
    - composer install --no-interaction
