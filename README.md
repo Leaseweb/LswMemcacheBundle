@@ -1,5 +1,6 @@
 LswMemcacheBundle
 =================
+[![Build Status](https://travis-ci.org/LeaseWeb/LswMemcacheBundle.svg)](https://travis-ci.org/LeaseWeb/LswMemcacheBundle)
 
 ![screenshot](http://www.leaseweblabs.com/wp-content/uploads/2013/03/memcache_debug.png)
 
