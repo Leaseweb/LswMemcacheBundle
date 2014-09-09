@@ -16,8 +16,11 @@ foreach (array(true,false) as $interface) {
       if ($class != 1) continue;
       if (!preg_match('/^\s*public function/', $line)) continue;
       $line = preg_replace('/^\s*/', '        ', $line);
-      preg_match('/public function ([^\(]*)\(/', $line, $matches);
+      preg_match('/public function ([^\(]*)\(([^\)]*)/', $line, $matches);
       $function = $matches[1];
+      $arguments = $matches[2];
+      preg_match_all('/\$[a-zA-Z_0-9]+/', $arguments, $matches);
+      $arguments = implode(',',$matches[0]);
       if ($interface) {
       	if ($function != '__construct') {
       		echo str_replace(' {}', ';', $line);
@@ -26,17 +29,15 @@ foreach (array(true,false) as $interface) {
       else {
         $line = str_replace(' {}', ' {', $line);
         if ($function == '__construct') $php = <<<END_OF_PHP
-        public function __construct(\$logging, \$persistentId = '') {
+        public function __construct(\$logging, \$persistent_id = '') {
             \$this->calls = array();
             \$this->logging = \$logging;
-            if (\$persistentId) {
+            if (\$persistent_id) {
                 \$this->initialize = count(\$this->getServerList())==0;
             } else {
                 \$this->initialize = true;
             }
-            \$arguments = func_get_args();
-            array_shift(\$arguments);
-            forward_static_call_array("parent::__construct", \$arguments);
+            parent::__construct(\$persistent_id);
         }
         private \$calls;
         private \$initialize;
@@ -52,11 +53,11 @@ foreach (array(true,false) as $interface) {
 
 END_OF_PHP;
         else $php = $line.<<<END_OF_PHP
-            if (!\$this->logging) return forward_static_call_array('parent::$function', func_get_args());
+            if (!\$this->logging) return parent::$function($arguments);
             \$start = microtime(true);
             \$name = '$function';
-            \$arguments = func_get_args();
-            \$result = forward_static_call_array("parent::\$name", \$arguments);
+            \$arguments = array($arguments);
+            \$result = parent::$function($arguments);
             \$time = microtime(true) - \$start;
             \$this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return \$result;
