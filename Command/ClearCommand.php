@@ -2,6 +2,7 @@
 
 namespace Lsw\MemcacheBundle\Command;
 
+use Lsw\MemcacheBundle\Cache\AntiDogPileMemcache;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -14,6 +15,10 @@ use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
  */
 class ClearCommand extends ContainerAwareCommand
 {
+    /**
+     * @var AntiDogPileMemcache
+     */
+    private $memcache;
 
    /**
     * Configure the CLI task
