@@ -2,6 +2,7 @@
 
 namespace Lsw\MemcacheBundle\Command;
 
+use Lsw\MemcacheBundle\Cache\AntiDogPileMemcache;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -14,6 +15,10 @@ use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
  */
 class ClearCommand extends ContainerAwareCommand
 {
+    /**
+     * @var AntiDogPileMemcache
+     */
+    private $memcache;
 
    /**
     * Configure the CLI task
@@ -27,7 +32,9 @@ class ClearCommand extends ContainerAwareCommand
         ->setDescription('Invalidate all Memcache items')
         ->setDefinition(array(
             new InputArgument('client', InputArgument::REQUIRED, 'The client'),
-        ));
+        ))
+        ->addOption('prefix', null, InputOption::VALUE_REQUIRED, 'Only clears items with specific prefix')
+        ->addOption('regex', null, InputOption::VALUE_REQUIRED, 'Only clears items matching the expression');
    }
 
    /**
@@ -41,9 +48,26 @@ class ClearCommand extends ContainerAwareCommand
    protected function execute(InputInterface $input, OutputInterface $output)
    {
         $client = $input->getArgument('client');
+        $prefix = $input->getOption('prefix');
+        $regex = $input->getOption('regex');
+
+        if(!empty($prefix) && !empty($regex)) {
+            throw new \InvalidArgumentException('you cannot filter by prefix and regex');
+        }
+
+        if(!empty($prefix)) {
+            $regex = '^'.$prefix.'(.*)';
+        }
+
         try {
-            $memcache = $this->getContainer()->get('memcache.'.$client);
-            $output->writeln($memcache->flush()?'<info>OK</info>':'<error>ERROR</error>');
+            $this->memcache = $this->getContainer()->get('memcache.'.$client);
+
+            // flush/delete keys
+            if(empty($regex)) {
+                $output->writeln($this->memcache->flush()?'<info>OK</info>':'<error>ERROR</error>');
+            } else {
+                $output->writeln($this->deleteByRegex($regex)?'<info>OK</info>':'<error>ERROR</error>');
+            }
         } catch (ServiceNotFoundException $e) {
             $output->writeln("<error>client '$client' is not found</error>");
         }
@@ -75,6 +99,29 @@ class ClearCommand extends ContainerAwareCommand
             );
             $input->setArgument('client', $client);
         }
+    }
+
+    /**
+     * delete keys by regular expression
+     *
+     * @param $regex
+     * @return bool|void
+     */
+    private function deleteByRegex($regex)
+    {
+        // load keys
+        $keys = $this->memcache->getAllKeys();
+
+        if(!$keys) {
+            return false;
+        }
+
+        // filter keys
+        $deleteKeys = preg_grep('@'.$regex.'@', $keys);
+        // reset prefix
+        $this->memcache->setOption(\Memcached::OPT_PREFIX_KEY, '');
+        // delete keys
+        return $this->memcache->deleteMulti($deleteKeys);
     }
 
 }
