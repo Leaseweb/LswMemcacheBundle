@@ -37,7 +37,7 @@ foreach (array(true,false) as $interface) {
             } else {
                 \$this->initialize = true;
             }
-            parent::__construct(\$persistent_id);
+            forward_static_call("parent::__construct", \$persistent_id);
         }
         private \$calls;
         private \$initialize;
@@ -53,11 +53,11 @@ foreach (array(true,false) as $interface) {
 
 END_OF_PHP;
         else $php = $line.<<<END_OF_PHP
-            if (!\$this->logging) return parent::$function($arguments);
+            if (!\$this->logging) return forward_static_call("parent::$function", func_get_args());
             \$start = microtime(true);
             \$name = '$function';
             \$arguments = array($arguments);
-            \$result = parent::$function($arguments);
+            \$result = forward_static_call_array("parent::$function", \$arguments);
             \$time = microtime(true) - \$start;
             \$this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return \$result;
