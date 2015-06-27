@@ -141,8 +141,8 @@ class LswMemcacheExtension extends Extension
     private function newMemcachedClient($name, array $config, ContainerBuilder $container)
     {
         // Check if the Memcached extension is loaded
-        if (!extension_loaded('memcached')) {
-            throw new \LogicException('Memcached extension is not loaded! To configure memcached clients it MUST be loaded!');
+        if (!extension_loaded('memcache')) {
+            throw new \LogicException('Memcache extension is not loaded! To configure clients it MUST be loaded!');
         }
 
         $memcached = new Definition('Lsw\MemcacheBundle\Cache\AntiDogPileMemcache');
@@ -162,7 +162,7 @@ class LswMemcacheExtension extends Extension
                 $host['weight']
             );
         }
-        $memcached->addMethodCall('addServers', array($servers));
+        //$memcached->addMethodCall('addServers', array($servers));
 
         // Get default memcached options
         $options = $container->getParameter('memcache.default_options');
