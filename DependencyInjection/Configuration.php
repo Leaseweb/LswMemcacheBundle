@@ -8,7 +8,7 @@ use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
 /**
- * Defines the configuration options for the Memcached object
+ * Defines the configuration options for the Memcache object
  * Based on Emagister\MemcachedBundle by Christian Soronellas
  */
 class Configuration implements ConfigurationInterface
@@ -25,7 +25,7 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->append($this->addSessionSupportSection())
             ->append($this->addDoctrineSection())
-            ->append($this->addclientsSection())
+            ->append($this->addClientsSection())
         ;
 
         return $treeBuilder;
@@ -36,7 +36,7 @@ class Configuration implements ConfigurationInterface
      *
      * @return ArrayNodeDefinition
      */
-    private function addclientsSection()
+    private function addClientsSection()
     {
         $tree = new TreeBuilder();
         $node = $tree->root('clients');
@@ -46,34 +46,50 @@ class Configuration implements ConfigurationInterface
             ->useAttributeAsKey('name')
             ->prototype('array')
                 ->children()
-                    ->scalarNode('persistent_id')
-                        ->defaultNull()
-                        ->info('Specify to enable persistent connections. All clients with the same ID share connections.')
-                    ->end()
                     ->arrayNode('hosts')
                         ->requiresAtLeastOneElement()
                         ->prototype('array')
                             ->children()
-                                ->scalarNode('dsn')->cannotBeEmpty()->isRequired()->end()
+                                ->scalarNode('host')
+                                	->cannotBeEmpty()
+                                	->isRequired()
+                               	->end()
                                 ->scalarNode('port')
                                     ->cannotBeEmpty()
                                     ->defaultValue(11211)
                                     ->validate()
                                     ->ifTrue(function ($v) { return !is_numeric($v); })
-                                        ->thenInvalid('host port must be numeric')
+                                        ->thenInvalid('port must be numeric')
                                     ->end()
+                                ->end()
+                                ->booleanNode('persistent')
+                                	->defaultTrue()
                                 ->end()
                                 ->scalarNode('weight')
-                                    ->defaultValue(0)
+                                    ->defaultValue(1)
                                     ->validate()
                                     ->ifTrue(function ($v) { return !is_numeric($v); })
-                                        ->thenInvalid('host weight must be numeric')
+                                        ->thenInvalid('weight must be numeric')
                                     ->end()
                                 ->end()
-                            ->end()
+                                ->scalarNode('timeout')
+	                                ->defaultValue(1)
+	                                ->validate()
+	                                ->ifTrue(function ($v) { return !is_numeric($v); })
+	                                	->thenInvalid('timeout must be numeric')
+	                                ->end()
+                                ->end()
+                                ->scalarNode('retry_interval')
+	                                ->defaultValue(15)
+	                                ->validate()
+	                                ->ifTrue(function ($v) { return !is_numeric($v); })
+	                                	->thenInvalid('retry_interval must be numeric')
+	                                ->end()
+                                ->end()
+                        	->end()
                         ->end()
                     ->end()
-                    ->append($this->addMemcachedOptionsSection())
+                    ->append($this->addMemcacheOptionsSection())
                 ->end()
             ->end()
         ->end();
@@ -94,6 +110,7 @@ class Configuration implements ConfigurationInterface
         $node
             ->children()
                 ->scalarNode('client')->isRequired()->end()
+                ->booleanNode('autoload')->defaultTrue()->end()
                 ->scalarNode('prefix')->end()
                 ->scalarNode('ttl')->end()
                 ->booleanNode('locking')->defaultTrue()->end()
@@ -165,12 +182,12 @@ class Configuration implements ConfigurationInterface
      *
      * @return ArrayNodeDefinition
      */
-    private function addMemcachedOptionsSection()
+    private function addMemcacheOptionsSection()
     {
         $tree = new TreeBuilder();
         $node = $tree->root('options');
 
-        // Memcached only configs
+        // Memcache only configs
         $node
             ->children()
                 ->booleanNode('compression')->defaultFalse()->end()

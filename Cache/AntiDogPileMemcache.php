@@ -2,7 +2,7 @@
 namespace Lsw\MemcacheBundle\Cache;
 
 /**
- * Class to encapsulate PHP Memcached object to avoid the "Dog Pile" effect
+ * Class to encapsulate PHP Memcache object to avoid the "Dog Pile" effect
  */
 class AntiDogPileMemcache extends LoggingMemcache
 {
@@ -21,8 +21,7 @@ class AntiDogPileMemcache extends LoggingMemcache
      */
     public function getAdp($key)
     {
-        $cas=0;
-        $value = $this->get($key, null, $cas);
+        $value = $this->get($key, $flags, $cas);
         if ($value===false) {
             return false;
         }
@@ -32,7 +31,7 @@ class AntiDogPileMemcache extends LoggingMemcache
         $time = time();
         if ($time>$exp) {
             $value = implode('|', array($time+$ttl, $ttl, json_encode($val)));
-            $result = $this->cas($cas, $key, $value, 0);
+            $result = $this->cas($key, $value, null, 0, $cas);
 
             if ($result) {
                 return false;
@@ -59,7 +58,7 @@ class AntiDogPileMemcache extends LoggingMemcache
         }
         $time = time();
         $value = implode('|', array($time+$ttl, $ttl, json_encode($value)));
-        $result = $this->set($key, $value, 0);
+        $result = $this->set($key, $value, null, 0);
 
         return $result;
     }

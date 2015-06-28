@@ -17,12 +17,10 @@ It has full Web Debug Toolbar integration that allows you to analyze and debug t
 ### Requirements
 
 - PHP 5.3.10 or higher
-- php-memcached 1.0.2, 2.0.1 or 2.1.0 (this is the PHP "memcached" extension that uses "libmemcached")
+- php-memcache 3.0.8 or higher
+- memcached 1.4 or higher  
 
-NB: php-memcached 2.2.x gives runtime notices and should be avoided!
-
-NB: Unlike the PHP "memcache" extension, the PHP "memcached" extension is not (yet) included in the PHP Windows binaries.
-
+NB: This bundle no longer uses the PHP "memcached" extension that uses "libmemcached", see "Considerations". 
 
 ### Installation
 
@@ -58,12 +56,12 @@ lsw_memcache:
     clients:
         default:
             hosts:
-              - { dsn: localhost, port: 11211 }
+              - { host: localhost, port: 11211 }
 ```
 
 Install the following dependencies (in Debian based systems using 'apt'):
 
-    apt-get install memcached php5-memcached
+    apt-get install memcached php5-memcache
 
 Do not forget to restart you web server after adding the Memcache module. Now the Memcache
 information should show up with a little double arrow (fast-forward) icon in your debug toolbar.
@@ -81,16 +79,15 @@ specified number of seconds have passed the 'get' function returns the value 'fa
 
 ### Configuration
 
-Below you can see a full configuration for this bundle.
+Below you can see an example configuration for this bundle.
 
 ```yml
 lsw_memcache:
     clients:
         default:
-            persistent_id: default  # Do NOT use this, see known issues
             hosts:
-                - { dsn: 10.0.0.1, port: 11211, weight: 15 }
-                - { dsn: 10.0.0.2, port: 11211, weight: 30 }
+                - { host: 10.0.0.1, port: 11211, weight: 15 }
+                - { host: 10.0.0.2, port: 11211, weight: 30 }
             options:
                 compression: true
                 serializer: json
@@ -113,20 +110,22 @@ lsw_memcache:
                 server_failure_limit: 0
         sessions:
             hosts:
-                - { dsn: localhost, port: 11212 }
+                - { host: localhost, port: 11212 }
 
 ```
 
 ### Session Support ###
 
 This bundle also provides support for storing session data on Memcache servers. To enable session support
-you will have to enable it through the ```session``` key. Note that the only required subkey of
-the session support is ```client``` (a valid client). You can also specify a key prefix and an ttl.
+you will have to enable it through the ```session``` key (autoload is true by default). Note that the only
+required subkey of the session support is ```client``` (a valid client). You can also specify a key prefix
+and an ttl.
 
 ```yml
 lsw_memcache:
     session:
         client: sessions
+        autoload: true
         prefix: "session_"
         ttl: 7200
         locking: true
@@ -180,8 +179,9 @@ Please note:
 
 ### Considerations
 
-LswMemcacheBundle uses the 'memcached' PHP extension (client) not the older 'memcache' PHP extension.
-For a comparison of the available clients see: http://code.google.com/p/memcached/wiki/PHPClientComparison
+LswMemcacheBundle uses the 'memcache' PHP extension (client) not the libmemcache based 'memcached' PHP extension.
+
+Mojor version 1 of this bundle used the other extension. In major version 2 of this bundle the full featured version 3.0.8 of PECL "memcache" (without the 'd') was chosen, due to it's complete feature set and good design and support.
 
 ### Known issues
 
@@ -216,8 +216,3 @@ https://github.com/beryllium/CacheBundle by Kevin Boyd
 ### License
 
 This bundle is under the MIT license.
-
-The "fast-forward" icon in the web debug toolbar is part of the Picas icon set (official website: http://www.picasicons.com).
-The icon is licensed and may only be used to identifying the LswMemcacheBundle in the Symfony2 web debug toolbar.
-All ownership and copyright of this icon remain the property of Rok Benedik.
-
