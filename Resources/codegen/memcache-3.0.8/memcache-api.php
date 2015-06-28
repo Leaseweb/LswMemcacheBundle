@@ -18,23 +18,23 @@ class Memcache {
 	
 	//proto bool memcache_add_server(string host [, int port [, bool persistent [, int weight [, double timeout [, int retry_interval [, bool status [, callback failure_callback ] ] ] ] ] ] ])
 	
-	public function add_server($host,$port=null,$persistent=null,$weight=null,$timeout=null,$retry_interval=null,$status=null,$failure_callback=null) {}
+	public function addServer($host,$port=null,$persistent=null,$weight=null,$timeout=null,$retryInterval=null,$status=null,$failureCallback=null) {}
 		
 	//proto bool memcache_set_server_params( string host [, int port [, double timeout [, int retry_interval [, bool status [, callback failure_callback ] ] ] ] ])
 	
-	public function set_server_params($host,$port=null,$timeout=null,$retry_interval=null,$status=null,$failure_callback=null) {}
+	public function setServerParams($host,$port=null,$timeout=null,$retryInterval=null,$status=null,$failureCallback=null) {}
 	
 	//proto bool memcache_set_failure_callback( callback failure_callback )
 	
-	public function set_failure_callback($failure_callback) {}
+	public function setFailureCallback($failureCallback) {}
 	
 	//proto int memcache_get_server_status( string host [, int port ])
 	
-	public function get_server_status($host,$port=null) {}
+	public function getServerStatus($host,$port=null) {}
 	
 	//proto string memcache_get_version( object memcache )
 	
-	public function get_version() {}
+	public function getVersion() {}
 	
 	// proto bool memcache_add(object memcache, mixed key [, mixed var [, int flag [, int exptime ] ] ])
 	
@@ -62,15 +62,15 @@ class Memcache {
 	
 	//proto array memcache_get_stats( object memcache [, string type [, int slabid [, int limit ] ] ])
 	
-	public function get_stats($type=null,$slabid=null,$limit=null) {}
+	public function getStats($type=null,$slabid=null,$limit=null) {}
 	
 	//proto array memcache_get_extended_stats( object memcache [, string type [, int slabid [, int limit ] ] ])
 	
-	public function get_extended_stats($type=null,$slabid=null,$limit=null) {}
+	public function getExtendedStats($type=null,$slabid=null,$limit=null) {}
 	
 	//proto array memcache_set_compress_threshold( object memcache, int threshold [, float min_savings ] )
 	
-	public function set_compress_threshold($threshold,$min_savings=null) {}
+	public function setCompressThreshold($threshold,$minSavings=null) {}
 	
 	//proto bool memcache_delete(object memcache, mixed key [, int exptime ])
 	
@@ -102,11 +102,11 @@ class MemcachePool {
 	
 	//proto bool MemcachePool::addServer(string host [, int tcp_port [, int udp_port [, bool persistent [, int weight [, double timeout [, int retry_interval [, bool status] ] ] ] ])
 	
-	public function addServer($host,$tcp_port=null,$udp_port=null,$persistent=null,$weight=null,$timeout=null,$retry_interval=null,$status=null) {}
+	public function addServer($host,$tcpPort=null,$udpPort=null,$persistent=null,$weight=null,$timeout=null,$retryInterval=null,$status=null) {}
 	
 	//proto bool MemcachePool::connect(string host [, int tcp_port [, int udp_port [, bool persistent [, int weight [, double timeout [, int retry_interval] ] ] ] ] ])
 	
-	public function connect($host,$tcp_port=null,$udp_port=null,$persistent=null,$weight=null,$timeout=null,$retry_interval=null) {}
+	public function connect($host,$tcpPort=null,$udpPort=null,$persistent=null,$weight=null,$timeout=null,$retryInterval=null) {}
 	
 	//proto string MemcachePool::findServer(string key)
 	

@@ -38,52 +38,52 @@ if ($extension->getVersion()=='3.0.8') {
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-        public function add_server($host,$port=null,$persistent=null,$weight=null,$timeout=null,$retry_interval=null,$status=null,$failure_callback=null) {
-            if (!$this->logging) return parent::add_server($host,$port,$persistent,$weight,$timeout,$retry_interval,$status,$failure_callback);
+        public function addServer($host,$port=null,$persistent=null,$weight=null,$timeout=null,$retryInterval=null,$status=null,$failureCallback=null) {
+            if (!$this->logging) return parent::addServer($host,$port,$persistent,$weight,$timeout,$retryInterval,$status,$failureCallback);
             $start = microtime(true);
-            $name = 'add_server';
-            $arguments = array($host,$port,$persistent,$weight,$timeout,$retry_interval,$status,$failure_callback);
-            $result = parent::add_server($host,$port,$persistent,$weight,$timeout,$retry_interval,$status,$failure_callback);
+            $name = 'addServer';
+            $arguments = array($host,$port,$persistent,$weight,$timeout,$retryInterval,$status,$failureCallback);
+            $result = parent::addServer($host,$port,$persistent,$weight,$timeout,$retryInterval,$status,$failureCallback);
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-        public function set_server_params($host,$port=null,$timeout=null,$retry_interval=null,$status=null,$failure_callback=null) {
-            if (!$this->logging) return parent::set_server_params($host,$port,$timeout,$retry_interval,$status,$failure_callback);
+        public function setServerParams($host,$port=null,$timeout=null,$retryInterval=null,$status=null,$failureCallback=null) {
+            if (!$this->logging) return parent::setServerParams($host,$port,$timeout,$retryInterval,$status,$failureCallback);
             $start = microtime(true);
-            $name = 'set_server_params';
-            $arguments = array($host,$port,$timeout,$retry_interval,$status,$failure_callback);
-            $result = parent::set_server_params($host,$port,$timeout,$retry_interval,$status,$failure_callback);
+            $name = 'setServerParams';
+            $arguments = array($host,$port,$timeout,$retryInterval,$status,$failureCallback);
+            $result = parent::setServerParams($host,$port,$timeout,$retryInterval,$status,$failureCallback);
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-        public function set_failure_callback($failure_callback) {
-            if (!$this->logging) return parent::set_failure_callback($failure_callback);
+        public function setFailureCallback($failureCallback) {
+            if (!$this->logging) return parent::setFailureCallback($failureCallback);
             $start = microtime(true);
-            $name = 'set_failure_callback';
-            $arguments = array($failure_callback);
-            $result = parent::set_failure_callback($failure_callback);
+            $name = 'setFailureCallback';
+            $arguments = array($failureCallback);
+            $result = parent::setFailureCallback($failureCallback);
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-        public function get_server_status($host,$port=null) {
-            if (!$this->logging) return parent::get_server_status($host,$port);
+        public function getServerStatus($host,$port=null) {
+            if (!$this->logging) return parent::getServerStatus($host,$port);
             $start = microtime(true);
-            $name = 'get_server_status';
+            $name = 'getServerStatus';
             $arguments = array($host,$port);
-            $result = parent::get_server_status($host,$port);
+            $result = parent::getServerStatus($host,$port);
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-        public function get_version() {
-            if (!$this->logging) return parent::get_version();
+        public function getVersion() {
+            if (!$this->logging) return parent::getVersion();
             $start = microtime(true);
-            $name = 'get_version';
+            $name = 'getVersion';
             $arguments = array();
-            $result = parent::get_version();
+            $result = parent::getVersion();
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
@@ -148,32 +148,32 @@ if ($extension->getVersion()=='3.0.8') {
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-        public function get_stats($type=null,$slabid=null,$limit=null) {
-            if (!$this->logging) return parent::get_stats($type,$slabid,$limit);
+        public function getStats($type=null,$slabid=null,$limit=null) {
+            if (!$this->logging) return parent::getStats($type,$slabid,$limit);
             $start = microtime(true);
-            $name = 'get_stats';
+            $name = 'getStats';
             $arguments = array($type,$slabid,$limit);
-            $result = parent::get_stats($type,$slabid,$limit);
+            $result = parent::getStats($type,$slabid,$limit);
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-        public function get_extended_stats($type=null,$slabid=null,$limit=null) {
-            if (!$this->logging) return parent::get_extended_stats($type,$slabid,$limit);
+        public function getExtendedStats($type=null,$slabid=null,$limit=null) {
+            if (!$this->logging) return parent::getExtendedStats($type,$slabid,$limit);
             $start = microtime(true);
-            $name = 'get_extended_stats';
+            $name = 'getExtendedStats';
             $arguments = array($type,$slabid,$limit);
-            $result = parent::get_extended_stats($type,$slabid,$limit);
+            $result = parent::getExtendedStats($type,$slabid,$limit);
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-        public function set_compress_threshold($threshold,$min_savings=null) {
-            if (!$this->logging) return parent::set_compress_threshold($threshold,$min_savings);
+        public function setCompressThreshold($threshold,$minSavings=null) {
+            if (!$this->logging) return parent::setCompressThreshold($threshold,$minSavings);
             $start = microtime(true);
-            $name = 'set_compress_threshold';
-            $arguments = array($threshold,$min_savings);
-            $result = parent::set_compress_threshold($threshold,$min_savings);
+            $name = 'setCompressThreshold';
+            $arguments = array($threshold,$minSavings);
+            $result = parent::setCompressThreshold($threshold,$minSavings);
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
