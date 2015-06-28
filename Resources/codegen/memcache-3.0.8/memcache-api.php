@@ -58,7 +58,7 @@ class Memcache {
 	
 	//proto mixed memcache_get( object memcache, mixed key [, mixed &flags [, mixed &cas ] ] )
 	
-	public function get($key,$flag=null,&$cas=null) {}
+	public function get($key,&$flags=null,&$cas=null) {}
 	
 	//proto array memcache_get_stats( object memcache [, string type [, int slabid [, int limit ] ] ])
 	

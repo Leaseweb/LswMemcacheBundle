@@ -138,12 +138,12 @@ if ($extension->getVersion()=='3.0.8') {
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;
         }
-        public function get($key,$flag=null,&$cas=null) {
-            if (!$this->logging) return parent::get($key,$flag,$cas);
+        public function get($key,&$flags=null,&$cas=null) {
+            if (!$this->logging) return parent::get($key,$flags,$cas);
             $start = microtime(true);
             $name = 'get';
-            $arguments = array($key,$flag,$cas);
-            $result = parent::get($key,$flag,$cas);
+            $arguments = array($key,$flags,$cas);
+            $result = parent::get($key,$flags,$cas);
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
             return $result;

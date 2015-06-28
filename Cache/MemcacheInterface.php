@@ -16,7 +16,7 @@ if ($extension->getVersion()=='3.0.8') {
         public function replace($key,$var=null,$flag=null,$exptime=null);
         public function cas($key,$var=null,$flag=null,$exptime=null,$cas=null);
         public function prepend($key,$var=null,$flag=null,$exptime=null);
-        public function get($key,$flag=null,&$cas=null);
+        public function get($key,&$flags=null,&$cas=null);
         public function get_stats($type=null,$slabid=null,$limit=null);
         public function get_extended_stats($type=null,$slabid=null,$limit=null);
         public function set_compress_threshold($threshold,$min_savings=null);
