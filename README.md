@@ -171,7 +171,7 @@ Please note:
 
 ### Considerations
 
-LswMemcacheBundle uses the 'memcache' PHP extension (pool) not the libmemcache based 'memcached' PHP extension.
+LswMemcacheBundle uses the 'memcache' PHP extension (memcached client) and not the libmemcache based 'memcached' PHP extension.
 
 Mojor version 1 of this bundle used the other extension. In major version 2 of this bundle the full featured version 3.0.8 of PECL "memcache" (without the 'd') was chosen, due to it's complete feature set and good design and support.
 
