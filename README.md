@@ -182,9 +182,6 @@ The collect call of the memcache data collector is executed before the rendering
 and therefor also before the session write is executed. This causes the session writes not to show up in
 the Web Debug Toolbar.
 
-Enabling persistent connections (setting "persistent_id") is known to crash php5 (core dump) on some systems.
-Use with caution: it is strongly recommended to leave out "persistent_id" from the configuration.
-
 ### Credits
 
 Doctrine support is based on the implementation in SncRedisBundle:
