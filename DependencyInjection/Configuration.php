@@ -110,7 +110,7 @@ class Configuration implements ConfigurationInterface
         $node
             ->children()
                 ->scalarNode('pool')->isRequired()->end()
-                ->booleanNode('autoload')->defaultTrue()->end()
+                ->booleanNode('auto_load')->defaultTrue()->end()
                 ->scalarNode('prefix')->end()
                 ->scalarNode('ttl')->end()
                 ->booleanNode('locking')->defaultTrue()->end()

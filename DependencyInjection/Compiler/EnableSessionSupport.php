@@ -20,8 +20,8 @@ class EnableSessionSupport implements CompilerPassInterface
         if (!$container->hasAlias('session.storage')) {
         	return;
         }
-        // If autoload is not enabled, return
-        if (!$container->getParameter('memcache.session_handler.autoload')) {
+        // If auto_load is not enabled, return
+        if (!$container->getParameter('memcache.session_handler.auto_load')) {
         	return;
         }
         // If the memcache.session_handler service is loaded set the alias

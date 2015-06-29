@@ -117,7 +117,7 @@ lsw_memcache:
 ### Session Support ###
 
 This bundle also provides support for storing session data on Memcache servers. To enable session support
-you will have to enable it through the ```session``` key (autoload is true by default). Note that the only
+you will have to enable it through the ```session``` key (auto_load is true by default). Note that the only
 required subkey of the session support is ```pool``` (a valid pool). You can also specify a key prefix
 and an ttl.
 
@@ -125,7 +125,7 @@ and an ttl.
 lsw_memcache:
     session:
         pool: sessions
-        autoload: true
+        auto_load: true
         prefix: "session_"
         ttl: 7200
         locking: true
