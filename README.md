@@ -52,10 +52,10 @@ Configure the bundle by adding the following to app/config/config.yml':
 ```yml
 lsw_memcache:
     session:
-        client: default
-    clients:
+        pool: default
+    pools:
         default:
-            hosts:
+            servers:
               - { host: localhost, port: 11211 }
 ```
 
@@ -83,9 +83,9 @@ Below you can see an example configuration for this bundle.
 
 ```yml
 lsw_memcache:
-    clients:
+    pools:
         default:
-            hosts:
+            servers:
                 - { host: 10.0.0.1, port: 11211, weight: 15 }
                 - { host: 10.0.0.2, port: 11211, weight: 30 }
             options:
@@ -109,7 +109,7 @@ lsw_memcache:
                 cache_lookups: false
                 server_failure_limit: 0
         sessions:
-            hosts:
+            servers:
                 - { host: localhost, port: 11212 }
 
 ```
@@ -118,19 +118,19 @@ lsw_memcache:
 
 This bundle also provides support for storing session data on Memcache servers. To enable session support
 you will have to enable it through the ```session``` key (autoload is true by default). Note that the only
-required subkey of the session support is ```client``` (a valid client). You can also specify a key prefix
+required subkey of the session support is ```pool``` (a valid pool). You can also specify a key prefix
 and an ttl.
 
 ```yml
 lsw_memcache:
     session:
-        client: sessions
+        pool: sessions
         autoload: true
         prefix: "session_"
         ttl: 7200
         locking: true
         spin_lock_wait: 150000
-    # clients
+    # pools
 ```
 
 Note that the session locking is enabled by default and the default spin lock is set to poll every 150 milliseconds (150000 microseconds).
@@ -140,23 +140,23 @@ Note that the session locking is enabled by default and the default spin lock is
 This bundle also provides support for Doctrine caching on Memcache servers. To enable Doctrine caching
 you will have to enable it through the ```doctrine``` key. Note that you can specify all three kinds of
 Doctrine caching: 'metadata', 'result' and 'query'. The required keys within those subkeys are both 
-```client``` (a valid client) and ```entity_manager``` (normally: default). You can also specify a prefix.
+```pool``` (a valid pool) and ```entity_manager``` (normally: default). You can also specify a prefix.
 
 ```yml
 lsw_memcache:
     doctrine:
         metadata_cache:
-            client: default
+            pool: default
             entity_manager: default          # the name of your entity_manager connection
             document_manager: default        # the name of your document_manager connection
         result_cache:
-            client: default
+            pool: default
             entity_manager: [default, read]  # you may specify multiple entity_managers
             prefix: "result_"                # you may specify a prefix for the entries
         query_cache:
-            client: default
+            pool: default
             entity_manager: default
-    # clients
+    # pools
 ```
 
 ### ADP: Anti Dog Pile
@@ -179,7 +179,7 @@ Please note:
 
 ### Considerations
 
-LswMemcacheBundle uses the 'memcache' PHP extension (client) not the libmemcache based 'memcached' PHP extension.
+LswMemcacheBundle uses the 'memcache' PHP extension (pool) not the libmemcache based 'memcached' PHP extension.
 
 Mojor version 1 of this bundle used the other extension. In major version 2 of this bundle the full featured version 3.0.8 of PECL "memcache" (without the 'd') was chosen, due to it's complete feature set and good design and support.
 

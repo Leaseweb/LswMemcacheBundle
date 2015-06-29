@@ -45,7 +45,7 @@
 {% block panel %}
     <h2>Memcache</h2>
     {% for name, calls in collector.calls %}
-        <h3>Statistics for '{{ name }}'</h3>
+        <h3>Statistics for pool '{{ name }}'</h3>
         <table>
         <thead><tr>
         {% for key, value in collector.statistics[name] %}
@@ -61,7 +61,7 @@
         {% endfor %}
         </tr></tbody></table>
 
-        <h3>Calls for '{{ name }}'</h3>
+        <h3>Calls for pool '{{ name }}'</h3>
 
         {% if not collector.totals.calls %}
             <p>
@@ -84,7 +84,7 @@
             </ul>
         {% endif %}
 
-        <h3>Options for '{{ name }}'</h3>
+        <h3>Options for pool '{{ name }}'</h3>
         <pre>
             {%- for key, value in collector.options[name] %}
                 {{- '%-25s'|format(key~':') }} {{ value }}{{ "\n" -}}

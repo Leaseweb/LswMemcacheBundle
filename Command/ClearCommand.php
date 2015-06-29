@@ -31,10 +31,8 @@ class ClearCommand extends ContainerAwareCommand
         ->setName('memcache:clear')
         ->setDescription('Invalidate all Memcache items')
         ->setDefinition(array(
-            new InputArgument('client', InputArgument::REQUIRED, 'The client'),
-        ))
-        ->addOption('prefix', null, InputOption::VALUE_REQUIRED, 'Only clears items with specific prefix')
-        ->addOption('regex', null, InputOption::VALUE_REQUIRED, 'Only clears items matching the expression');
+            new InputArgument('pool', InputArgument::REQUIRED, 'The pool'),
+        ));
    }
 
    /**
@@ -47,34 +45,19 @@ class ClearCommand extends ContainerAwareCommand
     */
    protected function execute(InputInterface $input, OutputInterface $output)
    {
-        $client = $input->getArgument('client');
-        $prefix = $input->getOption('prefix');
-        $regex = $input->getOption('regex');
-
-        if(!empty($prefix) && !empty($regex)) {
-            throw new \InvalidArgumentException('you cannot filter by prefix and regex');
-        }
-
-        if(!empty($prefix)) {
-            $regex = '^'.$prefix.'(.*)';
-        }
+        $pool = $input->getArgument('pool');
 
         try {
-            $this->memcache = $this->getContainer()->get('memcache.'.$client);
+            $this->memcache = $this->getContainer()->get('memcache.'.$pool);
 
-            // flush/delete keys
-            if(empty($regex)) {
-                $output->writeln($this->memcache->flush()?'<info>OK</info>':'<error>ERROR</error>');
-            } else {
-                $output->writeln($this->deleteByRegex($regex)?'<info>OK</info>':'<error>ERROR</error>');
-            }
+            $output->writeln($this->memcache->flush()?'<info>OK</info>':'<error>ERROR</error>');
         } catch (ServiceNotFoundException $e) {
-            $output->writeln("<error>client '$client' is not found</error>");
+            $output->writeln("<error>pool '$pool' is not found</error>");
         }
    }
 
    /**
-    * Choose the client
+    * Choose the pool
     *
     * @param InputInterface  $input  Input interface
     * @param OutputInterface $output Output interface
@@ -84,44 +67,21 @@ class ClearCommand extends ContainerAwareCommand
     */
     protected function interact(InputInterface $input, OutputInterface $output)
     {
-        if (!$input->getArgument('client')) {
-            $client = $this->getHelper('dialog')->askAndValidate(
+        if (!$input->getArgument('pool')) {
+            $pool = $this->getHelper('dialog')->askAndValidate(
                 $output,
-                'Please give the client:',
-                function($client)
+                'Please give the pool:',
+                function($pool)
                 {
-                   if (empty($client)) {
-                       throw new \Exception('client can not be empty');
+                   if (empty($pool)) {
+                       throw new \Exception('pool can not be empty');
                    }
 
-                   return $client;
+                   return $pool;
                 }
             );
-            $input->setArgument('client', $client);
+            $input->setArgument('pool', $pool);
         }
-    }
-
-    /**
-     * delete keys by regular expression
-     *
-     * @param $regex
-     * @return bool|void
-     */
-    private function deleteByRegex($regex)
-    {
-        // load keys
-        $keys = $this->memcache->getAllKeys();
-
-        if(!$keys) {
-            return false;
-        }
-
-        // filter keys
-        $deleteKeys = preg_grep('@'.$regex.'@', $keys);
-        // reset prefix
-        $this->memcache->setOption(\Memcached::OPT_PREFIX_KEY, '');
-        // delete keys
-        return $this->memcache->deleteMulti($deleteKeys);
     }
 
 }

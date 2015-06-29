@@ -4,9 +4,14 @@ namespace Lsw\MemcacheBundle\Cache;
 $extension = new \ReflectionExtension('memcache');
 if ($extension->getVersion()=='3.0.8') {
     class LoggingMemcache extends \Memcache implements MemcacheInterface, LoggingMemcacheInterface {
-        public function __construct($logging) {
+        public function __construct($logging,$options) {
             $this->calls = array();
             $this->logging = $logging;
+            foreach ($options as $key=>$value) {
+            	if (is_bool($value)) $value = (string)((int)$value);
+            	if (is_int($value))	$value = (string)$value;
+            	ini_set('memcache.'.$key, $value); 
+            }
         }
         private $calls;
         private $logging;

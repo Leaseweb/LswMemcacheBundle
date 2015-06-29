@@ -37,8 +37,8 @@ class LswMemcacheExtension extends Extension
         if (isset($config['doctrine'])) {
           $this->loadDoctrine($config, $container);
         }
-        if (isset($config['clients'])) {
-            $this->addClients($config['clients'], $container);
+        if (isset($config['pools'])) {
+            $this->addClients($config['pools'], $container);
         }
     }
 
@@ -52,13 +52,13 @@ class LswMemcacheExtension extends Extension
      */
     private function enableSessionSupport($config, ContainerBuilder $container)
     {
-        // make sure the client is specified and it exists
-        $client = $config['session']['client'];
-        if (null === $client) {
+        // make sure the pool is specified and it exists
+        $pool = $config['session']['pool'];
+        if (null === $pool) {
             return;
         }
-        if (!isset($config['clients']) || !isset($config['clients'][$client])) {
-            throw new \LogicException(sprintf('The client "%s" does not exist! Cannot enable the session support!', $client));
+        if (!isset($config['pools']) || !isset($config['pools'][$pool])) {
+            throw new \LogicException(sprintf('The pool "%s" does not exist! Cannot enable the session support!', $pool));
         }
         // calculate options
         $sessionOptions = $container->getParameter('session.storage.options');
@@ -80,7 +80,7 @@ class LswMemcacheExtension extends Extension
         $definition = new Definition($container->getParameter('memcache.session_handler.class'));
         $container->setDefinition('memcache.session_handler', $definition);
         $definition
-            ->addArgument(new Reference(sprintf('memcache.%s', $client)))
+            ->addArgument(new Reference(sprintf('memcache.%s', $pool)))
             ->addArgument($options);
        	$this->addClassesToCompile(array($definition->getClass()));
     }
@@ -94,11 +94,11 @@ class LswMemcacheExtension extends Extension
     protected function loadDoctrine(array $config, ContainerBuilder $container)
     {
         foreach ($config['doctrine'] as $name => $cache) {
-            $client = new Reference(sprintf('memcache.%s', $cache['client']));
+            $pool = new Reference(sprintf('memcache.%s', $cache['pool']));
             foreach ($cache['entity_managers'] as $em) {
                 $def = new Definition($container->getParameter('memcache.doctrine_cache.class'));
                 $def->setScope(ContainerInterface::SCOPE_CONTAINER);
-                $def->addMethodCall('setMemcache', array($client));
+                $def->addMethodCall('setMemcache', array($pool));
                 if ($cache['prefix']) {
                     $def->addMethodCall('setPrefix', array($cache['prefix']));
                 }
@@ -107,7 +107,7 @@ class LswMemcacheExtension extends Extension
             foreach ($cache['document_managers'] as $dm) {
                 $def = new Definition($container->getParameter('memcache.doctrine_cache.class'));
                 $def->setScope(ContainerInterface::SCOPE_CONTAINER);
-                $def->addMethodCall('setMemcache', array($client));
+                $def->addMethodCall('setMemcache', array($pool));
                 if ($cache['prefix']) {
                     $def->addMethodCall('setPrefix', array($cache['prefix']));
                 }
@@ -117,17 +117,17 @@ class LswMemcacheExtension extends Extension
     }
 
     /**
-     * Adds memcache/memcache clients to the service contaienr
+     * Adds memcache/memcache pools to the service contaienr
      *
-     * @param array            $clients   Array of client configurations
+     * @param array            $pools   Array of pool configurations
      * @param ContainerBuilder $container Service container
      *
      * @throws \LogicException
      */
-    private function addClients(array $clients, ContainerBuilder $container)
+    private function addClients(array $pools, ContainerBuilder $container)
     {
-        foreach ($clients as $client => $memcacheConfig) {
-            $this->newMemcacheClient($client, $memcacheConfig, $container);
+        foreach ($pools as $pool => $memcacheConfig) {
+            $this->newMemcacheClient($pool, $memcacheConfig, $container);
         }
     }
 
@@ -144,21 +144,21 @@ class LswMemcacheExtension extends Extension
     {
         // Check if the Memcache extension is loaded
         if (!extension_loaded('memcache')) {
-            throw new \LogicException('Memcache extension is not loaded! To configure clients it MUST be loaded!');
+            throw new \LogicException('Memcache extension is not loaded! To configure pools it MUST be loaded!');
         }
 
         $memcache = new Definition('Lsw\MemcacheBundle\Cache\AntiDogPileMemcache');
         $memcache->addArgument(new Parameter('kernel.debug'));
 
-        // Add servers to the memcache client
-        foreach ($config['hosts'] as $host) {
+        // Add servers to the memcache pool
+        foreach ($config['servers'] as $s) {
             $server = array(
-                $host['host'],
-                $host['port'],
-                $host['persistent'],
-                $host['weight'],
-                $host['timeout'],
-                $host['retry_interval']
+                $s['host'],
+                $s['port'],
+                $s['persistent'],
+                $s['weight'],
+                $s['timeout'],
+                $s['retry_interval']
             );
 			$memcache->addMethodCall('addServer', $server);
         }
@@ -166,32 +166,16 @@ class LswMemcacheExtension extends Extension
         // Get default memcache options
         $options = $container->getParameter('memcache.default_options');
 
-        // Add overriden options
+        // Set overriden options
         if (isset($config['options'])) {
             foreach ($options as $key => $value) {
                 if (isset($config['options'][$key])) {
-                    if ($key == 'serializer') {
-                        // serializer option needs to be supported and is a constant
-                        if ($value != 'php' && !constant('Memcache::HAVE_' . strtoupper($value))) {
-                            throw new \LogicException("Invalid serializer specified for Memcache: $value");
-                        }
-                        $newValue = constant('Memcache::SERIALIZER_' . strtoupper($value));
-                    } elseif ($key == 'distribution') {
-                        // distribution is defined as a constant
-                        $newValue = constant('Memcache::DISTRIBUTION_' . strtoupper($value));
-                    } else {
-                        $newValue = $config['options'][$key];
-                    }
-                    if ($config['options'][$key]!=$value) {
-                        // not default, add method call and update options
-                        $constant = 'Memcache::OPT_'.strtoupper($key);
-                        $memcache->addMethodCall('setOption', array(constant($constant), $newValue));
-                        $options[$key] = $newValue;
-                    }
-
+                    $options[$key] = $config['options'][$key];
                 }
             }
         }
+        
+        $memcache->addArgument($options);
 
         // Make sure that config values are human readable
         foreach ($options as $key => $value) {

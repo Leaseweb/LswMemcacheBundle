@@ -10,7 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 
 /**
- * Provides a command-line interface for viewing cache client stats
+ * Provides a command-line interface for viewing cache pool stats
  * Based on Beryllium\CacheBundle by Kevin Boyd <beryllium@beryllium.ca>
  */
 class StatisticsCommand extends ContainerAwareCommand
@@ -27,7 +27,7 @@ class StatisticsCommand extends ContainerAwareCommand
         ->setName('memcache:statistics')
         ->setDescription('Display Memcache statistics')
         ->setDefinition(array(
-            new InputArgument('client', InputArgument::REQUIRED, 'The client'),
+            new InputArgument('pool', InputArgument::REQUIRED, 'The pool'),
         ));
    }
 
@@ -41,17 +41,17 @@ class StatisticsCommand extends ContainerAwareCommand
     */
    protected function execute(InputInterface $input, OutputInterface $output)
    {
-     $client = $input->getArgument('client');
+     $pool = $input->getArgument('pool');
      try {
-         $memcache = $this->getContainer()->get('memcache.'.$client);
+         $memcache = $this->getContainer()->get('memcache.'.$pool);
          $output->writeln($this->formatStats($memcache->getStats()));
      } catch (ServiceNotFoundException $e) {
-         $output->writeln("<error>client '$client' is not found</error>");
+         $output->writeln("<error>pool '$pool' is not found</error>");
      }
    }
 
    /**
-    * Choose the client
+    * Choose the pool
     *
     * @param InputInterface  $input  Input interface
     * @param OutputInterface $output Output interface
@@ -61,20 +61,20 @@ class StatisticsCommand extends ContainerAwareCommand
     */
     protected function interact(InputInterface $input, OutputInterface $output)
     {
-        if (!$input->getArgument('client')) {
-            $client = $this->getHelper('dialog')->askAndValidate(
+        if (!$input->getArgument('pool')) {
+            $pool = $this->getHelper('dialog')->askAndValidate(
                 $output,
-                'Please give the client:',
-                function($client)
+                'Please give the pool:',
+                function($pool)
                 {
-                   if (empty($client)) {
-                       throw new \Exception('client can not be empty');
+                   if (empty($pool)) {
+                       throw new \Exception('pool can not be empty');
                    }
 
-                   return $client;
+                   return $pool;
                 }
             );
-            $input->setArgument('client', $client);
+            $input->setArgument('pool', $pool);
         }
     }
 
