@@ -89,25 +89,17 @@ lsw_memcache:
                 - { host: 10.0.0.1, port: 11211, weight: 15 }
                 - { host: 10.0.0.2, port: 11211, weight: 30 }
             options:
-                compression: true
-                serializer: json
-                prefix_key: ""
-                hash: default
-                distribution: consistent
-                libketama_compatible: true
-                buffer_writes: true
-                binary_protocol: true
-                no_block: true
-                tcp_nodelay: false
-                socket_send_size: 4096
-                socket_recv_size: 4096
-                connect_timeout: 1000
-                retry_timeout: 0
-                send_timeout: 0
-                recv_timeout: 0
-                poll_timeout: 1000
-                cache_lookups: false
-                server_failure_limit: 0
+		        allow_failover: true
+		        max_failover_attempts: 20
+		        default_port: 11211
+		        chunk_size: 32768
+		        protocol: ascii
+		        hash_strategy: consistent
+		        hash_function: crc32
+		        redundancy: true
+		        session_redundancy: 2
+		        compress_threshold: 20000
+		        lock_timeout: 15
         sessions:
             servers:
                 - { host: localhost, port: 11212 }
