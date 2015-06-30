@@ -87,8 +87,8 @@ lsw_memcache:
     pools:
         default:
             servers:
-                - { host: 10.0.0.1, port: 11211, weight: 15 }
-                - { host: 10.0.0.2, port: 11211, weight: 30 }
+                - { host: 10.0.0.1, tcp_port: 11211, weight: 15 }
+                - { host: 10.0.0.2, tcp_port: 11211, weight: 30 }
             options:
 		        allow_failover: true
 		        max_failover_attempts: 20
@@ -103,7 +103,7 @@ lsw_memcache:
 		        lock_timeout: 15
         sessions:
             servers:
-                - { host: localhost, port: 11212 }
+                - { host: localhost, tcp_port: 11212 }
 
 ```
 

@@ -154,7 +154,8 @@ class LswMemcacheExtension extends Extension
         foreach ($config['servers'] as $s) {
             $server = array(
                 $s['host'],
-                $s['port'],
+                $s['tcp_port'],
+                $s['udp_port'],
                 $s['persistent'],
                 $s['weight'],
                 $s['timeout'],

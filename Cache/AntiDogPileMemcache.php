@@ -21,7 +21,7 @@ class AntiDogPileMemcache extends LoggingMemcache
      */
     public function getAdp($key)
     {
-        $value = $this->get($key, $flags, $cas);
+    	$value = $this->get($key, $flags, $cas);
         if ($value===false) {
             return false;
         }
@@ -31,8 +31,7 @@ class AntiDogPileMemcache extends LoggingMemcache
         $time = time();
         if ($time>$exp) {
             $value = implode('|', array($time+$ttl, $ttl, json_encode($val)));
-            $result = $this->cas($key, $value, null, 0, $cas);
-
+            $result = $this->cas($key, $value, $flags, 0, $cas);
             if ($result) {
                 return false;
             }
@@ -58,7 +57,7 @@ class AntiDogPileMemcache extends LoggingMemcache
         }
         $time = time();
         $value = implode('|', array($time+$ttl, $ttl, json_encode($value)));
-        $result = $this->set($key, $value, null, 0);
+        $result = $this->set($key, $value);
 
         return $result;
     }

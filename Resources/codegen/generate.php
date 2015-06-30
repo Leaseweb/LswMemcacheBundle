@@ -10,7 +10,7 @@ foreach (array(true,false) as $interface) {
     $lines = file($dir.DIRECTORY_SEPARATOR.'memcache-api.php');
     $class = 0;
     if ($interface) echo "    interface MemcacheInterface {\n";
-    else echo "    class LoggingMemcache extends \\Memcache implements MemcacheInterface, LoggingMemcacheInterface {\n";
+    else echo "    class LoggingMemcache extends \\MemcachePool implements MemcacheInterface, LoggingMemcacheInterface {\n";
     foreach ($lines as $line) {
       if (preg_match('/^\s*class/', $line)) $class++;
       if ($class != 1) continue;
@@ -21,6 +21,7 @@ foreach (array(true,false) as $interface) {
       $arguments = $matches[2];
       preg_match_all('/\$[a-zA-Z_0-9]+/', $arguments, $matches);
       $arguments = implode(',',$matches[0]);
+      $privates = str_replace('$', '$_', $arguments);
       if ($interface) {
       	if ($function != '__construct') {
       		echo str_replace(' {}', ';', $line);
@@ -46,13 +47,18 @@ foreach (array(true,false) as $interface) {
 
 END_OF_PHP;
         else $php = $line.<<<END_OF_PHP
-            if (!\$this->logging) return parent::$function($arguments);
-            \$start = microtime(true);
-            \$name = '$function';
-            \$arguments = array($arguments);
-            \$result = parent::$function($arguments);
-            \$time = microtime(true) - \$start;
-            \$this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            if (\$this->logging) { 
+                \$start = microtime(true);
+                \$name = '$function';
+                \$arguments = array($arguments);
+            }
+            list($privates) = array($arguments);
+            \$result = parent::$function($privates);
+            list($arguments) = array($privates);
+            if (\$this->logging) {
+                \$time = microtime(true) - \$start;
+                \$this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
+            }
             return \$result;
         }
 

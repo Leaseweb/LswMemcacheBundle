@@ -4,7 +4,7 @@ namespace Lsw\MemcacheBundle\Session\Storage;
 /**
  * LockingSessionHandler.
  *
- * Memcache based session storage handler based on the Memcache class
+ * Memcache based session storage handler based on the MemcachePool class
  * provided by the PHP memcache extension with added locking support.
  *
  * @see http://php.net/memcache
@@ -45,7 +45,7 @@ class LockingSessionHandler implements \SessionHandlerInterface
     private $lockMaxWait;
 
     /**
-     * @var \Memcache Memcache driver.
+     * @var \MemcachePool Memcache driver.
      */
     private $memcache;
 
@@ -66,12 +66,12 @@ class LockingSessionHandler implements \SessionHandlerInterface
      *  * prefix: The prefix to use for the memcache keys in order to avoid collision
      *  * expiretime: The time to live in seconds
      *
-     * @param \Memcache $memcache A \Memcache instance
-     * @param array     $options   An associative array of Memcache options
+     * @param \MemcachePool $memcache  A \MemcachePool instance
+     * @param array         $options   An associative array of Memcache options
      *
      * @throws \InvalidArgumentException When unsupported options are passed
      */
-    public function __construct(\Memcache $memcache, array $options = array())
+    public function __construct(\MemcachePool $memcache, array $options = array())
     {
         $this->memcache = $memcache;
 

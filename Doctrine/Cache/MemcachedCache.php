@@ -1,7 +1,7 @@
 <?php
 namespace Lsw\MemcacheBundle\Doctrine\Cache;
 
-use \Memcache;
+use \MemcachePool;
 
 use Doctrine\Common\Cache\Cache;
 use Doctrine\Common\Cache\CacheProvider;
@@ -14,7 +14,7 @@ use Doctrine\Common\Cache\CacheProvider;
 class MemcacheCache extends CacheProvider
 {
     /**
-     * @var Memcache
+     * @var MemcachePool
      */
     private $memcache;
     /**
@@ -25,9 +25,9 @@ class MemcacheCache extends CacheProvider
     /**
      * Sets the memcache instance to use.
      *
-     * @param Memcache $memcache
+     * @param MemcachePool $memcache
      */
-    public function setMemcache(Memcache $memcache)
+    public function setMemcache(MemcachePool $memcache)
     {
         $this->memcache = $memcache;
     }

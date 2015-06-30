@@ -23,8 +23,8 @@ class DogPileTest //extends \PHPUnit_Framework_TestCase
         }
 
         $c = 10;
-        $m = new AntiDogPileMemcache(false);
-        $m->addServer('localhost', 11211);
+        $m = new AntiDogPileMemcache(false,array());
+        $m->addServer('localhost', 11212, 0);
         if ($t==1) {
             echo "THREAD | SECOND | STATUS\n";
         }
