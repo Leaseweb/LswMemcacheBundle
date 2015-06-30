@@ -2,22 +2,14 @@ parameters:
     memcache.doctrine_cache.class: Lsw\MemcacheBundle\Doctrine\Cache\MemcachedCache
     memcache.session_handler.class: Lsw\MemcacheBundle\Session\Storage\LockingSessionHandler
     memcache.default_options:
-        compression: false
-        serializer: php
-        prefix_key: ""
-        hash: default
-        distribution: modula
-        libketama_compatible: false
-        buffer_writes: false
-        binary_protocol: false
-        no_block: false
-        tcp_nodelay: false
-        socket_send_size: ~
-        socket_recv_size: ~
-        connect_timeout: 1000
-        retry_timeout: 0
-        send_timeout: 0
-        recv_timeout: 0
-        poll_timeout: 1000
-        cache_lookups: false
-        server_failure_limit: 0
+        allow_failover: true
+        max_failover_attempts: 20
+        default_port: 11211
+        chunk_size: 32768
+        protocol: ascii
+        hash_strategy: consistent
+        hash_function: crc32
+        redundancy: true
+        session_redundancy: 2
+        compress_threshold: 20000
+        lock_timeout: 15

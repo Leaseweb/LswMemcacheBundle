@@ -2,7 +2,7 @@
 
 {% block toolbar %}
     {% set icon %}
-        <img width="20" height="28" alt="Memcache" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAcCAYAAABh2p9gAAAAAXNSR0IArs4c6QAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB90DGRcHJGLuAHcAAAAZdEVYdENvbW1lbnQAQ3JlYXRlZCB3aXRoIEdJTVBXgQ4XAAACrUlEQVRIx+2UO0xTYRTHz3d7b6FIeUmhviZauaCgpQkIPoIRXyBIEZISJonI04DEGNDFhBBICNrBKJjSmrhonAzKAA7appoymaglTXBoL9gXBQr2Yu9t+7lYINjGxcSl//Hkl99w/icHIJ54/n9Q+/VWkmVZVTAYdEil2bOjGg0XDVQ3NNSLxWKfw+kyvJ56E4glFOTl0pkLDDPrdrma13xrUqWiiPk6Z3Fuh3q7e/bMz397abPbuygBqVAqi2yWuTkmmpCgD+WnUBQFHM/Dktfb4nQ6pivPnR+cnJxMjkDJqSkHMnZnZOEwhuWVlapFZmGqovz0Q712QvKHEAAQxnhz4GdZidvj6R8ZGv7U0dZ+CgBASFEUArTJBDguZdXn6xwfH7M0qRubdwq3FooQIIQAAJCfZXNmzeb3ly5W6kKhUHoUBng+mGm1WicuVJx923qtRQYAQMZsCyHAGIPD4bhqMhivkEKKjMW4PZ4zAZ77WF1ZJSP/egYIQW4eLbLZ7ChmswICaJoW0/n5oqhCjDFgjCFTIoGeW73AB4PmZzp9MQAIdnIJQiG0dnXCQZp+F+ACa0Q0UWJCAlRfroERzf31H35/reXzlzsYQzjCAAAQBAElpcfgsU4b3Lt/3w2j0aAqP3GSJQG2GhYQBBQcKYRqVS2XJZW+6OjobDMZDOzAwMBx+C1CCIFcLoeaOlU4Ry436vW6Js3og8WIgyQIQRgAIDs7C+rVajhcWGD2epeHyopLXkWgtPS0jXA4DLuSkqC+UQ1HixRWjuOHi5XKpzvXRSqUytWSslJOJBKth0Khex9Mpuc3u3uWtkMbPzmmt++2jSRJOcfzgy63W9ugqrNHLfHR2BhBEEiWmprm101ov89Mz+Bo4BOtNjdRlOhnGMZxt68/FH+D8fzD/AKVShqzbU52jQAAAABJRU5ErkJggg==" />
+        <img width="20" height="28" alt="Memcache" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAhCAYAAAC4JqlRAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3wYcFiU0a9/iTQAABA9JREFUWMPtVl1II1cUPncmySSaCCZFgxCzpW0MS4MlyiqD0dgxjaEUYaOCQugaBUsRxSglJbBBMduKRdtUELHUSKHERV+iPoqbIJQVLBbqdrWIC11/iO0aq5huMpnbh+4EW1M3UehL/R7Pdw7nO9+5984AXOMa/3skEgmwWCwpudXV1XMxh8ORMtfpdF5OgEqlAgCAzs5OqdlsLq+srDTZ7fYbPN/T03OuBmMMVqtVbTAYTCaTiQ6FQmKe8/l8mYvAGENNTc0dmqafl5eX46qqqod1dXXtu7u72XzO2NhYMr+pqamAYZiFsrIyTNP0KcMwE62trWU839zcDCzLptUbAQAwDCOMRCL3OI7rRQgBxhhEIlE8KytrSafT3fN6vcGzRWaz+a3j4+OFaDRaAABAEASIxeInCoXiW7fb/UlJSclJusMTAACHh4eAMeYQQn+pQgji8bjw6OjonZWVlbnGxsbPMcYivohlWcxxXAIhBLzgaDR6Y2dnx9nb2/udw+F4m89dXFx8uYCLEIvFZJubm10mk2nL6XRWAgCQJEkQBEGmWCURiUTeXF5eXmxoaJgIBALZDMMk+dHR0dQr0Ov1QgAYAICPLjonAoEACgsLvwaAub29vYloNPoK79o/wXEc5ObmPlOr1R8AwILP5zu9lANJpQhBIpGA7e1tezgcvs+ybPa/NefPRSQSka+vr9/f39//xmaz0TzncrkyF3AWJycnQpZlJemKPjg4uL21tTVjsVg+nZ6elns8HmhpaclsBVfFixVyFEU91uv1Nq/X+/2lHbgMXrhBnJ6e3lxbW+u60gquYoRUKv3FYDAM/KcCEEIgFAqfFRQUfBkMBl/zeDw/d3R0ZC4AYwwAABKJ5IgkyT/S3Dvk5OTMabVa6/z8fBdCKD4+Pp58E9IWwHEciMViUCqV4wqFokckEp3wglI1xhiDXC5/olQq7Uaj8f2pqakHAADd3d3Q3t6ezBWkO3VeXt5P+fn5H2q12ofBYPB1jHEs1TvAcRxIJBJQKpWfURT1hd/vfxoIBAAAYGNjA4qKitJ/iDDGIBaLWY1GM6DT6W5ZrdYHLpcrmkgkCI7jEqlq5HL5j8XFxWXV1dVOv9//FACgr68PAOBc86QDFEVBLBaDs5aSJBmTSqU/lJaWdgwNDa2cdYMkSSAI4m+HjCTJX1Uq1VczMzN3EULxs03cbvfFH6PJyUlWJpNtCwSC3wmCiIpEokdqtfru0tLSLb55KBSC4eFhfsoIRVGPEULPSZL8TSaTzRmNRvPs7OzHCKF4Rn9H9fX1AAAwODiYbTab362oqLA7nc5Xeb6/vz9lnc1me4Om6Tu1tbXv8TGNRgPhcDjze2qz2c7F2traUuaOjIxkFL/GNa7xMvwJ4WuVPrHMR8YAAAAASUVORK5CYII=" />
         <span class="sf-toolbar-status{% if collector.totals.calls > 0 %} sf-toolbar-status-green{% endif %}">{{ collector.totals.calls }}</span>
         {% if collector.totals.calls > 0 %}
             <span class="sf-toolbar-info-piece-additional-detail">in {{ '%0.2f'|format(collector.totals.time * 1000) }} ms</span>
@@ -32,7 +32,7 @@
 {% block menu %}
 <span class="label">
     <span class="icon">
-        <img width="32" height="33" alt="Memcache" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAhCAYAAAC4JqlRAAAAAXNSR0IArs4c6QAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB90DGRcLOjRUchgAAAAZdEVYdENvbW1lbnQAQ3JlYXRlZCB3aXRoIEdJTVBXgQ4XAAAEM0lEQVRYw+1Wa0ybZRR+3q8tY1gwmshGvBGW/ViEBqfSghpgFzdmNhaQy4bZsoEbRcCNIQtEsoTb3Bj9AVWgILDF0UksJNKIl0gQ0RUolFvnmEhSpixeKKATOno5/mAlGyu23S9/9Pn55X3OeZ5zznu+F/DAAw/+DyAiobK5Ob+vry/l5tSU0B2ubmBQVFtdXTw+Pi4mIt5DCZBXVpaGBofQS89vpbjY/breH67ucZWbduSobmuIiF4Jj7hz7Giqkog2uZObIyLOYJg6yBiDjQgGgyFUKpWq3y8tqxseGnraSeV85+fngxmPB5PJ5KUdGEjevWNnf1tr6xGbjXxcEqBQKHje3useBxEYY2BgYIyxlpaWtNyTOf1XlMocIhI4IstkMj/GcStl5zgOf87MPHa2pLQ+MT7+69m52XCnAqanpxmBGMCWvzAsC2EMxtnZDWdLSisypRnfqNvbXyAidi95YWGBWx3wbiW5ycnJiJgdr3VXlJefnzJMbVxLAH8lq4NAACDw8oJGo3lVNzjYPaDV1hPRe4yxv5064ziYLRa+sln57hcdHUm9Gk2BWCK5/MC55WY61HAflsxmnzZVa3ZyQuJAU0NjPBHxFxcXbctkx7CbMBpnn5EeS//4RHZ2W69GE/qggP8Icm8gvkCAiYmJzfKqqk/SUtPUsbGxAYzI6aAxxsA4hp7veva/k5nV81F9fZG9nWu2wIkYnk6r3VUPBDEe3x0ezBbLIx9UyQtvTU97A8jjnPtfIyDHYWR4eDPPHtk9AxjU6Q4QEY97mMVls1rh47Me52QVZLZY3OJaLRaIRCKczM2dYYzZh5BcXdngOIYwiRhNzZfNKpWq3JUCEhGICHwBH8czpHgrM+PXM4WFmQCsnDuuAwI24kxxMR04dOhGqEi0c4O/f6Wr3Oht0aiqrrYQj1O9LJaIOzs7e1aGkJyo9xIIsH3PHiS/mfLPFaWyrKSoqAaAkc/nP+XM+aN+fpBmZWK9UDgql1flX2xs6gBgu28RsVUS6O5atlmtCBGJkJ71tnXGaPw+eMuWLAAj9nNms5k5SrrcazOSD6Zg997XF9rV6qbC/ILTAG473ITkIIivUIi4hDfwokR8S1GryGtsaPgUgMmBz9VkBAYGIud0Hn6a/Lm7IL8g53O1enCtQvO7urpsUZGRK6NsXlpCZHQUDqel3tHr9Z9FiCWnANx0RNbr9UsCr3UEgBERrBYLTuSewnOikN/r6urKFNU1cgBWp1fz4qVLQ9sjoyghLp5a29qo46svb+zdty8KgLMHhresQrawLSqapMfTaezaNTp3oVwpCZc869bdTExKOjw8Nmq62t/32/mKC6UAfF3lflhboxoaHTF1fts1tismJtnthWb/J4SFhQXZiP7S9vf/4c5yDNoU5PuEv/+T83Nzv1z/8fptzwPXAw/cxb9BRtmu8GHExgAAAABJRU5ErkJggg==" />
+        <img width="32" height="33" alt="Memcache" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAhCAYAAAC4JqlRAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3wYcFiU0a9/iTQAABA9JREFUWMPtVl1II1cUPncmySSaCCZFgxCzpW0MS4MlyiqD0dgxjaEUYaOCQugaBUsRxSglJbBBMduKRdtUELHUSKHERV+iPoqbIJQVLBbqdrWIC11/iO0aq5huMpnbh+4EW1M3UehL/R7Pdw7nO9+5984AXOMa/3skEgmwWCwpudXV1XMxh8ORMtfpdF5OgEqlAgCAzs5OqdlsLq+srDTZ7fYbPN/T03OuBmMMVqtVbTAYTCaTiQ6FQmKe8/l8mYvAGENNTc0dmqafl5eX46qqqod1dXXtu7u72XzO2NhYMr+pqamAYZiFsrIyTNP0KcMwE62trWU839zcDCzLptUbAQAwDCOMRCL3OI7rRQgBxhhEIlE8KytrSafT3fN6vcGzRWaz+a3j4+OFaDRaAABAEASIxeInCoXiW7fb/UlJSclJusMTAACHh4eAMeYQQn+pQgji8bjw6OjonZWVlbnGxsbPMcYivohlWcxxXAIhBLzgaDR6Y2dnx9nb2/udw+F4m89dXFx8uYCLEIvFZJubm10mk2nL6XRWAgCQJEkQBEGmWCURiUTeXF5eXmxoaJgIBALZDMMk+dHR0dQr0Ov1QgAYAICPLjonAoEACgsLvwaAub29vYloNPoK79o/wXEc5ObmPlOr1R8AwILP5zu9lANJpQhBIpGA7e1tezgcvs+ybPa/NefPRSQSka+vr9/f39//xmaz0TzncrkyF3AWJycnQpZlJemKPjg4uL21tTVjsVg+nZ6elns8HmhpaclsBVfFixVyFEU91uv1Nq/X+/2lHbgMXrhBnJ6e3lxbW+u60gquYoRUKv3FYDAM/KcCEEIgFAqfFRQUfBkMBl/zeDw/d3R0ZC4AYwwAABKJ5IgkyT/S3Dvk5OTMabVa6/z8fBdCKD4+Pp58E9IWwHEciMViUCqV4wqFokckEp3wglI1xhiDXC5/olQq7Uaj8f2pqakHAADd3d3Q3t6ezBWkO3VeXt5P+fn5H2q12ofBYPB1jHEs1TvAcRxIJBJQKpWfURT1hd/vfxoIBAAAYGNjA4qKitJ/iDDGIBaLWY1GM6DT6W5ZrdYHLpcrmkgkCI7jEqlq5HL5j8XFxWXV1dVOv9//FACgr68PAOBc86QDFEVBLBaDs5aSJBmTSqU/lJaWdgwNDa2cdYMkSSAI4m+HjCTJX1Uq1VczMzN3EULxs03cbvfFH6PJyUlWJpNtCwSC3wmCiIpEokdqtfru0tLSLb55KBSC4eFhfsoIRVGPEULPSZL8TSaTzRmNRvPs7OzHCKF4Rn9H9fX1AAAwODiYbTab362oqLA7nc5Xeb6/vz9lnc1me4Om6Tu1tbXv8TGNRgPhcDjze2qz2c7F2traUuaOjIxkFL/GNa7xMvwJ4WuVPrHMR8YAAAAASUVORK5CYII=" />
     </span>
     <strong>Memcache</strong>
     <span class="count">
@@ -45,7 +45,7 @@
 {% block panel %}
     <h2>Memcache</h2>
     {% for name, calls in collector.calls %}
-        <h3>Statistics for '{{ name }}'</h3>
+        <h3>Statistics for pool '{{ name }}'</h3>
         <table>
         <thead><tr>
         {% for key, value in collector.statistics[name] %}
@@ -61,7 +61,7 @@
         {% endfor %}
         </tr></tbody></table>
 
-        <h3>Calls for '{{ name }}'</h3>
+        <h3>Calls for pool '{{ name }}'</h3>
 
         {% if not collector.totals.calls %}
             <p>
@@ -84,7 +84,7 @@
             </ul>
         {% endif %}
 
-        <h3>Options for '{{ name }}'</h3>
+        <h3>Options for pool '{{ name }}'</h3>
         <pre>
             {%- for key, value in collector.options[name] %}
                 {{- '%-25s'|format(key~':') }} {{ value }}{{ "\n" -}}

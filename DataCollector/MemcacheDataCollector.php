@@ -16,7 +16,7 @@ use Lsw\MemcacheBundle\Cache\LoggingMemcacheInterface;
  */
 class MemcacheDataCollector extends DataCollector
 {
-    private $clients;
+    private $pools;
     private $options;
 
     /**
@@ -24,22 +24,22 @@ class MemcacheDataCollector extends DataCollector
      */
     public function __construct()
     {
-        $this->clients = array();
+        $this->pools = array();
         $this->options = array();
     }
 
     /**
      * Add a Memcache object to the collector
      *
-     * @param string                   $name     Name of the Memcache client
-     * @param array                    $options  Options for Memcache client
+     * @param string                   $name     Name of the Memcache pool
+     * @param array                    $options  Options for Memcache pool
      * @param LoggingMemcacheInterface $memcache Logging Memcache object
      *
      * @return void
      */
     public function addClient($name, $options, LoggingMemcacheInterface $memcache)
     {
-        $this->clients[$name] = $memcache;
+        $this->pools[$name] = $memcache;
         $this->options[$name] = $options;
     }
 
@@ -49,20 +49,20 @@ class MemcacheDataCollector extends DataCollector
     public function collect(Request $request, Response $response, \Exception $exception = null)
     {
         $empty = array('calls'=>array(),'config'=>array(),'options'=>array(),'statistics'=>array());
-        $this->data = array('clients'=>$empty,'total'=>$empty);
-        foreach ($this->clients as $name => $memcache) {
+        $this->data = array('pools'=>$empty,'total'=>$empty);
+        foreach ($this->pools as $name => $memcache) {
             $calls = $memcache->getLoggedCalls();
-            $this->data['clients']['calls'][$name] = $calls;
-            $this->data['clients']['options'][$name] = $this->options[$name];
+            $this->data['pools']['calls'][$name] = $calls;
+            $this->data['pools']['options'][$name] = $this->options[$name];
         }
-        $this->data['clients']['statistics'] = $this->calculateStatistics($this->data['clients']['calls']);
-        $this->data['total']['statistics'] = $this->calculateTotalStatistics($this->data['clients']['statistics']);
+        $this->data['pools']['statistics'] = $this->calculateStatistics($this->data['pools']['calls']);
+        $this->data['total']['statistics'] = $this->calculateTotalStatistics($this->data['pools']['statistics']);
     }
 
     private function calculateStatistics($calls)
     {
         $statistics = array();
-        foreach ($this->data['clients']['calls'] as $name => $calls) {
+        foreach ($this->data['pools']['calls'] as $name => $calls) {
             $statistics[$name] = array('calls'=>0,'time'=>0,'reads'=>0,'hits'=>0,'misses'=>0,'writes'=>0);
             foreach ($calls as $call) {
                 $statistics[$name]['calls'] += 1;
@@ -74,7 +74,7 @@ class MemcacheDataCollector extends DataCollector
                     } else {
                         $statistics[$name]['misses'] += 1;
                     }
-                } elseif ($call->name == 'set') {
+                } elseif (in_array($call->name,array('set','add','cas','increment','decrement','delete'))) {
                     $statistics[$name]['writes'] += 1;
                 }
             }
@@ -112,7 +112,7 @@ class MemcacheDataCollector extends DataCollector
      */
     public function getStatistics()
     {
-        return $this->data['clients']['statistics'];
+        return $this->data['pools']['statistics'];
     }
 
     /**
@@ -133,7 +133,7 @@ class MemcacheDataCollector extends DataCollector
      */
     public function getCalls()
     {
-        return $this->data['clients']['calls'];
+        return $this->data['pools']['calls'];
     }
 
     /**
@@ -143,7 +143,7 @@ class MemcacheDataCollector extends DataCollector
      */
     public function getOptions()
     {
-        return $this->data['clients']['options'];
+        return $this->data['pools']['options'];
     }
 
     /**

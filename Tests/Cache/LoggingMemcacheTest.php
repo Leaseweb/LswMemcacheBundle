@@ -14,9 +14,9 @@ class LoggingMemcacheTest extends \PHPUnit_Framework_TestCase
 {
     public function testConstructAndInterfaces()
     {
-        $cache = new LoggingMemcache('foo');
+        $cache = new LoggingMemcache('foo',array());
 
-        $this->assertInstanceOf('\Memcached', $cache);
+        $this->assertInstanceOf('\MemcachePool', $cache);
         $this->assertInstanceOf('\Lsw\MemcacheBundle\Cache\MemcacheInterface', $cache);
         $this->assertInstanceOf('\Lsw\MemcacheBundle\Cache\LoggingMemcacheInterface', $cache);
     }
@@ -28,7 +28,7 @@ class LoggingMemcacheTest extends \PHPUnit_Framework_TestCase
 	
 	public function testGet()
     {
-    	$m = new LoggingMemcache(false);
+    	$m = new LoggingMemcache(false,array());
         $m->addServer('localhost', 11211);
         $m->set('key', 'value');
         $value = $m->get('key');

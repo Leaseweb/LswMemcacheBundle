@@ -18,13 +18,15 @@ class EnableSessionSupport implements CompilerPassInterface
     {
         // If there is no active session support, return
         if (!$container->hasAlias('session.storage')) {
-            return;
+        	return;
+        }
+        // If auto_load is not enabled, return
+        if (!$container->getParameter('memcache.session_handler.auto_load')) {
+        	return;
         }
         // If the memcache.session_handler service is loaded set the alias
         if ($container->hasDefinition('memcache.session_handler')) {
-            if (!$container->hasAlias('session.handler')) {
-                $container->setAlias('session.handler', 'memcache.session_handler');
-            }
-        }
+            $container->setAlias('session.handler', 'memcache.session_handler');
+        }        	
     }
 }

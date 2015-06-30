@@ -14,7 +14,7 @@ class AntiDogPileMemcacheTest extends \PHPUnit_Framework_TestCase
 {
     public function testConstructAndInterfaces()
     {
-        $cache = new AntiDogPileMemcache('foo');
+        $cache = new AntiDogPileMemcache('foo',array());
 
         $this->assertInstanceOf('\Lsw\MemcacheBundle\Cache\LoggingMemcache', $cache);
     }

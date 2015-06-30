@@ -4,10 +4,10 @@ namespace Lsw\MemcacheBundle\Session\Storage;
 /**
  * LockingSessionHandler.
  *
- * Memcached based session storage handler based on the Memcached class
- * provided by the PHP memcached extension with added locking support.
+ * Memcache based session storage handler based on the MemcachePool class
+ * provided by the PHP memcache extension with added locking support.
  *
- * @see http://php.net/memcached
+ * @see http://php.net/memcache
  *
  * @author Maurits van der Schee <m.vanderschee@leaseweb.com>
  */
@@ -45,9 +45,9 @@ class LockingSessionHandler implements \SessionHandlerInterface
     private $lockMaxWait;
 
     /**
-     * @var \Memcached Memcached driver.
+     * @var \MemcachePool Memcache driver.
      */
-    private $memcached;
+    private $memcache;
 
     /**
      * @var integer Time to live in seconds
@@ -63,17 +63,17 @@ class LockingSessionHandler implements \SessionHandlerInterface
      * Constructor.
      *
      * List of available options:
-     *  * prefix: The prefix to use for the memcached keys in order to avoid collision
+     *  * prefix: The prefix to use for the memcache keys in order to avoid collision
      *  * expiretime: The time to live in seconds
      *
-     * @param \Memcached $memcached A \Memcached instance
-     * @param array      $options   An associative array of Memcached options
+     * @param \MemcachePool $memcache  A \MemcachePool instance
+     * @param array         $options   An associative array of Memcache options
      *
      * @throws \InvalidArgumentException When unsupported options are passed
      */
-    public function __construct(\Memcached $memcached, array $options = array())
+    public function __construct(\MemcachePool $memcache, array $options = array())
     {
-        $this->memcached = $memcached;
+        $this->memcache = $memcache;
 
         if ($diff = array_diff(array_keys($options), array('prefix', 'expiretime', 'locking', 'spin_lock_wait', 'lock_max_wait'))) {
             throw new \InvalidArgumentException(sprintf(
@@ -108,14 +108,10 @@ class LockingSessionHandler implements \SessionHandlerInterface
 
         $this->lockKey = $sessionId.'.lock';
         for ($i=0;$i<$attempts;$i++) {
-            $success = $this->memcached->add($this->prefix.$this->lockKey, '1', $this->lockMaxWait+1);
+            $success = $this->memcache->add($this->prefix.$this->lockKey, '1', null, $this->lockMaxWait+1);
             if ($success) {
                 $this->locked = true;
                 return true;
-            }
-            $status = $this->memcached->getResultCode();
-            if ($status != \Memcached::RES_NOTSTORED && $status != \Memcached::RES_DATA_EXISTS) {
-                break;
             }
             usleep($this->spinLockWait);
         }
@@ -125,7 +121,7 @@ class LockingSessionHandler implements \SessionHandlerInterface
 
     private function unlockSession()
     {
-        $this->memcached->delete($this->prefix.$this->lockKey);
+        $this->memcache->delete($this->prefix.$this->lockKey);
         $this->locked = false;
     }
 
@@ -155,7 +151,7 @@ class LockingSessionHandler implements \SessionHandlerInterface
             }
         }
 
-        return $this->memcached->get($this->prefix.$sessionId) ?: '';
+        return $this->memcache->get($this->prefix.$sessionId) ?: '';
     }
 
     /**
@@ -171,7 +167,7 @@ class LockingSessionHandler implements \SessionHandlerInterface
             }
         }
         
-        return $this->memcached->set($this->prefix.$sessionId, $data, time() + $this->ttl);
+        return $this->memcache->set($this->prefix.$sessionId, $data, null, $this->ttl);
     }
 
     /**
@@ -179,7 +175,7 @@ class LockingSessionHandler implements \SessionHandlerInterface
      */
     public function destroy($sessionId)
     {
-        $this->memcached->delete($this->prefix.$sessionId);
+        $this->memcache->delete($this->prefix.$sessionId);
         $this->close();
         return true;
     }
@@ -189,7 +185,7 @@ class LockingSessionHandler implements \SessionHandlerInterface
      */
     public function gc($lifetime)
     {
-        // not required here because memcached will auto expire the records anyhow.
+        // not required here because memcache will auto expire the records anyhow.
         return true;
     }
 

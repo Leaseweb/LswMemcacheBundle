@@ -1,45 +1,45 @@
 <?php
 namespace Lsw\MemcacheBundle\Doctrine\Cache;
 
-use \Memcached;
+use \MemcachePool;
 
 use Doctrine\Common\Cache\Cache;
 use Doctrine\Common\Cache\CacheProvider;
 
 /**
- * Memcached cache provider (with prefix support).
+ * Memcache cache provider (with prefix support).
  *
  * Based on: Doctrine/Common/Cache/MemcacheCache.php
  */
-class MemcachedCache extends CacheProvider
+class MemcacheCache extends CacheProvider
 {
     /**
-     * @var Memcached
+     * @var MemcachePool
      */
-    private $memcached;
+    private $memcache;
     /**
      * @var string prefix
      */
     private $prefix;
 
     /**
-     * Sets the memcached instance to use.
+     * Sets the memcache instance to use.
      *
-     * @param Memcached $memcached
+     * @param MemcachePool $memcache
      */
-    public function setMemcached(Memcached $memcached)
+    public function setMemcache(MemcachePool $memcache)
     {
-        $this->memcached = $memcached;
+        $this->memcache = $memcache;
     }
 
     /**
-     * Gets the memcached instance used by the cache.
+     * Gets the memcache instance used by the cache.
      *
-     * @return Memcached
+     * @return Memcache
      */
-    public function getMemcached()
+    public function getMemcache()
     {
-        return $this->memcached;
+        return $this->memcache;
     }
 
     /**
@@ -67,7 +67,7 @@ class MemcachedCache extends CacheProvider
      */
     protected function doFetch($id)
     {
-        return $this->memcached->get($this->prefix.$id);
+        return $this->memcache->get($this->prefix.$id);
     }
 
     /**
@@ -75,7 +75,7 @@ class MemcachedCache extends CacheProvider
      */
     protected function doContains($id)
     {
-        return (bool) $this->memcached->get($this->prefix.$id);
+        return (bool) $this->memcache->get($this->prefix.$id);
     }
 
     /**
@@ -86,7 +86,7 @@ class MemcachedCache extends CacheProvider
         if ($lifeTime > 30 * 24 * 3600) {
             $lifeTime = time() + $lifeTime;
         }
-        return $this->memcached->set($this->prefix.$id, $data, (int) $lifeTime);
+        return $this->memcache->set($this->prefix.$id, $data, null, (int) $lifeTime);
     }
 
     /**
@@ -94,7 +94,7 @@ class MemcachedCache extends CacheProvider
      */
     protected function doDelete($id)
     {
-        return $this->memcached->delete($this->prefix.$id);
+        return $this->memcache->delete($this->prefix.$id);
     }
 
     /**
@@ -102,7 +102,7 @@ class MemcachedCache extends CacheProvider
      */
     protected function doFlush()
     {
-        return $this->memcached->flush();
+        return $this->memcache->flush();
     }
 
     /**
@@ -110,7 +110,7 @@ class MemcachedCache extends CacheProvider
      */
     protected function doGetStats()
     {
-        $stats = $this->memcached->getStats();
+        $stats = $this->memcache->getStats();
         return array(
             Cache::STATS_HITS   => $stats['get_hits'],
             Cache::STATS_MISSES => $stats['get_misses'],
