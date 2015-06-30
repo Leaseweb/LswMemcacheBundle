@@ -2,7 +2,7 @@ LswMemcacheBundle
 =================
 [![Build Status](https://travis-ci.org/LeaseWeb/LswMemcacheBundle.svg)](https://travis-ci.org/LeaseWeb/LswMemcacheBundle)
 
-![screenshot](http://www.leaseweblabs.com/wp-content/uploads/2013/03/memcache_debug.png)
+![screenshot](http://www.leaseweblabs.com/wp-content/uploads/2015/06/memcache_v2.png)
 
 If you want to optimize your web application for high load and/or low load times Memcache is an indispensable tool.
 It will manage your session data without doing disk I/O on web or database servers. You can also run it as a
@@ -12,7 +12,7 @@ caching support or expensive API calls by implementing the caching using Memcach
 This Symfony2 bundle will provide Memcache integration into Symfony2 and Doctrine for session storage and caching. 
 It has full Web Debug Toolbar integration that allows you to analyze and debug the cache behavior and performance.
 
-[Read the LeaseWebLabs blog about LswMemcacheBundle](http://www.leaseweblabs.com/2013/03/memcache-support-in-symfony2-wdt/)
+[Read the LeaseWebLabs blog about LswMemcacheBundle](http://www.leaseweblabs.com/2015/06/version-2-of-our-memcache-bundle-for-symfony-is-released/)
 
 ### Requirements
 
