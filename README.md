@@ -110,9 +110,9 @@ lsw_memcache:
 ### Session Support ###
 
 This bundle also provides support for storing session data on Memcache servers. To enable session support
-you will have to enable it through the ```session``` key (auto_load is true by default). Note that the only
-required subkey of the session support is ```pool``` (a valid pool). You can also specify a key prefix
-and an ttl.
+you will have to enable it through the ```session``` key (```auto_load``` is true by default). Note that the only
+required subkey of the session support is ```pool``` (a valid pool). You can also specify a key ```prefix```
+and a ```ttl```.
 
 ```yml
 lsw_memcache:
@@ -133,7 +133,7 @@ Note that the session locking is enabled by default and the default spin lock is
 This bundle also provides support for Doctrine caching on Memcache servers. To enable Doctrine caching
 you will have to enable it through the ```doctrine``` key. Note that you can specify all three kinds of
 Doctrine caching: 'metadata', 'result' and 'query'. The required keys within those subkeys are both 
-```pool``` (a valid pool) and ```entity_manager``` (normally: default). You can also specify a prefix.
+```pool``` (a valid pool) and ```entity_manager``` (normally: default). You can also specify a ```prefix```.
 
 ```yml
 lsw_memcache:
@@ -156,9 +156,9 @@ lsw_memcache:
 
 Let us examine a high traffic website case and see how Memcache behaves:
 
-Your cache is stored for 90 minutes. It takes about 3 second to calculate the cache value and 1 ms second to read from cache the cache value. You have about 5000 requests per second and that the value is cached. You get 5000 requests per second taking about 5000 ms to read the values from cache. You might think that that is not possible since 5000 > 1000, but that depends on the number of worker processes on your web server  Let's say it is about 100 workers (under high load) with 75 threads each. Your web requests take about 20 ms each. Whenever the cache invalidates (after 90 minutes), during 3 seconds, there will be 15000 requests getting a cache miss. All the threads getting a miss will start to calculate the cache value (because they don't know the other threads are doing the same). This means that during (almost) 3 seconds the server wont answer a single request, but the requests keep coming in. Since each worker has 75 threads (holding 100 x 75 connections), the amount of workers has to go up to be able to process them.
+Your cache is stored for 90 minutes. It takes about 3 second to calculate the cache value and 1 ms second to read from cache the cache value. You have about 5000 requests per second and that the value is cached. You get 5000 requests per second taking about 5000 ms to read the values from cache. You might think that that is not possible since 5000 > 1000, but that depends on the number of worker processes on your web server. Let's say it is about 100 workers (under high load) with 75 threads each. Your web requests take about 20 ms each. Whenever the cache invalidates (after 90 minutes), during 3 seconds, there will be 15000 requests getting a cache miss. All the threads getting a miss will start to calculate the cache value (because they don't know the other threads are doing the same). This means that during (almost) 3 seconds the server wont answer a single request, but the requests keep coming in. Since each worker has 75 threads (holding 100 x 75 connections), the amount of workers has to go up to be able to process them.
 
-The heavy forking will cause extra CPU usage and the each worker will use extra RAM. This unexpected increase in RAM and CPU is called the 'dog pile' effect or 'stampeding herd' and is very unwelcome during peak hours on a web service.
+The heavy forking will cause extra CPU usage and the each worker will use extra RAM. This unexpected increase in RAM and CPU is called the 'dog pile' effect or 'stampeding herd' or 'thundering herd' and is very unwelcome during peak hours on a web service.
 
 There is a solution: we serve the old cache entries while calculating the new value and by using an atomic read and write operation we can make sure only one thread will receive a cache miss when the content is invalidated. The algorithm is implemented in AntiDogPileMemcache class in LswMemcacheBundle. It provides the getAdp() and setAdp() functions that can be used as replacements for the normal get and set.
 
@@ -174,7 +174,7 @@ Please note:
 
 LswMemcacheBundle uses the 'memcache' PHP extension (memcached client) and not the libmemcache based 'memcached' PHP extension.
 
-Mojor version 1 of this bundle used the other extension. In major version 2 of this bundle the full featured version 3.0.8 of PECL "memcache" (without the 'd') was chosen, due to it's complete feature set and good design and support.
+Major version 1 of this bundle used the other extension. In major version 2 of this bundle the full featured version 3.0.8 of PECL "memcache" (without the 'd') was chosen, due to it's complete feature set and good design and support.
 
 ### Known issues
 
