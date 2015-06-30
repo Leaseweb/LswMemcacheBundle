@@ -56,7 +56,7 @@ lsw_memcache:
     pools:
         default:
             servers:
-              - { host: localhost, port: 11211 }
+              - { host: localhost, tcp_port: 11211 }
 ```
 
 Install the following dependencies (in Debian based systems using 'apt'):
