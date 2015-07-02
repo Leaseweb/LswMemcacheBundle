@@ -112,7 +112,6 @@ class FirewallHandler
 		
 		$request = $event->getRequest();
 		if ($this->reverseProxies) {
-			var_dump($this->reverseProxies);
 			$request->setTrustedProxies($this->reverseProxies);
 		}
 		if ($this->xForwardedFor) {
