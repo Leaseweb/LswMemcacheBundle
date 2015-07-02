@@ -164,7 +164,7 @@ and a ```concurrency``` (default is 10). If you use one or more reverse proxies,
 ```yml
 lsw_memcache:
     firewall:
-        pool: firewall
+        pool: firewall   #set pool: null to dodge it
         prefix: "firewall_"
         concurrency: 10
         reverse_proxies: [10.0.0.1]
