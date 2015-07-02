@@ -195,7 +195,6 @@ class Configuration implements ConfigurationInterface
     	$node = $tree->root('firewall');
     
     	$node
-            ->addDefaultsIfNotSet()
             ->children()
                 ->scalarNode('pool')->isRequired()->end()
                 ->scalarNode('prefix')->defaultValue('lmbf')->end()
