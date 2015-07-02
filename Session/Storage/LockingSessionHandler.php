@@ -65,6 +65,9 @@ class LockingSessionHandler implements \SessionHandlerInterface
      * List of available options:
      *  * prefix: The prefix to use for the memcache keys in order to avoid collision
      *  * expiretime: The time to live in seconds
+     *  * locking: Indicates whether session locking is enabled or not
+     *  * spin_lock_wait: Microseconds to wait between acquire lock tries
+     *  * lock_max_wait: Maximum amount of seconds to wait for the lock
      *
      * @param \MemcachePool $memcache  A \MemcachePool instance
      * @param array         $options   An associative array of Memcache options

@@ -1,15 +1,4 @@
 parameters:
     memcache.doctrine_cache.class: Lsw\MemcacheBundle\Doctrine\Cache\MemcachedCache
     memcache.session_handler.class: Lsw\MemcacheBundle\Session\Storage\LockingSessionHandler
-    memcache.default_options:
-        allow_failover: true
-        max_failover_attempts: 20
-        default_port: 11211
-        chunk_size: 32768
-        protocol: ascii
-        hash_strategy: consistent
-        hash_function: crc32
-        redundancy: true
-        session_redundancy: 2
-        compress_threshold: 20000
-        lock_timeout: 15
+    memcache.firewall_handler.class: Lsw\MemcacheBundle\Firewall\FirewallHandler

@@ -152,6 +152,25 @@ lsw_memcache:
     # pools
 ```
 
+### Firewall Support ###
+
+This bundle also provides support a firewall that limits the number of concurrent requests per IP address.
+It maintains a counter of running requests per IP address and delays (throttles) the requests if nessecary. 
+To enable firewall support you will have to enable it through the ```firewall``` key. Note that the only
+required subkey of the firewall support is ```pool``` (a valid pool). You can also specify a key ```prefix```
+and a ```concurrency``` (default is 10). If you use one or more reverse proxies, then specify them in the
+```reverse_proxies``` key.
+
+```yml
+lsw_memcache:
+    firewall:
+        pool: firewall
+        prefix: "firewall_"
+        concurrency: 10
+        reverse_proxies: [10.0.0.1]
+    # pools
+```
+
 ### ADP: Anti Dog Pile
 
 Let us examine a high traffic website case and see how Memcache behaves:

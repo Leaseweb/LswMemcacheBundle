@@ -25,6 +25,7 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->append($this->addSessionSupportSection())
             ->append($this->addDoctrineSection())
+            ->append($this->addFirewallSection())
             ->append($this->addClientsSection())
         ;
 
@@ -117,7 +118,7 @@ class Configuration implements ConfigurationInterface
             ->children()
                 ->scalarNode('pool')->isRequired()->end()
                 ->booleanNode('auto_load')->defaultTrue()->end()
-                ->scalarNode('prefix')->end()
+                ->scalarNode('prefix')->defaultValue('lmbs')->end()
                 ->scalarNode('ttl')->end()
                 ->booleanNode('locking')->defaultTrue()->end()
                 ->scalarNode('spin_lock_wait')->defaultValue(150000)->end()
@@ -158,7 +159,7 @@ class Configuration implements ConfigurationInterface
                     ->canBeUnset()
                     ->children()
                         ->scalarNode('pool')->isRequired()->end()
-                        ->scalarNode('prefix')->defaultValue('')->end()
+                        ->scalarNode('prefix')->defaultValue('lmbd')->end()
                     ->end()
                     ->fixXmlConfig('entity_manager')
                     ->children()
@@ -182,6 +183,53 @@ class Configuration implements ConfigurationInterface
 
         return $node;
     }
+    
+    /**
+     * Configure the "lsw_memcache.firewall" section
+     *
+     * @return ArrayNodeDefinition
+     */
+    private function addFirewallSection()
+    {
+    	$tree = new TreeBuilder();
+    	$node = $tree->root('firewall');
+    
+    	$node
+            ->addDefaultsIfNotSet()
+            ->children()
+                ->scalarNode('pool')->isRequired()->end()
+                ->scalarNode('prefix')->defaultValue('lmbf')->end()
+                ->scalarNode('concurrency')
+                    ->defaultValue(10)
+                    ->validate()
+                    ->ifTrue(function ($v) { return !is_numeric($v); })
+                        ->thenInvalid('concurrency must be numeric')
+                    ->end()
+                ->end()
+                ->scalarNode('spin_lock_wait')
+                    ->defaultValue(150000)
+                    ->validate()
+                    ->ifTrue(function ($v) { return !is_numeric($v); })
+                        ->thenInvalid('spin_lock_wait must be numeric')
+                	->end()
+                ->end()
+                ->scalarNode('lock_max_wait')
+                    ->defaultValue(300)
+                    ->validate()
+                    ->ifTrue(function ($v) { return !is_numeric($v); })
+                        ->thenInvalid('lock_max_wait must be numeric')
+                    ->end()
+                ->end()
+                ->arrayNode('reverse_proxies')
+                    ->defaultValue(array())
+                    ->prototype('scalar')->end()
+                ->end()
+                ->scalarNode('x_forwarded_for')->defaultFalse()->end()
+            ->end()
+        ->end();
+    	
+    	return $node;
+    }
 
     /**
      * Configure the "lsw_memcache.options" section
@@ -196,8 +244,9 @@ class Configuration implements ConfigurationInterface
         // Memcache only configs
         
         $node
+            ->addDefaultsIfNotSet()
             ->children()
-	            ->booleanNode('allow_failover')->defaultTrue()->end()
+                ->booleanNode('allow_failover')->defaultTrue()->end()
                 ->scalarNode('max_failover_attempts')
 		            ->defaultValue(20)
 		            ->validate()
