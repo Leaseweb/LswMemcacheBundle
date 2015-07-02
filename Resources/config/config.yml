@@ -1,4 +1,4 @@
 parameters:
-    memcache.doctrine_cache.class: Lsw\MemcacheBundle\Doctrine\Cache\MemcachedCache
+    memcache.doctrine_cache.class: Lsw\MemcacheBundle\Doctrine\Cache\MemcacheCache
     memcache.session_handler.class: Lsw\MemcacheBundle\Session\Storage\LockingSessionHandler
     memcache.firewall_handler.class: Lsw\MemcacheBundle\Firewall\FirewallHandler
