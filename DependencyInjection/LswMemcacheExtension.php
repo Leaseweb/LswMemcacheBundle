@@ -33,6 +33,8 @@ class LswMemcacheExtension extends Extension
 
         if (isset($config['session'])) {
             $this->enableSessionSupport($config, $container);
+        } else {
+        	$container->setParameter('memcache.session_handler.auto_load',false);
         }
         if (isset($config['doctrine'])) {
           $this->loadDoctrine($config, $container);
