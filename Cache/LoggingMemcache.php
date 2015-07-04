@@ -1,11 +1,6 @@
 <?php
 namespace Lsw\MemcacheBundle\Cache;
 
-// for hhvm compatibility
-if (!class_exists('MemcachePool',false)){
-    class \MemcachePool extends \Memcache {};
-}
-
 class LoggingMemcache extends \MemcachePool implements MemcacheInterface, LoggingMemcacheInterface {
     public function __construct($logging) {
         $this->calls = array();
