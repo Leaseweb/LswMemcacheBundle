@@ -1,6 +1,7 @@
+[![Build Status](https://travis-ci.org/LeaseWeb/LswMemcacheBundle.svg)](https://travis-ci.org/LeaseWeb/LswMemcacheBundle)
+
 LswMemcacheBundle
 =================
-[![Build Status](https://travis-ci.org/LeaseWeb/LswMemcacheBundle.svg)](https://travis-ci.org/LeaseWeb/LswMemcacheBundle)
 
 ![screenshot](http://www.leaseweblabs.com/wp-content/uploads/2015/06/memcache_v2.png)
 
