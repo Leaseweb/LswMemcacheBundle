@@ -18,7 +18,7 @@ It has full Web Debug Toolbar integration that allows you to analyze and debug t
 ### Requirements
 
 - PHP 5.3.10 or higher
-- php-memcache 3.0.8 or higher
+- php-memcache 3.0.6 or higher
 - memcached 1.4 or higher  
 
 NB: This bundle no longer uses the PHP "memcached" extension that uses "libmemcached", see "Considerations". 
