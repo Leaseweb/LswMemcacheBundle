@@ -2,7 +2,9 @@
 namespace Lsw\MemcacheBundle\Cache;
 
 // for hhvm compatibility
-defined('MemcachePool') or define('MemcachePool', 'Memcache');
+if (!class_exists('MemcachePool',false)){
+    class \MemcachePool extends \Memcache {};
+}
 
 class LoggingMemcache extends \MemcachePool implements MemcacheInterface, LoggingMemcacheInterface {
     public function __construct($logging) {
