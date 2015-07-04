@@ -1,6 +1,9 @@
 <?php
 namespace Lsw\MemcacheBundle\Cache;
 
+// for hhvm compatibility
+defined('MemcachePool') or define('MemcachePool', 'Memcache');
+
 class LoggingMemcache extends \MemcachePool implements MemcacheInterface, LoggingMemcacheInterface {
     public function __construct($logging) {
         $this->calls = array();
