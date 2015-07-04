@@ -12,6 +12,7 @@ services:
    - memcached
 
 env:
+   - PECL_MEMCACHE=memcache-3.0.6
    - PECL_MEMCACHE=memcache-3.0.8
 
 before_script:
