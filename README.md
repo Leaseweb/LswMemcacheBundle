@@ -1,7 +1,7 @@
 [![Build Status](https://travis-ci.org/LeaseWeb/LswMemcacheBundle.svg)](https://travis-ci.org/LeaseWeb/LswMemcacheBundle)
 [![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/LeaseWeb/LswMemcacheBundle.svg)](http://isitmaintained.com/project/LeaseWeb/LswMemcacheBundle "Average time to resolve an issue")
 [![Percentage of issues still open](http://isitmaintained.com/badge/open/LeaseWeb/LswMemcacheBundle.svg)](http://isitmaintained.com/project/LeaseWeb/LswMemcacheBundle "Percentage of issues still open")
-
+[![Total Downloads](https://img.shields.io/packagist/dt/leaseweb/memcache-bundle.svg?style=flat-square)](https://packagist.org/packages/leaseweb/memcache-bundle)
 
 LswMemcacheBundle
 =================
