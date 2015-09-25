@@ -158,7 +158,11 @@ class LoggingMemcache extends \MemcachePool implements MemcacheInterface, Loggin
             $arguments = array($type,$slabid,$limit);
         }
         list($_type,$_slabid,$_limit) = array($type,$slabid,$limit);
-        $result = parent::getStats($_type,$_slabid,$_limit);
+        if ($_type == '') {
+            $result = parent::getStats();
+        } else {
+            $result = parent::getStats($_type, $_slabid, $_limit);
+        }
         list($type,$slabid,$limit) = array($_type,$_slabid,$_limit);
         if ($this->logging) {
             $time = microtime(true) - $start;
@@ -173,7 +177,11 @@ class LoggingMemcache extends \MemcachePool implements MemcacheInterface, Loggin
             $arguments = array($type,$slabid,$limit);
         }
         list($_type,$_slabid,$_limit) = array($type,$slabid,$limit);
-        $result = parent::getExtendedStats($_type,$_slabid,$_limit);
+        if ($_type == '') {
+            $result = parent::getExtendedStats();
+        } else {
+            $result = parent::getExtendedStats($_type, $_slabid, $_limit);
+        }
         list($type,$slabid,$limit) = array($_type,$_slabid,$_limit);
         if ($this->logging) {
             $time = microtime(true) - $start;
