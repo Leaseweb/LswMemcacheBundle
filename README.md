@@ -78,7 +78,7 @@ When you want to use the cache from the controller you can simply call:
     $this->get('memcache.default')->get('someKey');
 
 The above example shows how to store value 'someValue' under key 'someKey' for a maximum of $timeToLive
-seconds (the 0 parameter are the 'flags'). In the second line the value is retrieved from Memcache.
+seconds. In the second line the value is retrieved from Memcache.
 If the key can not be found or the specified number of seconds have passed the 'get' function returns
 the value 'false'.
 
