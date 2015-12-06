@@ -199,7 +199,9 @@ class LswMemcacheExtension extends Extension
                 $s['timeout'],
                 $s['retry_interval']
             );
-			$memcache->addMethodCall('addServer', $server);
+            if ($s['host']) {
+                $memcache->addMethodCall('addServer', $server);
+            }
         }
         
         $memcache->addArgument($config['options']);
