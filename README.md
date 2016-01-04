@@ -26,6 +26,8 @@ It has full Web Debug Toolbar integration that allows you to analyze and debug t
 
 NB: This bundle no longer uses the PHP "memcached" extension that uses "libmemcached", see "Considerations". 
 
+PHP7 support is currently available by compiling and installing: https://github.com/websupport-sk/pecl-memcache
+
 ### Installation
 
 To install LswMemcacheBundle with Composer just add the following to your 'composer.json' file:
