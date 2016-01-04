@@ -26,7 +26,7 @@ It has full Web Debug Toolbar integration that allows you to analyze and debug t
 
 NB: This bundle no longer uses the PHP "memcached" extension that uses "libmemcached", see "Considerations". 
 
-PHP7 support is currently (experimentally) available by compiling and installing: https://github.com/websupport-sk/pecl-memcache
+PHP7 support is currently (experimentally) available by compiling and installing: https://github.com/websupport-sk/pecl-memcache/tree/php7
 
 ### Installation
 
