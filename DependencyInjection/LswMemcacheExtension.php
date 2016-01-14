@@ -100,7 +100,11 @@ class LswMemcacheExtension extends Extension
             $pool = new Reference(sprintf('memcache.%s', $cache['pool']));
             foreach ($cache['entity_managers'] as $em) {
                 $def = new Definition($container->getParameter('memcache.doctrine_cache.class'));
-                $def->setScope(ContainerInterface::SCOPE_CONTAINER);
+                if (method_exists($def, 'setShared')) { // Symfony 2.8+
+                    $def->setShared(true);
+                } else { // For Symfony <2.8 compatibility
+                    $def->setScope(ContainerInterface::SCOPE_CONTAINER);
+                }
                 $def->addMethodCall('setMemcache', array($pool));
                 if ($cache['prefix']) {
                     $def->addMethodCall('setPrefix', array($cache['prefix']));
@@ -109,7 +113,11 @@ class LswMemcacheExtension extends Extension
             }
             foreach ($cache['document_managers'] as $dm) {
                 $def = new Definition($container->getParameter('memcache.doctrine_cache.class'));
-                $def->setScope(ContainerInterface::SCOPE_CONTAINER);
+                if (method_exists($def, 'setShared')) { // Symfony 2.8+
+                    $def->setShared(true);
+                } else { // For Symfony <2.8 compatibility
+                    $def->setScope(ContainerInterface::SCOPE_CONTAINER);
+                }
                 $def->addMethodCall('setMemcache', array($pool));
                 if ($cache['prefix']) {
                     $def->addMethodCall('setPrefix', array($cache['prefix']));
