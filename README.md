@@ -13,7 +13,7 @@ It will manage your session data without doing disk I/O on web or database serve
 central object storage for your website. In this role it is used for caching database queries using the Doctrine 
 caching support or expensive API calls by implementing the caching using Memcache "get" and "set" commands.
 
-This Symfony2 bundle will provide Memcache integration into Symfony2 and Doctrine for session storage and caching. 
+This Symfony bundle will provide Memcache integration into Symfony and Doctrine for session storage and caching. 
 It has full Web Debug Toolbar integration that allows you to analyze and debug the cache behavior and performance.
 
 [Read the LeaseWebLabs blog about LswMemcacheBundle](http://www.leaseweblabs.com/2015/06/version-2-of-our-memcache-bundle-for-symfony-is-released/)
