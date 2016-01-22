@@ -52,9 +52,8 @@ class LoggingMemcache extends \MemcachePool implements MemcacheInterface, Loggin
             $name = 'getVersion';
             $arguments = array();
         }
-        list() = array();
         $result = parent::getVersion();
-        list() = array();
+
         if ($this->logging) {
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
@@ -255,9 +254,8 @@ class LoggingMemcache extends \MemcachePool implements MemcacheInterface, Loggin
             $name = 'close';
             $arguments = array();
         }
-        list() = array();
         $result = parent::close();
-        list() = array();
+
         if ($this->logging) {
             $time = microtime(true) - $start;
             $this->calls[] = (object) compact('start', 'time', 'name', 'arguments', 'result');
