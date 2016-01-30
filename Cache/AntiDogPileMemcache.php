@@ -61,5 +61,26 @@ class AntiDogPileMemcache extends LoggingMemcache
 
         return $result;
     }
+    
+    /**
+     * Function to delete value by key using Anti-Dog-Pile algorithm.
+     * NB: Use this function for cache invalidation under high load
+     *
+     * @param string $key   Key of the value you are deleting
+     *
+     * @return boolean True on success, false on failure
+     */
+    public function deleteAdp($key)
+    {
+        $value = $this->get($key);
+        if ($value===false) {
+            return false;
+        }
+        list($exp, $ttl, $val) = explode('|', $value, 3);
+        $time = time();
+        $value = implode('|', array($time-1, $ttl, $val));
+        $result = $this->set($key, $value);
 
+        return $result;
+    }
 }
