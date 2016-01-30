@@ -185,14 +185,14 @@ Your cache is stored for 90 minutes. It takes about 3 second to calculate the ca
 
 The heavy forking will cause extra CPU usage and the each worker will use extra RAM. This unexpected increase in RAM and CPU is called the 'dog pile' effect or 'stampeding herd' or 'thundering herd' and is very unwelcome during peak hours on a web service.
 
-There is a solution: we serve the old cache entries while calculating the new value and by using an atomic read and write operation we can make sure only one thread will receive a cache miss when the content is invalidated. The algorithm is implemented in AntiDogPileMemcache class in LswMemcacheBundle. It provides the getAdp() and setAdp() functions that can be used as replacements for the normal get and set.
+There is a solution: we serve the old cache entries while calculating the new value and by using an atomic read and write operation we can make sure only one thread will receive a cache miss when the content is invalidated. The algorithm is implemented in AntiDogPileMemcache class in LswMemcacheBundle. It provides the getAdp(), setAdp() and deleteAdp() functions that can be used as replacements for the normal get, set and delete.
 
 Please note:
 
 - ADP might not be needed if you have low amount of hits or when calculating the new value goes relatively fast.
 - ADP might not be needed if you can break up the big calculation into smaller, maybe even with different timeouts for each part.
 - ADP might get you older data than the invalidation that is specified. Especially when a thread/worker gets "false" for "get" request, but fails to "set" the new calculated value afterwards.
-- ADP's "getAdp" and ADP "setAdp" are more expensive than the normal "get" and "set", slowing down all cache hits.
+- ADP's "getAdp", "setAdp" and "deleteAdp" are more expensive than the normal "get", "set" and "delete", slowing down all cache hits.
 - ADP does not guarantee that the dog pile will not occur. Restarting Memcache, flushing data or not enough RAM will also get keys evicted and you will run into the problem anyway.
 
 ### Considerations
