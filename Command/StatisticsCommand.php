@@ -62,18 +62,7 @@ class StatisticsCommand extends ContainerAwareCommand
     protected function interact(InputInterface $input, OutputInterface $output)
     {
         if (!$input->getArgument('pool')) {
-            $pool = $this->getHelper('dialog')->askAndValidate(
-                $output,
-                'Please give the pool:',
-                function($pool)
-                {
-                   if (empty($pool)) {
-                       throw new \Exception('pool can not be empty');
-                   }
-
-                   return $pool;
-                }
-            );
+            $pool = (new InteractHelper())->askForPool($this, $input, $output);
             $input->setArgument('pool', $pool);
         }
     }
