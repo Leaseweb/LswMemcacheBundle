@@ -44,7 +44,7 @@ class StatisticsCommand extends ContainerAwareCommand
      $pool = $input->getArgument('pool');
      try {
          $memcache = $this->getContainer()->get('memcache.'.$pool);
-         $output->writeln($this->formatStats($memcache->getStats()));
+         $output->writeln($this->formatStats($memcache->getExtendedStats()));
      } catch (ServiceNotFoundException $e) {
          $output->writeln("<error>pool '$pool' is not found</error>");
      }
