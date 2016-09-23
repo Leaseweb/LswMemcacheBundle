@@ -4,6 +4,6 @@ parameters:
 
 services:
     memcache.data_collector:
-        class: %memcache.data_collector.class%
+        class: "%memcache.data_collector.class%"
         tags:
-            - { name: data_collector, template: %memcache.data_collector.template%, id:"memcache"}
+            - { name: data_collector, template: "%memcache.data_collector.template%", id:"memcache"}
