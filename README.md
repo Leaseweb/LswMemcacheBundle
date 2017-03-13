@@ -134,6 +134,27 @@ lsw_memcache:
 
 Note that the session locking is enabled by default and the default spin lock is set to poll every 150 milliseconds (150000 microseconds).
 
+### Session Management for applications running behind a load balancer ###
+
+When your application is running on multiple servers you have to be aware that all your instances should be comunicating with 1 Caching server for consistency; otherwise each instance would have its own session and this would produce unexpected results.
+
+In order for you to avoid the problem described above you have to add LockingSessionHandler as service. By doing this, all your instances will use the session handler and the session handler would store the data in the configured memcache server.
+
+```yml
+my.memcache.service:
+    class: Memcache
+    calls:
+        - [addServer, ['your_memcache_address', 'your_memcache_port']] 
+
+my.memcached.session.handler:
+    class: Lsw\MemcacheBundle\Session\Storage\LockingSessionHandler
+   arguments:
+       - "@my.memcache.service"
+       - prefix: 'your_prefix'
+       - expiretime: 'your_expire_time'
+```
+
+
 ### Doctrine Support ###
 
 This bundle also provides support for Doctrine caching on Memcache servers. To enable Doctrine caching
