@@ -68,7 +68,8 @@ class ClearCommand extends ContainerAwareCommand
     protected function interact(InputInterface $input, OutputInterface $output)
     {
         if (!$input->getArgument('pool')) {
-            $pool = (new InteractHelper())->askForPool($this, $input, $output);
+            $interactHelper = new InteractHelper();
+            $pool = $interactHelper->askForPool($this, $input, $output);
             $input->setArgument('pool', $pool);
         }
     }
