@@ -85,7 +85,9 @@ class LswMemcacheExtension extends Extension
         $definition
             ->addArgument(new Reference(sprintf('memcache.%s', $pool)))
             ->addArgument($options);
-       	$this->addClassesToCompile(array($definition->getClass()));
+        if (PHP_VERSION_ID < 70000) {
+           	$this->addClassesToCompile(array($definition->getClass()));
+        }
     }
 
     /**
@@ -159,7 +161,9 @@ class LswMemcacheExtension extends Extension
     	    ->addArgument($options);
     	$definition->addTag('kernel.event_listener', array('event'=>'kernel.request','method'=>'onKernelRequest'));
     	$definition->addTag('kernel.event_listener', array('event'=>'kernel.terminate','method'=>'onKernelTerminate'));
-    	$this->addClassesToCompile(array($definition->getClass()));
+        if (PHP_VERSION_ID < 70000) {
+        	$this->addClassesToCompile(array($definition->getClass()));
+        }
     }
 
     /**
