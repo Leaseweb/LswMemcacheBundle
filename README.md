@@ -1,3 +1,9 @@
+## Deprecated
+
+This repository is no longer being actively maintained. We encourage you to not use this code.
+If you rely on this code you might want to fork the repository to keep your systems from breaking, if we remove this repository in the future.
+
+
 [![Build Status](https://travis-ci.org/LeaseWeb/LswMemcacheBundle.svg)](https://travis-ci.org/LeaseWeb/LswMemcacheBundle)
 [![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/LeaseWeb/LswMemcacheBundle.svg)](http://isitmaintained.com/project/LeaseWeb/LswMemcacheBundle "Average time to resolve an issue")
 [![Percentage of issues still open](http://isitmaintained.com/badge/open/LeaseWeb/LswMemcacheBundle.svg)](http://isitmaintained.com/project/LeaseWeb/LswMemcacheBundle "Percentage of issues still open")
