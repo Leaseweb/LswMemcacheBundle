@@ -126,7 +126,7 @@ class LswMemcacheExtension extends Extension
             }
         }
     }
-    
+
     /**
      * Loads the Firewall configuration.
      *
@@ -211,7 +211,7 @@ class LswMemcacheExtension extends Extension
                 $memcache->addMethodCall('addServer', $server);
             }
         }
-        
+
         $memcache->addArgument($config['options']);
 
         $options = array();
@@ -223,11 +223,16 @@ class LswMemcacheExtension extends Extension
         // Add the service to the container
         $serviceName = sprintf('memcache.%s', $name);
         $container->setDefinition($serviceName, $memcache);
+
         // Add the service to the data collector
         if ($container->hasDefinition('memcache.data_collector')) {
             $definition = $container->getDefinition('memcache.data_collector');
             $definition->addMethodCall('addClient', array($name, $options, new Reference($serviceName)));
         }
+
+        // Add the service to the manager
+        $container->getDefinition('memcache.memcache_manager')
+            ->addMethodCall('addMemcachePool', array($name, new Reference($serviceName)));
     }
 
 }
